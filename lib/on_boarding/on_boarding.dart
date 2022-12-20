@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:moneyger/OnBoarding/OnboardingContents.dart';
-import 'package:moneyger/OnBoarding/SizeConfig.dart';
+import 'package:moneyger/on_boarding/on_boarding_contents.dart';
+import 'package:moneyger/on_boarding/size_config.dart';
 import 'package:moneyger/common/color_value.dart';
 
-class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+class OnBoardingScreen extends StatefulWidget {
+  const OnBoardingScreen({Key? key}) : super(key: key);
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final _controller = PageController();
   int _currentPage = 0;
   List colors = [Colors.white, Colors.white, Colors.white];
