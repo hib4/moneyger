@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moneyger/common/app_theme_data.dart';
-import 'package:moneyger/splash_screen//splash_screen.dart';
+import 'package:moneyger/ui/splash_screen//splash_screen.dart';
 
 void main() {
   runApp(const MyApp());

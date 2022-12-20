@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:moneyger/on_boarding/on_boarding.dart';
+import 'package:moneyger/ui/on_boarding/on_boarding.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatefulWidget {
