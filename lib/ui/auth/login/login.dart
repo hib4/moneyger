@@ -7,6 +7,7 @@ import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/auth/register/register.dart';
 import 'package:moneyger/ui/auth/verification/verification.dart';
+import 'package:moneyger/ui/home.dart';
 import 'package:moneyger/ui/widget/button_sign_in_google.dart';
 import 'package:moneyger/ui/widget/custom_text_form_field.dart';
 import 'package:moneyger/ui/widget/loading/loading_animation.dart';
@@ -134,7 +135,17 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(
                           height: 16,
                         ),
-                        const ButtonSignInGoogle(),
+                        GestureDetector(
+                          onTap: () async {
+                            await FirebaseService().signInGoogle(context).then(
+                                  (value) => value
+                                      ? Navigate.navigatorPush(
+                                          context, const HomeTest())
+                                      : null,
+                                );
+                          },
+                          child: const ButtonSignInGoogle(),
+                        ),
                         const SizedBox(
                           height: 40,
                         ),
@@ -151,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () => Navigate.navigatorPush(
-                                      context, const LoginPage()),
+                                      context, const RegisterPage()),
                               ),
                             ],
                           ),

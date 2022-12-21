@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 
 class FirebaseService {
@@ -73,6 +75,62 @@ class FirebaseService {
       return false;
     } on SocketException {
       showSnackBar(context, title: 'Tidak ada koneksi internet');
+      return false;
+    }
+  }
+
+  Future<bool> signInGoogle(BuildContext context) async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      try {
+        await FirebaseAuth.instance
+            .signInWithCredential(credential)
+            .then((value) {
+          FirebaseFirestore.instance.runTransaction((transaction) async {
+            DocumentReference documentReference = FirebaseFirestore.instance
+                .collection('users')
+                .doc(FirebaseAuth.instance.currentUser!.uid);
+            DocumentSnapshot snapshot =
+                await transaction.get(documentReference);
+
+            if (!snapshot.exists) {
+              documentReference.set({
+                'email': googleSignInAccount.email,
+                'full-name': googleSignInAccount.displayName,
+                'created-at': DateTime.now(),
+                'updated-at': DateTime.now(),
+              });
+              return true;
+            } else {
+              documentReference.update({
+                'updated-at': DateTime.now(),
+              });
+              return true;
+            }
+          });
+        });
+        return true;
+      } on FirebaseAuthException catch (e) {
+        return false;
+      } on SocketException {
+        showSnackBar(context, title: 'Tidak ada koneksi internet');
+        return false;
+      } on PlatformException {
+        return false;
+      }
+    } else {
       return false;
     }
   }
