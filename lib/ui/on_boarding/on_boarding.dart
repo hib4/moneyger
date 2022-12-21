@@ -90,6 +90,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
+                        Container(
+                          height: 72,
+                          decoration:
+                              const BoxDecoration(color: Colors.transparent),
+                        )
                       ],
                     ),
                   );
@@ -97,7 +102,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               ),
             ),
             SizedBox(
-              height: (height * 0.1) - MediaQuery.of(context).padding.top,
+              height: (height * 0.13) - MediaQuery.of(context).padding.top,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
