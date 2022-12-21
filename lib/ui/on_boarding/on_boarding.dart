@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moneyger/common/navigate.dart';
+import 'package:moneyger/ui/auth/register/register.dart';
 import 'package:moneyger/ui/on_boarding/on_boarding_contents.dart';
 import 'package:moneyger/ui/on_boarding/size_config.dart';
 import 'package:moneyger/common/color_value.dart';
@@ -76,7 +78,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         Text(
                           contents[i].title,
                           style: textTheme.headline2!.copyWith(
-                            color: ColorValue.primaryColor,
+                            fontWeight: FontWeight.w700
                           ),
                         ),
                         const SizedBox(
@@ -124,7 +126,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                 ),
                               ),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigate.navigatorReplacement(
+                                      context, const RegisterPage());
+                                },
                                 style: TextButton.styleFrom(
                                   elevation: 0,
                                   textStyle: textTheme.headline4!
