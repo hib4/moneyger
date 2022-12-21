@@ -36,26 +36,27 @@ class AppThemeData {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           onPrimary: Colors.white,
-          primary: ColorValue.primaryColor,
-          minimumSize: const Size(double.infinity, 45),
+          primary: ColorValue.secondaryColor,
+          minimumSize: const Size(double.infinity, 48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
           textStyle: GoogleFonts.poppins(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
         ),
       ),
       textTheme: TextTheme(
         headline1: GoogleFonts.poppins(
+          color: Colors.black,
           fontSize: 24,
           fontWeight: FontWeight.w700,
         ),
         headline2: GoogleFonts.poppins(
+          color: Colors.black,
           fontSize: 20,
-          fontWeight: FontWeight.w700,
         ),
         headline3: GoogleFonts.poppins(
           fontSize: 16,
@@ -64,9 +65,11 @@ class AppThemeData {
           fontSize: 14,
         ),
         bodyText1: GoogleFonts.poppins(
+          color: ColorValue.greyColor,
           fontSize: 12,
         ),
         bodyText2: GoogleFonts.poppins(
+          color: ColorValue.greyColor,
           fontSize: 10,
         ),
       ),
