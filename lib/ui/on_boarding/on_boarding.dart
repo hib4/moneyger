@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moneyger/common/navigate.dart';
+import 'package:moneyger/ui/auth/login/login.dart';
 import 'package:moneyger/ui/auth/register/register.dart';
 import 'package:moneyger/ui/on_boarding/on_boarding_contents.dart';
 import 'package:moneyger/ui/on_boarding/size_config.dart';
@@ -128,7 +129,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               TextButton(
                                 onPressed: () {
                                   Navigate.navigatorReplacement(
-                                      context, const RegisterPage());
+                                      context, const LoginPage());
                                 },
                                 style: TextButton.styleFrom(
                                   elevation: 0,

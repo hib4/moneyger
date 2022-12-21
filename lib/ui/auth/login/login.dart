@@ -3,19 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
-import 'package:moneyger/ui/auth/login/login.dart';
+import 'package:moneyger/ui/auth/register/register.dart';
 import 'package:moneyger/ui/widget/button_sign_in_google.dart';
 import 'package:moneyger/ui/widget/custom_text_form_field.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  final _fullNameController = TextEditingController();
+class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -43,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 48,
                   ),
                   Text(
-                    'Daftar Akun',
+                    'Selamat Datang',
                     style: textTheme.headline2!.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -52,15 +51,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 8,
                   ),
                   Text(
-                    'Masukkan email dan password untuk mendaftar',
+                    'Masukkan email dan password untuk masuk',
                     style: textTheme.bodyText2,
                   ),
                   const SizedBox(
                     height: 24,
-                  ),
-                  CustomTextFormField(
-                    label: 'Masukkan nama lengkap',
-                    controller: _fullNameController,
                   ),
                   const SizedBox(
                     height: 8,
@@ -78,11 +73,26 @@ class _RegisterPageState extends State<RegisterPage> {
                     isPassword: true,
                   ),
                   const SizedBox(
+                    height: 2,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Lupa password?',
+                        style: textTheme.bodyText2!.copyWith(
+                          color: ColorValue.secondaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
                     height: 24,
                   ),
                   ElevatedButton(
                     onPressed: () {},
-                    child: const Text('Daftar'),
+                    child: const Text('Masuk'),
                   ),
                   const SizedBox(
                     height: 16,
@@ -100,18 +110,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   RichText(
                     text: TextSpan(
-                      text: 'Sudah punya akun? ',
+                      text: 'Belum punya akun? ',
                       style: textTheme.bodyText1,
                       children: [
                         TextSpan(
-                          text: 'Masuk',
+                          text: 'Daftar',
                           style: textTheme.bodyText1!.copyWith(
                             color: ColorValue.secondaryColor,
                             fontWeight: FontWeight.w500,
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => Navigate.navigatorPush(
-                                context, const LoginPage()),
+                                context, const RegisterPage()),
                         ),
                       ],
                     ),
