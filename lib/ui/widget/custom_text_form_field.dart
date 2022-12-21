@@ -63,14 +63,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(
             width: 2,
-            color: Colors.red,
+            color: Colors.redAccent,
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(
             width: 2,
-            color: Colors.red,
+            color: Colors.redAccent,
           ),
         ),
         labelText: widget.label,
