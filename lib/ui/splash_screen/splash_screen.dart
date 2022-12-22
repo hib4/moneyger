@@ -1,5 +1,10 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:moneyger/common/navigate.dart';
+import 'package:moneyger/common/shared_code.dart';
+import 'package:moneyger/ui/auth/login/login.dart';
+import 'package:moneyger/ui/auth/verification/verification.dart';
 import 'package:moneyger/ui/on_boarding/on_boarding.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,12 +16,27 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Future<bool> _checkOnBoardingStatus() async {
+    String value = await SharedCode().getToken('token');
+    if (value == '') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   Future _startSplashScreen() async {
     var duration = const Duration(seconds: 3);
+    bool status = await _checkOnBoardingStatus();
     return Timer(duration, () {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const OnBoardingScreen()),
-          (Route<dynamic> route) => false);
+      Navigate.navigatorPushAndRemove(
+        context,
+        FirebaseAuth.instance.currentUser == null
+            ? status
+                ? const LoginPage()
+                : const OnBoardingScreen()
+            : const VerificationPage(),
+      );
     });
   }
 

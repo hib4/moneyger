@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moneyger/common/navigate.dart';
+import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/ui/auth/login/login.dart';
 import 'package:moneyger/ui/auth/register/register.dart';
 import 'package:moneyger/ui/on_boarding/on_boarding_contents.dart';
@@ -78,9 +79,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         ),
                         Text(
                           contents[i].title,
-                          style: textTheme.headline2!.copyWith(
-                            fontWeight: FontWeight.w700
-                          ),
+                          style: textTheme.headline2!
+                              .copyWith(fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(
                           height: 16,
@@ -132,9 +132,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                 ),
                               ),
                               TextButton(
-                                onPressed: () {
-                                  Navigate.navigatorReplacement(
-                                      context, const LoginPage());
+                                onPressed: () async {
+                                  await SharedCode()
+                                      .setToken('token', 'true')
+                                      .then(
+                                        (value) =>
+                                            Navigate.navigatorReplacement(
+                                                context, const LoginPage()),
+                                      );
                                 },
                                 style: TextButton.styleFrom(
                                   elevation: 0,
