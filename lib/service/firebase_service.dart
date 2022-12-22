@@ -79,6 +79,23 @@ class FirebaseService {
     }
   }
 
+  Future<bool> resetPassword(BuildContext context,
+      {required String email}) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email).then(
+            (value) => showSnackBar(
+              context,
+              title: 'Email telah dikirim (cek dibagian spam)',
+              duration: const Duration(seconds: 3),
+            ),
+          );
+      return true;
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, title: 'Terjadi kesalahan');
+      return false;
+    }
+  }
+
   Future<bool> signInGoogle(BuildContext context) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
