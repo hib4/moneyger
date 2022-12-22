@@ -27,106 +27,109 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Center(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/verification.png',
-                          width: size.width * 0.7,
-                        ),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                        Text(
-                          'Lupa Password?',
-                          style: textTheme.headline2!.copyWith(
-                            fontWeight: FontWeight.w600,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Center(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/images/verification.png',
+                            width: size.width * 0.7,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          'Masukkan email yang terkait dengan akun anda dan kami akan mengirimkan email dengan instruksi untuk mengatur ulang kata sandi anda.\n(cek dibagian spam)',
-                          style: textTheme.bodyText1,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                        CustomTextFormField(
-                          label: 'Masukkan email',
-                          controller: _emailController,
-                          textInputType: TextInputType.emailAddress,
-                          validator: (value) =>
-                              SharedCode().emailValidator(value),
-                        ),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              _isLoad.value = true;
-                              await FirebaseService()
-                                  .resetPassword(context,
-                                      email: _emailController.text.trim())
-                                  .then(
-                                    (value) => value
-                                        ? Navigate.navigatorReplacement(
-                                            context, const LoginPage())
-                                        : null,
-                                  );
-                              _isLoad.value = false;
-                            }
-                          },
-                          child: const Text('Reset Password'),
-                        ),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            text: 'Kembali ke ',
+                          const SizedBox(
+                            height: 24,
+                          ),
+                          Text(
+                            'Lupa Password?',
+                            style: textTheme.headline2!.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            'Masukkan email yang terkait dengan akun anda dan kami akan mengirimkan email dengan instruksi untuk mengatur ulang kata sandi anda.\n(cek dibagian spam)',
                             style: textTheme.bodyText1,
-                            children: [
-                              TextSpan(
-                                text: 'Masuk',
-                                style: textTheme.bodyText1!.copyWith(
-                                  color: ColorValue.secondaryColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () => Navigate.navigatorPush(
-                                      context, const LoginPage()),
-                              ),
-                            ],
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 24,
+                          ),
+                          CustomTextFormField(
+                            label: 'Masukkan email',
+                            controller: _emailController,
+                            textInputType: TextInputType.emailAddress,
+                            validator: (value) =>
+                                SharedCode().emailValidator(value),
+                          ),
+                          const SizedBox(
+                            height: 40,
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                _isLoad.value = true;
+                                await FirebaseService()
+                                    .resetPassword(context,
+                                        email: _emailController.text.trim())
+                                    .then(
+                                      (value) => value
+                                          ? Navigate.navigatorReplacement(
+                                              context, const LoginPage())
+                                          : null,
+                                    );
+                                _isLoad.value = false;
+                              }
+                            },
+                            child: const Text('Reset Password'),
+                          ),
+                          const SizedBox(
+                            height: 40,
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              text: 'Kembali ke ',
+                              style: textTheme.bodyText1,
+                              children: [
+                                TextSpan(
+                                  text: 'Masuk',
+                                  style: textTheme.bodyText1!.copyWith(
+                                    color: ColorValue.secondaryColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () => Navigate.navigatorPush(
+                                        context, const LoginPage()),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          ValueListenableBuilder<bool>(
-            valueListenable: _isLoad,
-            builder: (context, value, _) => Visibility(
-              visible: value,
-              child: const LoadingAnimation(),
+            ValueListenableBuilder<bool>(
+              valueListenable: _isLoad,
+              builder: (context, value, _) => Visibility(
+                visible: value,
+                child: const LoadingAnimation(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
