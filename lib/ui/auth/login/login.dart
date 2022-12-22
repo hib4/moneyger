@@ -6,6 +6,7 @@ import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/auth/register/register.dart';
+import 'package:moneyger/ui/auth/reset_password/reset_password.dart';
 import 'package:moneyger/ui/auth/verification/verification.dart';
 import 'package:moneyger/ui/home.dart';
 import 'package:moneyger/ui/widget/button_sign_in_google.dart';
@@ -92,7 +93,10 @@ class _LoginPageState extends State<LoginPage> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigate.navigatorPush(
+                                  context, const ResetPasswordPage());
+                            },
                             child: Text(
                               'Lupa password?',
                               style: textTheme.bodyText2!.copyWith(
