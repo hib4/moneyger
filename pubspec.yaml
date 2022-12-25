@@ -43,6 +43,7 @@ dependencies:
   google_sign_in: ^5.4.2
   lottie: ^1.4.2
   shared_preferences: ^2.0.15
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:
