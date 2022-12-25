@@ -7,6 +7,7 @@ class CustomTextFormField extends StatefulWidget {
   final TextInputType textInputType;
   final String? Function(String?)? validator;
   final bool isPassword;
+  final double borderRadius;
 
   const CustomTextFormField(
       {Key? key,
@@ -14,7 +15,8 @@ class CustomTextFormField extends StatefulWidget {
       required this.controller,
       this.textInputType = TextInputType.text,
       this.validator,
-      this.isPassword = false})
+      this.isPassword = false,
+      this.borderRadius = 8})
       : super(key: key);
 
   @override
@@ -39,35 +41,35 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       style: textTheme.bodyText1,
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
           borderSide: const BorderSide(
             width: 1,
             color: ColorValue.borderColor,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
           borderSide: const BorderSide(
             width: 1,
             color: ColorValue.borderColor,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
           borderSide: const BorderSide(
             width: 2,
             color: ColorValue.secondaryColor,
           ),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
           borderSide: const BorderSide(
             width: 2,
             color: Colors.redAccent,
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
           borderSide: const BorderSide(
             width: 2,
             color: Colors.redAccent,
