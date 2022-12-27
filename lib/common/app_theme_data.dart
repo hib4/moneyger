@@ -59,9 +59,11 @@ class AppThemeData {
           fontSize: 20,
         ),
         headline3: GoogleFonts.poppins(
+          color: Colors.black,
           fontSize: 16,
         ),
         headline4: GoogleFonts.poppins(
+          color: Colors.black,
           fontSize: 14,
         ),
         bodyText1: GoogleFonts.poppins(
