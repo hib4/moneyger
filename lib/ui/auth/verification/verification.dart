@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/ui/auth/login/login.dart';
-import 'package:moneyger/ui/auth/register/register.dart';
 import 'package:moneyger/ui/bottom_navigation/bottom_navigation.dart';
-import 'package:moneyger/ui/home.dart';
 
 class VerificationPage extends StatefulWidget {
   const VerificationPage({Key? key}) : super(key: key);

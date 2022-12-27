@@ -131,7 +131,17 @@ class _RegisterPageState extends State<RegisterPage> {
                         const SizedBox(
                           height: 16,
                         ),
-                        const ButtonSignInGoogle(),
+                        GestureDetector(
+                          onTap: () async {
+                            await FirebaseService().signInGoogle(context).then(
+                                  (value) => value
+                                      ? Navigate.navigatorPush(
+                                          context, const VerificationPage())
+                                      : null,
+                                );
+                          },
+                          child: const ButtonSignInGoogle(),
+                        ),
                         const SizedBox(
                           height: 40,
                         ),
