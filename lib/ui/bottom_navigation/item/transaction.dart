@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moneyger/common/navigate.dart';
+import 'package:moneyger/ui/transaction/add_transaction.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
@@ -10,6 +12,13 @@ class TransactionPage extends StatefulWidget {
 class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigate.navigatorPush(context, const AddTransactionPage());
+        },
+        child: const Icon(Icons.add_rounded),
+      ),
+    );
   }
 }

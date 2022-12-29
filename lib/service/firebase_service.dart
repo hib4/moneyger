@@ -127,12 +127,12 @@ class FirebaseService {
                 'email': googleSignInAccount.email,
                 'full-name': googleSignInAccount.displayName,
                 'created-at': DateTime.now(),
-                'updated-at': DateTime.now(),
+                'updated_at': DateTime.now(),
               });
               return true;
             } else {
               documentReference.update({
-                'updated-at': DateTime.now(),
+                'updated_at': DateTime.now(),
               });
               return true;
             }
