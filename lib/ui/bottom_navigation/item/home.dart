@@ -1,11 +1,7 @@
-import 'dart:math';
-
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
-import 'package:moneyger/common/color_value.dart';
-import 'package:moneyger/common/color_value.dart';
+import 'package:moneyger/ui/widget/chart/chart_widget.dart';
+import 'package:moneyger/ui/widget/detail_transaction_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,14 +11,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<FlSpot> dummyData1 = List.generate(7, (index) {
-    return FlSpot(index.toDouble(), index * Random().nextDouble());
-  });
-
-  final List<FlSpot> dummyData2 = List.generate(7, (index) {
-    return FlSpot(index.toDouble(), index * Random().nextDouble());
-  });
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -82,63 +70,9 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 24,
                     ),
-                    AspectRatio(
+                    const AspectRatio(
                       aspectRatio: 1.8,
-                      child: LineChart(
-                        LineChartData(
-                          maxX: 6,
-                          borderData: FlBorderData(
-                            border: Border.all(
-                              color: const Color(0XFFF0F0F0),
-                            ),
-                          ),
-                          gridData: FlGridData(
-                            getDrawingHorizontalLine: (value) {
-                              return FlLine(
-                                color: const Color(0XFFF0F0F0),
-                                strokeWidth: 1,
-                              );
-                            },
-                            getDrawingVerticalLine: (value) {
-                              return FlLine(
-                                color: const Color(0XFFF0F0F0),
-                                strokeWidth: 1,
-                              );
-                            },
-                          ),
-                          titlesData: _getTitleData(),
-                          lineBarsData: [
-                            LineChartBarData(
-                              spots: dummyData1,
-                              isCurved: true,
-                              color: ColorValue.greenColor,
-                              dotData: FlDotData(
-                                show: true,
-                                getDotPainter: (p0, p1, p2, p3) {
-                                  return FlDotCirclePainter(
-                                    strokeWidth: 0,
-                                    color: ColorValue.greenColor,
-                                  );
-                                },
-                              ),
-                            ),
-                            LineChartBarData(
-                              spots: dummyData2,
-                              isCurved: true,
-                              color: ColorValue.redColor,
-                              dotData: FlDotData(
-                                show: true,
-                                getDotPainter: (p0, p1, p2, p3) {
-                                  return FlDotCirclePainter(
-                                    strokeWidth: 0,
-                                    color: ColorValue.redColor,
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      child: ChartWidget(),
                     ),
                   ],
                 ),
@@ -148,9 +82,9 @@ class _HomePageState extends State<HomePage> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _detailTransaction(textTheme),
-                  _detailTransaction(textTheme, isIncome: false),
+                children: const [
+                  DetailTransactionItem(),
+                  DetailTransactionItem(isIncome: false),
                 ],
               ),
               const SizedBox(
@@ -224,6 +158,10 @@ class _HomePageState extends State<HomePage> {
                             'Edukasi',
                             style: textTheme.bodyText1,
                           ),
+                          Text(
+                            '${DateTime.now()}',
+                            style: textTheme.bodyText1,
+                          ),
                         ],
                       ),
                     ),
@@ -233,94 +171,6 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  FlTitlesData _getTitleData() {
-    return FlTitlesData(
-      topTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: false,
-        ),
-      ),
-      rightTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: false,
-        ),
-      ),
-      leftTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 30,
-        ),
-      ),
-      bottomTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 20,
-          getTitlesWidget: (value, meta) {
-            switch (value.toInt()) {
-              case 0:
-                return const Text('Sen');
-              case 1:
-                return const Text('Sel');
-              case 2:
-                return const Text('Rab');
-              case 3:
-                return const Text('Kam');
-              case 4:
-                return const Text('Jum');
-              case 5:
-                return const Text('Sab');
-              case 6:
-                return const Text('Min');
-            }
-            return const Text('');
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _detailTransaction(TextTheme textTheme, {bool isIncome = true}) {
-    return Container(
-      height: 65,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      decoration: BoxDecoration(
-        color: isIncome ? ColorValue.greenColor : ColorValue.redColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                isIncome ? 'Pendapatan' : 'Pengeluaran',
-                style: textTheme.bodyText2!.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              Text(
-                isIncome ? 'Rp. 14.000.000' : 'Rp. 13.000.000',
-                style: textTheme.bodyText1!.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            width: 16,
-          ),
-          SvgPicture.asset(
-            isIncome ? 'assets/svg/up.svg' : 'assets/svg/down.svg',
-          )
-        ],
       ),
     );
   }
