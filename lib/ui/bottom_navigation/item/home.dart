@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:moneyger/ui/widget/chart/chart_widget.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
 
@@ -159,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                             style: textTheme.bodyText1,
                           ),
                           Text(
-                            '${DateTime.now()}',
+                            '${DateFormat('EEE').format(DateTime.now())}',
                             style: textTheme.bodyText1,
                           ),
                         ],

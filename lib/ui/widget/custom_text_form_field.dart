@@ -38,7 +38,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       obscureText: widget.isPassword ? _isPasswordNotVisible : false,
       autocorrect: !widget.isPassword,
       enableSuggestions: !widget.isPassword,
-      style: textTheme.bodyText1,
+      style: textTheme.bodyText1!.copyWith(color: Colors.black),
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(widget.borderRadius),
