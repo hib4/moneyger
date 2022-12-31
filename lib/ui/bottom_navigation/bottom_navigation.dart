@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/ui/bottom_navigation/item/home.dart';
+import 'package:moneyger/ui/bottom_navigation/item/home_baru.dart';
 import 'package:moneyger/ui/bottom_navigation/item/profile.dart';
 import 'package:moneyger/ui/bottom_navigation/item/transaction.dart';
 
@@ -16,7 +17,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   int _currentIndex = 0;
 
   final _tabs = [
-    const HomePage(),
+    const HomePageBaru(),
     const TransactionPage(),
     const ProfilePage(),
   ];
