@@ -1,13 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/constant/list_category.dart';
-import 'package:moneyger/ui/widget/custom_text_form_field.dart';
+import 'package:moneyger/service/firebase_service.dart';
+import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 
 class AddTransactionPage extends StatefulWidget {
   const AddTransactionPage({Key? key}) : super(key: key);
@@ -17,11 +17,17 @@ class AddTransactionPage extends StatefulWidget {
 }
 
 class _AddTransactionPageState extends State<AddTransactionPage> {
-  bool _isSelectedIncome = false;
-  String _selectedValue = 'Belanja';
+  bool _isSelectedIncome = true;
+  String _selectedCategory = 'Belanja';
   final _formKey = GlobalKey<FormState>();
+  final _formatter = CurrencyTextInputFormatter(
+    locale: 'id',
+    decimalDigits: 0,
+    symbol: 'IDR ',
+  );
+  Map<String, dynamic> _userData = {};
 
-  final _amountController = TextEditingController();
+  final _totalController = TextEditingController();
   final _dateController = TextEditingController();
   final _descController = TextEditingController();
 
@@ -36,6 +42,27 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     if (picked != null) {
       setState(() => _dateController.text = picked.toString());
     }
+  }
+
+  Future _getUserData() async {
+    var document =
+        FirebaseFirestore.instance.collection('users').doc(SharedCode().uid);
+
+    var value = await document.get();
+    _userData = value.data() ?? {};
+  }
+
+  Future<bool> _addTransaction(bool isSelectedIncome) async {
+    bool isSuccess = await FirebaseService().addTransaction(
+      context,
+      type: isSelectedIncome ? 'income' : 'expenditure',
+      total: _formatter.getUnformattedValue(),
+      category: _selectedCategory,
+      date: _dateController.text,
+      desc: _descController.text,
+    );
+
+    return isSuccess;
   }
 
   @override
@@ -82,7 +109,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   _textFormTransaction(
                     textTheme,
                     hint: 'IDR',
-                    controller: _amountController,
+                    controller: _totalController,
                     textInputType: TextInputType.number,
                     withInputFormatter: true,
                     validator: (value) => SharedCode().emptyValidator(value),
@@ -101,7 +128,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   ),
                   _dropdownCategory(
                     textTheme,
-                    value: _selectedValue,
+                    value: _selectedCategory,
                     items: ListCategory().dropdownItems,
                   ),
                   const SizedBox(
@@ -127,7 +154,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                         hint: 'Masukkan tanggal',
                         controller: _dateController,
                         withIcon: true,
-                        validator: (value) => SharedCode().emptyValidator(value),
+                        validator: (value) =>
+                            SharedCode().emptyValidator(value),
                       ),
                     ),
                   ),
@@ -157,9 +185,25 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     height: 24,
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        print('true');
+                        _isSelectedIncome
+                            ? await _addTransaction(_isSelectedIncome).then(
+                                (value) =>
+                                    value ? Navigator.pop(context) : null,
+                              )
+                            : _getUserData().then((value) async {
+                                _userData['total_balance'] <
+                                        _formatter.getUnformattedValue()
+                                    ? showSnackBar(context,
+                                        title: 'Saldo tidak mencukupi')
+                                    : await _addTransaction(_isSelectedIncome)
+                                        .then(
+                                        (value) => value
+                                            ? Navigator.pop(context)
+                                            : null,
+                                      );
+                              });
                       }
                     },
                     child: const Text('Tambah'),
@@ -184,7 +228,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         items: items,
         onChanged: (String? value) {
           setState(() {
-            _selectedValue = value!;
+            _selectedCategory = value!;
           });
         },
         hint: Text(
@@ -228,15 +272,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       style: textTheme.bodyText1!.copyWith(color: Colors.black),
       maxLength: maxLength ?? null,
-      inputFormatters: withInputFormatter
-          ? [
-              CurrencyTextInputFormatter(
-                locale: 'id',
-                decimalDigits: 0,
-                symbol: 'IDR ',
-              ),
-            ]
-          : [],
+      inputFormatters: withInputFormatter ? [_formatter] : [],
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: const BorderSide(
@@ -287,13 +323,12 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     );
   }
 
-  Widget _buttonIncome(TextTheme textTheme) {
+  Widget _buttonExpenditure(TextTheme textTheme) {
     return GestureDetector(
       onTap: () {
         if (_isSelectedIncome == true) {
           setState(() {
             _isSelectedIncome = !_isSelectedIncome;
-
           });
         }
       },
@@ -322,13 +357,12 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     );
   }
 
-  Widget _buttonExpenditure(TextTheme textTheme) {
+  Widget _buttonIncome(TextTheme textTheme) {
     return GestureDetector(
       onTap: () {
         if (_isSelectedIncome == false) {
           setState(() {
             _isSelectedIncome = !_isSelectedIncome;
-
           });
         }
       },
