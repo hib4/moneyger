@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moneyger/common/color_value.dart';
-import 'package:moneyger/common/navigate.dart';
+import 'package:moneyger/main.dart';
 import 'package:moneyger/service/api_service.dart';
 import 'package:moneyger/ui/chat/chat.dart';
 import 'package:moneyger/ui/widget/artikel/artikel_card.dart';
@@ -122,7 +122,9 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 16,
                 ),
-                const TransactionHistoryItem(isHome: true,),
+                const TransactionHistoryItem(
+                  isHome: true,
+                ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -174,8 +176,13 @@ class _HomePageState extends State<HomePage> {
                                 elevation: 0,
                               ),
                               onPressed: () {
-                                Navigate.navigatorPush(
-                                    context, const ChatPage());
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const ChatPage(),
+                                    )).whenComplete(() => Future.delayed(
+                                        const Duration(milliseconds: 250))
+                                    .then((value) => statusBarStyle()));
                               },
                               child: Text(
                                 'Konsultasi',
