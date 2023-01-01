@@ -52,9 +52,11 @@ class _ChartWidgetState extends State<ChartWidget> {
   Future _getData() async {
     await _getDataIncome();
     await _getDataExpenditure();
-    setState(() {
-      _isLoaded = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoaded = true;
+      });
+    }
   }
 
   List<FlSpot> _getChartTransaction(Map<String, dynamic> data) {

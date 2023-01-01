@@ -119,7 +119,7 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
           );
         } else {
           return const Center(
-            child: Text('Data masih kosong'),
+            child: CircularProgressIndicator(),
           );
         }
       },
