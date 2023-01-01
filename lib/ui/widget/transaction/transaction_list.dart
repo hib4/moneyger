@@ -35,7 +35,7 @@ class WidgetTransactionList extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
               Text(
-                "data",
+                "json",
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,

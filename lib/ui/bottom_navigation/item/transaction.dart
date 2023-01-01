@@ -4,6 +4,7 @@ import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/ui/transaction/add_transaction.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
+import 'package:moneyger/ui/widget/headline_item.dart';
 import 'package:moneyger/ui/widget/transaction/transaction_list.dart';
 
 class TransactionPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _TransactionPageState extends State<TransactionPage> {
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  padding: const EdgeInsets.symmetric(horizontal: 28),
                   height: 264,
                   width: MediaQuery.of(context).size.width,
                   color: ColorValue.secondaryColor,
@@ -100,41 +101,18 @@ class _TransactionPageState extends State<TransactionPage> {
                 ),
               ],
             ),
-
             // judul transaksi seterusnya
             const SizedBox(
               height: 16,
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(30, 32.5, 30, 0),
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/svg/article.svg',
-                        width: 32,
-                        height: 32,
-                      ),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Transaksi',
-                            style: textTheme.headline4!.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            'Transaksi kamu selama ini',
-                            style: textTheme.bodyText2,
-                          ),
-                        ],
-                      ),
-                    ],
+                  const HeadlineItem(
+                    image: 'article',
+                    title: 'Transaksi',
+                    desc: 'Transaksi anda selama ini',
                   ),
                   //
                   const SizedBox(
