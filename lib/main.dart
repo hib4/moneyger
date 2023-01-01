@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/firebase_options.dart';
 import 'package:moneyger/ui/splash_screen//splash_screen.dart';
@@ -36,6 +37,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('id');
+
     return MaterialApp(
       title: 'Moneyger',
       debugShowCheckedModeBanner: false,

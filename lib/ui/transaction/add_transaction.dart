@@ -3,6 +3,7 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/constant/list_category.dart';
@@ -23,7 +24,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   final _formatter = CurrencyTextInputFormatter(
     locale: 'id',
     decimalDigits: 0,
-    symbol: 'IDR ',
+    symbol: 'Rp ',
   );
   Map<String, dynamic> _userData = {};
 
@@ -40,7 +41,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     );
 
     if (picked != null) {
-      setState(() => _dateController.text = picked.toString());
+      setState(
+        () => _dateController.text =
+            DateFormat('d MMM yyyy', 'id').format(picked),
+      );
     }
   }
 
@@ -108,7 +112,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   ),
                   _textFormTransaction(
                     textTheme,
-                    hint: 'IDR',
+                    hint: 'Rp',
                     controller: _totalController,
                     textInputType: TextInputType.number,
                     withInputFormatter: true,
