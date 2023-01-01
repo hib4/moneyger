@@ -5,7 +5,7 @@ import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/ui/transaction/add_transaction.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
 import 'package:moneyger/ui/widget/headline_item.dart';
-import 'package:moneyger/ui/widget/transaction/transaction_list.dart';
+import 'package:moneyger/ui/widget/transaction/transaction_history_item.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
@@ -17,8 +17,6 @@ class TransactionPage extends StatefulWidget {
 class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -57,15 +55,16 @@ class _TransactionPageState extends State<TransactionPage> {
                               const Text(
                                 "Selamat Pagi User",
                                 style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white),
-                              )
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         const Text(
-                          "IDR 3.000.000,00",
+                          "Rp. 3.000.000,00",
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
@@ -74,9 +73,10 @@ class _TransactionPageState extends State<TransactionPage> {
                         const Text(
                           "Total Saldo",
                           style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFFC7C7C7)),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFFC7C7C7),
+                          ),
                         ),
                       ],
                     ),
@@ -108,25 +108,17 @@ class _TransactionPageState extends State<TransactionPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
               child: Column(
-                children: [
-                  const HeadlineItem(
+                children: const [
+                  HeadlineItem(
                     image: 'article',
                     title: 'Transaksi',
                     desc: 'Transaksi anda selama ini',
                   ),
                   //
-                  const SizedBox(
+                  SizedBox(
                     height: 16,
                   ),
-                  ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return const WidgetTransactionList();
-                    },
-                  )
+                  TransactionHistoryItem(),
                 ],
               ),
             ),

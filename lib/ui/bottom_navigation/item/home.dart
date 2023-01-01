@@ -7,7 +7,7 @@ import 'package:moneyger/ui/widget/artikel/artikel_card.dart';
 import 'package:moneyger/ui/widget/chart/chart_widget.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
 import 'package:moneyger/ui/widget/headline_item.dart';
-import 'package:moneyger/ui/widget/transaction/transaction_list.dart';
+import 'package:moneyger/ui/widget/transaction/transaction_history_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -122,15 +122,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 16,
                 ),
-                ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return const WidgetTransactionList();
-                  },
-                ),
+                const TransactionHistoryItem(isHome: true,),
                 const SizedBox(
                   height: 16,
                 ),
