@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                                   )
                                   .then(
                                     (value) => value
-                                        ? Navigate.navigatorPush(
+                                        ? Navigate.navigatorPushAndRemove(
                                             context, const VerificationPage())
                                         : null,
                                   );
@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () async {
                             await FirebaseService().signInGoogle(context).then(
                                   (value) => value
-                                      ? Navigate.navigatorPush(
+                                      ? Navigate.navigatorPushAndRemove(
                                           context, const VerificationPage())
                                       : null,
                                 );

@@ -37,7 +37,8 @@ class _ArtikelCardState extends State<ArtikelCard> {
             ));
       },
       child: Container(
-        padding: const EdgeInsets.only(bottom: 16, top: 16),
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.only(bottom: 16),
         decoration: const BoxDecoration(
           border: BorderDirectional(
             bottom: BorderSide(
@@ -60,7 +61,7 @@ class _ArtikelCardState extends State<ArtikelCard> {
                 child: FadeInImage.assetNetwork(
                   placeholder: 'assets/images/google.png',
                   image: widget.foto,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -74,16 +75,14 @@ class _ArtikelCardState extends State<ArtikelCard> {
                   Text(
                     widget.judul,
                     style: textTheme.headline4,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(
                     height: 8,
                   ),
                   Text(
                     widget.tanggalPosting,
-                    style: textTheme.bodyText1,
-                  ),
-                  Text(
-                    '${DateTime.now()}',
                     style: textTheme.bodyText1,
                   ),
                 ],
