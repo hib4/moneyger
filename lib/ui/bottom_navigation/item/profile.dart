@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/ui/auth/login/login.dart';
+import 'package:moneyger/ui/auth/reset_password/reset_password_profile.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
 import 'package:moneyger/ui/widget/user_item/user_item.dart';
 
@@ -80,7 +81,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     _button(
                       textTheme,
-                      onPress: () {},
+                      onPress: () {
+                        Navigate.navigatorPush(context, ResetPasswordProfilePage());
+                      },
                       icon: 'reset_password',
                       title: 'Reset Password',
                     ),

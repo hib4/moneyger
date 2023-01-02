@@ -97,7 +97,17 @@ class FirebaseService {
           );
       return true;
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, title: 'Terjadi kesalahan');
+      switch (e.code) {
+        case 'user-not-found':
+          showSnackBar(context, title: 'Email tidak ditemukan');
+          break;
+        case 'invalid-email':
+          showSnackBar(context, title: 'Invalid Email');
+          break;
+        case 'missing-email':
+          showSnackBar(context, title: 'Email tidak ditemukan');
+          break;
+      }
       return false;
     }
   }
