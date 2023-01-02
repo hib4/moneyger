@@ -39,7 +39,7 @@ class SharedCode {
   String convertToIdr(dynamic number, int decimalDigit) {
     NumberFormat currencyFormatter = NumberFormat.currency(
       locale: 'id',
-      symbol: 'Rp ',
+      symbol: 'Rp. ',
       decimalDigits: decimalDigit,
     );
     return currencyFormatter.format(number);
@@ -51,6 +51,10 @@ class SharedCode {
 
   String get formattedDate =>
       '${DateTime.now().weekOfMonth}-${DateFormat('MM-yyy').format(DateTime.now())}';
+
+  String getInitials(String name) => name.isNotEmpty
+      ? name.trim().split(RegExp(' +')).map((s) => s[0]).take(2).join()
+      : '';
 }
 
 extension DateTimeExtension on DateTime {

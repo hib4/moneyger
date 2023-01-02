@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/ui/auth/login/login.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
+import 'package:moneyger/ui/widget/user_item/user_item.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -29,20 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
               child: Column(
                 children: [
-                  const CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    radius: 50,
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  Text(
-                    'Hibatullah',
-                    style: textTheme.headline4!.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text('hiba.kudus@gmail.com', style: textTheme.bodyText1),
+                  ProfilePreviewItem(),
                   const SizedBox(
                     height: 16,
                   ),

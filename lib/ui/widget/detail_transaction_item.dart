@@ -55,8 +55,8 @@ class _DetailTransactionItemState extends State<DetailTransactionItem> {
                       width: 88,
                       child: Text(
                         widget.isIncome
-                            ? SharedCode().convertToIdr(data['income'], 2)
-                            : SharedCode().convertToIdr(data['expenditure'], 2),
+                            ? SharedCode().convertToIdr(data['income'], 0)
+                            : SharedCode().convertToIdr(data['expenditure'], 0),
                         style: textTheme.bodyText1!.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -75,6 +75,8 @@ class _DetailTransactionItemState extends State<DetailTransactionItem> {
             ),
           );
         } else {
+
+          // ganti dengan shimmer effect
           return Container(
             width: 150,
             height: 65,
