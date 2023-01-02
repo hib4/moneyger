@@ -6,6 +6,7 @@ import 'package:moneyger/ui/transaction/add_transaction.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
 import 'package:moneyger/ui/widget/headline_item.dart';
 import 'package:moneyger/ui/widget/transaction/transaction_history_item.dart';
+import 'package:moneyger/ui/widget/user_item/user_item.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
@@ -63,12 +64,12 @@ class _TransactionPageState extends State<TransactionPage> {
                             ],
                           ),
                         ),
-                        const Text(
-                          "Rp. 3.000.000,00",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
+                        TotalBalanceItem(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         const Text(
                           "Total Saldo",

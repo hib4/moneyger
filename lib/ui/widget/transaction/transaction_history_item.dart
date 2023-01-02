@@ -95,7 +95,7 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '${type == 'income' ? '+' : '-'} ${SharedCode().convertToIdr(data['total'], 2)}',
+                          '${type == 'income' ? '+' : '-'} ${SharedCode().convertToIdr(data['total'], 0)}',
                           style: textTheme.bodyText2!.copyWith(
                             color: type == 'income'
                                 ? ColorValue.greenColor
@@ -118,6 +118,8 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
             },
           );
         } else {
+
+          // ganti dengan shimmer effect
           return const Center(
             child: CircularProgressIndicator(),
           );

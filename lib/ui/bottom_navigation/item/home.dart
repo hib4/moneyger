@@ -8,6 +8,7 @@ import 'package:moneyger/ui/widget/chart/chart_widget.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
 import 'package:moneyger/ui/widget/headline_item.dart';
 import 'package:moneyger/ui/widget/transaction/transaction_history_item.dart';
+import 'package:moneyger/ui/widget/user_item/user_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -46,12 +47,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Selamat Datang, User',
-                  style: textTheme.headline2!.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                WelcomeNameItem(),
                 Text(
                   'Pendapatan dan Pengeluaran kamu bulan ini',
                   style: textTheme.bodyText1!.copyWith(
@@ -82,9 +78,10 @@ class _HomePageState extends State<HomePage> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Text(
-                              'Rp. 3.000.000',
-                              style: textTheme.headline3!.copyWith(
+                            TotalBalanceItem(
+                              textStyle: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
