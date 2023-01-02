@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                   height: 24,
                 ),
                 const HeadlineItem(
-                  image: 'article',
+                  image: 'transaction',
                   title: 'Transaksi',
                   desc: 'Beberapa transaksi kamu akhir-akhir ini',
                 ),

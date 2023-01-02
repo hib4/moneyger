@@ -40,29 +40,9 @@ class _TransactionPageState extends State<TransactionPage> {
                   child: SafeArea(
                     child: Column(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(top: 16, bottom: 48),
-                          child: Row(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(right: 16),
-                                height: 35,
-                                width: 35,
-                                child: const CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/images/google.png'),
-                                ),
-                              ),
-                              const Text(
-                                "Selamat Pagi User",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
+                        // remove selamat pagi
+                        const SizedBox(
+                          height: 80,
                         ),
                         TotalBalanceItem(
                           textStyle: const TextStyle(
@@ -111,7 +91,7 @@ class _TransactionPageState extends State<TransactionPage> {
               child: Column(
                 children: const [
                   HeadlineItem(
-                    image: 'article',
+                    image: 'transaction',
                     title: 'Transaksi',
                     desc: 'Transaksi anda selama ini',
                   ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
+import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
 
 class DetailTransactionItem extends StatefulWidget {
   final bool isIncome;
@@ -75,13 +76,8 @@ class _DetailTransactionItemState extends State<DetailTransactionItem> {
             ),
           );
         } else {
-
           // ganti dengan shimmer effect
-          return Container(
-            width: 150,
-            height: 65,
-            color: Colors.grey,
-          );
+          return const ShimmerWidget(height: 65, width: 150, radius: 10);
         }
       },
     );
