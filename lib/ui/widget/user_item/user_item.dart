@@ -27,9 +27,13 @@ class WelcomeNameItem extends StatelessWidget {
           );
         } else {
           // ganti dengan shimmer effect
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Text(
+            'Hai, -',
+            style: textTheme.headline2!.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
           );
+          // ShimmerWidget(height: 30, width: 150, radius: 2.5);
         }
       },
     );
@@ -59,9 +63,7 @@ class TotalBalanceItem extends StatelessWidget {
           );
         } else {
           // ganti dengan shimmer effect
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return Text('RP -', style: textStyle);
         }
       },
     );

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
+import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
 import 'package:moneyger/ui/transaction/edit_transaction.dart';
 
 class TransactionHistoryItem extends StatefulWidget {
@@ -140,8 +141,20 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
           );
         } else {
           // ganti dengan shimmer effect
-          return const Center(
-            child: CircularProgressIndicator(),
+          return ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: 3,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: ShimmerWidget(
+                    height: 65,
+                    width: MediaQuery.of(context).size.width,
+                    radius: 7.5),
+              );
+            },
           );
         }
       },

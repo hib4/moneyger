@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:moneyger/ui/article/article.dart';
+import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
 
 class ArtikelCard extends StatefulWidget {
   String judul, subjudul, tanggalPosting, penulis, foto, isiArtikel;
@@ -58,10 +60,14 @@ class _ArtikelCardState extends State<ArtikelCard> {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/images/google.png',
-                  image: widget.foto,
-                  fit: BoxFit.cover,
+                child: CachedNetworkImage(
+                  imageUrl: widget.foto,
+                  fit: BoxFit.fill,
+                  placeholder: (context, url) => ShimmerWidget(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      radius: 5),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
             ),
