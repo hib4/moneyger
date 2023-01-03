@@ -6,6 +6,7 @@ import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
 import 'package:moneyger/ui/transaction/edit_transaction.dart';
+import 'package:moneyger/ui/widget/custom_pop_menu.dart';
 
 class TransactionHistoryItem extends StatefulWidget {
   final bool isHome;
@@ -18,10 +19,35 @@ class TransactionHistoryItem extends StatefulWidget {
 }
 
 class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
+  var _tapPosition;
+
   final _collection = FirebaseFirestore.instance
       .collection('users')
       .doc(SharedCode().uid)
       .collection('transaction');
+
+  void _showCustomPopMenu(List data, String isIncome) {
+    final RenderObject? overlay =
+        Overlay.of(context)?.context.findRenderObject();
+
+    showMenu(
+      context: context,
+      position: RelativeRect.fromRect(
+        _tapPosition & const Size(40, 40),
+        Offset.zero & overlay!.paintBounds.size,
+      ),
+      items: <PopupMenuEntry<int>>[
+        CustomPopMenu(
+          data: data,
+          isSelectedIncome: isIncome,
+        ),
+      ],
+    );
+  }
+
+  void _storePosition(TapDownDetails details) {
+    _tapPosition = details.globalPosition;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +76,21 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
               final type = data['type'];
 
               return GestureDetector(
+                onLongPress: () {
+                  widget.isHome
+                      ? null
+                      : _showCustomPopMenu(
+                          [
+                            data['total'],
+                            data['desc'],
+                            data['day'],
+                            data['week'],
+                            data.id,
+                          ],
+                          type == 'income' ? 'income' : 'expenditure',
+                        );
+                },
+                onTapDown: widget.isHome ? null : _storePosition,
                 onTap: () {
                   Navigate.navigatorPush(
                     context,
@@ -150,9 +191,10 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
               return Container(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ShimmerWidget(
-                    height: 65,
-                    width: MediaQuery.of(context).size.width,
-                    radius: 7.5),
+                  height: 65,
+                  width: MediaQuery.of(context).size.width,
+                  radius: 7.5,
+                ),
               );
             },
           );

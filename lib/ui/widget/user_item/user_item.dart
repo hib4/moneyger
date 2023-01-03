@@ -50,8 +50,8 @@ class TotalBalanceItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-      future: _document.get(),
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: _document.snapshots(),
       builder: (_, snapshot) {
         if (snapshot.hasData) {
           var data = snapshot.data!;
@@ -63,7 +63,7 @@ class TotalBalanceItem extends StatelessWidget {
           );
         } else {
           // ganti dengan shimmer effect
-          return Text('RP -', style: textStyle);
+          return Text('RP. -', style: textStyle);
         }
       },
     );

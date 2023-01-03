@@ -179,7 +179,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     textTheme,
                     hint: 'Deskripsi singkat',
                     controller: _descController,
-                    maxLength: 15,
+                    maxLength: 20,
                     validator: (value) => SharedCode().emptyValidator(value),
                   ),
                   const SizedBox(
