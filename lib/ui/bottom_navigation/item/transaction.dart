@@ -23,6 +23,7 @@ class _TransactionPageState extends State<TransactionPage> {
         onPressed: () {
           Navigate.navigatorPush(context, const AddTransactionPage());
         },
+        backgroundColor: ColorValue.secondaryColor,
         child: const Icon(Icons.add_rounded),
       ),
       body: SingleChildScrollView(

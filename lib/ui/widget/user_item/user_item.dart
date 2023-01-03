@@ -26,7 +26,6 @@ class WelcomeNameItem extends StatelessWidget {
             ),
           );
         } else {
-
           // ganti dengan shimmer effect
           return const Center(
             child: CircularProgressIndicator(),
@@ -56,9 +55,9 @@ class TotalBalanceItem extends StatelessWidget {
           return Text(
             SharedCode().convertToIdr(data['total_balance'], 0),
             style: textStyle,
+            textAlign: TextAlign.center,
           );
         } else {
-
           // ganti dengan shimmer effect
           return const Center(
             child: CircularProgressIndicator(),
@@ -106,12 +105,16 @@ class ProfilePreviewItem extends StatelessWidget {
                 style: textTheme.headline4!.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
+                textAlign: TextAlign.center,
               ),
-              Text(data['email'], style: textTheme.bodyText1),
+              Text(
+                data['email'],
+                style: textTheme.bodyText1,
+                textAlign: TextAlign.center,
+              ),
             ],
           );
         } else {
-
           // ganti dengan shimmer effect
           return const Center(
             child: CircularProgressIndicator(),
