@@ -7,6 +7,7 @@ class ShimmerWidget extends StatelessWidget {
       required this.height,
       required this.width,
       required this.radius});
+
   final double height, width, radius;
   final Color _baseColor = const Color(0xFFEEEEEE);
 
@@ -15,13 +16,14 @@ class ShimmerWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: Shimmer.fromColors(
-          baseColor: _baseColor,
-          highlightColor: const Color(0xFFFFFFFF),
-          child: Container(
-            height: height,
-            width: width,
-            color: _baseColor,
-          )),
+        baseColor: _baseColor,
+        highlightColor: const Color(0xFFFFFFFF),
+        child: Container(
+          height: height,
+          width: width,
+          color: _baseColor,
+        ),
+      ),
     );
   }
 }

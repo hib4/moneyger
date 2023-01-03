@@ -62,7 +62,7 @@ class _ArtikelCardState extends State<ArtikelCard> {
                 borderRadius: BorderRadius.circular(5),
                 child: CachedNetworkImage(
                   imageUrl: widget.foto,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                   placeholder: (context, url) => ShimmerWidget(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,

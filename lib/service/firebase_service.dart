@@ -272,10 +272,11 @@ class FirebaseService {
             print(1);
             num oldValueTotal = detailTransactionSnapshot['total'];
             num newValueTotal = oldValueTotal + total;
-            num oldValueDay = detailTransactionSnapshot['day'][day];
-            num newValueDay = oldValueDay + total;
 
             if (detailTransactionSnapshot['last_day'] == day) {
+              num oldValueDay = detailTransactionSnapshot['day'][day];
+              num newValueDay = oldValueDay + total;
+
               print(2);
               transaction.update(
                 detailTransactionDocument,
@@ -370,6 +371,76 @@ class FirebaseService {
             type: newValueUser,
             'total_balance': newTotalBalance,
           });
+        },
+      );
+      return true;
+    } on PlatformException {
+      return false;
+    } on SocketException {
+      showSnackBar(context, title: 'Tidak ada koneksi internet');
+      return false;
+    } on FirebaseException {
+      return false;
+    }
+  }
+
+  Future<bool> deleteTransaction(
+    BuildContext context, {
+    required String docId,
+    required String type,
+    required num total,
+    required String day,
+    required String week,
+  }) async {
+    try {
+      String uid = SharedCode().uid;
+
+      DocumentReference userDocument =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+
+      DocumentReference transactionDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('transaction')
+          .doc(docId);
+
+      DocumentReference detailTransactionDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection(type)
+          .doc(week);
+
+      FirebaseFirestore.instance.runTransaction(
+        (transaction) async {
+          DocumentSnapshot userSnapshot = await transaction.get(userDocument);
+          DocumentSnapshot detailTransactionSnapshot =
+              await transaction.get(detailTransactionDocument);
+
+          num oldTotalBalance = userSnapshot['total_balance'];
+          num oldValueUser = userSnapshot[type];
+          num oldValueDetail = detailTransactionSnapshot['day'][day];
+          num oldValueDetailTotal = detailTransactionSnapshot['total'];
+
+          num newTotalBalance = type == 'income'
+              ? oldTotalBalance - total
+              : oldTotalBalance + total;
+          num newValueUser = oldValueUser - total;
+          num newValueDetail = oldValueDetail - total;
+          num newValueDetailTotal = oldValueDetailTotal - total;
+
+          await transactionDocument.delete().then((value) {
+            transaction.update(detailTransactionDocument, {
+              'total': newValueDetailTotal,
+              'day.$day': newValueDetail,
+            });
+
+            transaction.update(userDocument, {
+              type: newValueUser,
+              'total_balance': newTotalBalance,
+            });
+          });
+
+          return true;
         },
       );
       return true;
