@@ -105,6 +105,7 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
                               data['day'],
                               data['week'],
                               data.id,
+                              type,
                             ],
                             isSelectedIncome: type == 'income' ? true : false,
                           ),

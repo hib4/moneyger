@@ -23,7 +23,8 @@ class EditTransactionPage extends StatefulWidget {
 }
 
 class _EditTransactionPageState extends State<EditTransactionPage> {
-  String _selectedCategory = 'Belanja';
+  String _selectedCategory = '';
+  String _type = '';
   String _docId = '';
   String _day = '';
   String _week = '';
@@ -88,6 +89,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
     var data = widget.data;
     _totalController.text = _formatter.format(data[0].toString());
     _oldTotal = data[0];
+    _type = data[7];
     _selectedCategory = data[1];
     _dateController.text = data[2];
     _descController.text = data[3];
@@ -153,7 +155,9 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                   _dropdownCategory(
                     textTheme,
                     value: _selectedCategory,
-                    items: ListCategory().dropdownExpenditureItems,
+                    items: _type == 'income'
+                        ? ListCategory().dropdownIncomeItems
+                        : ListCategory().dropdownExpenditureItems,
                   ),
                   const SizedBox(
                     height: 16,
