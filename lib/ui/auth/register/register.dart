@@ -64,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           height: 8,
                         ),
                         Text(
-                          'Masukkan email dan password untuk mendaftar',
+                          'Masukkan form di bawah untuk mendaftar',
                           style: textTheme.bodyText2,
                         ),
                         const SizedBox(

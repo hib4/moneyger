@@ -52,8 +52,8 @@ class _DetailTransactionItemState extends State<DetailTransactionItem> {
                     const SizedBox(
                       height: 8,
                     ),
-                    Container(
-                      width: 88,
+                    SizedBox(
+                      width: 84,
                       child: Text(
                         widget.isIncome
                             ? SharedCode().convertToIdr(data['income'], 0)

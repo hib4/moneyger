@@ -120,6 +120,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(_oldTotal.toString()),
                   const SizedBox(
                     height: 24,
                   ),
@@ -223,7 +224,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                                     value ? Navigator.pop(context) : null,
                               )
                             : _getUserData().then((value) async {
-                                _userData['total_balance'] <
+                                (_userData['total_balance'] + _oldTotal) <
                                         _formatter.getUnformattedValue()
                                     ? showSnackBar(context,
                                         title: 'Saldo tidak mencukupi')

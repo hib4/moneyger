@@ -148,12 +148,10 @@ class FirebaseService {
                 'created_at': DateTime.now(),
                 'updated_at': DateTime.now(),
               });
-              return true;
             } else {
               documentReference.update({
                 'updated_at': DateTime.now(),
               });
-              return true;
             }
           });
         });
@@ -347,10 +345,19 @@ class FirebaseService {
           num oldValueDetail = detailTransactionSnapshot['day'][day];
           num oldValueDetailTotal = detailTransactionSnapshot['total'];
 
-          num newTotalBalance = (oldTotalBalance - oldTotal) + total;
+          num newTotalBalance = type == 'income'
+              ? (oldTotalBalance - oldTotal) + total
+              : oldTotalBalance + (oldTotal - total);
+          print('newTotalBalance = $newTotalBalance');
+
           num newValueUser = (oldValueUser - oldTotal) + total;
+          print('newValueUser = $newValueUser');
+
           num newValueDetail = (oldValueDetail - oldTotal) + total;
+          print('newValueDetail = $newValueDetail');
+
           num newValueDetailTotal = (oldValueDetailTotal - oldTotal) + total;
+          print('newValueDetailTotal = $newValueDetailTotal');
 
           transaction.update(transactionDocument, {
             'type': type,

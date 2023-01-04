@@ -17,6 +17,14 @@ class WelcomeNameItem extends StatelessWidget {
       future: _document.get(),
       builder: (_, snapshot) {
         if (snapshot.hasData) {
+          if (!snapshot.data!.exists) {
+            return Text(
+              'Hai, -',
+              style: textTheme.headline2!.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            );
+          }
           var data = snapshot.data!;
 
           return Text(
