@@ -453,4 +453,30 @@ class FirebaseService {
       return false;
     }
   }
+
+  Future<bool> editProfile(BuildContext context, {required String name}) async {
+    try {
+      String uid = SharedCode().uid;
+
+      DocumentReference userDocument =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+
+      FirebaseFirestore.instance.runTransaction(
+        (transaction) async {
+          transaction.update(userDocument, {
+            'full_name': name,
+          });
+          return true;
+        },
+      );
+      return true;
+    } on PlatformException {
+      return false;
+    } on SocketException {
+      showSnackBar(context, title: 'Tidak ada koneksi internet');
+      return false;
+    } on FirebaseException {
+      return false;
+    }
+  }
 }

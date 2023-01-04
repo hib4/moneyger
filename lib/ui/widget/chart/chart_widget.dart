@@ -117,6 +117,8 @@ class _ChartWidgetState extends State<ChartWidget> {
               titlesData: _getTitleData(),
               lineBarsData: [
                 LineChartBarData(
+                  isCurved: true,
+                  preventCurveOverShooting: true,
                   spots: _getChartTransaction(_income),
                   color: ColorValue.greenColor,
                   dotData: FlDotData(
@@ -130,6 +132,8 @@ class _ChartWidgetState extends State<ChartWidget> {
                   ),
                 ),
                 LineChartBarData(
+                  isCurved: true,
+                  preventCurveOverShooting: true,
                   spots: _getChartTransaction(_expenditure),
                   color: ColorValue.redColor,
                   dotData: FlDotData(
