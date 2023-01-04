@@ -80,7 +80,7 @@ class _EditPersonalInformationState extends State<EditPersonalInformation> {
                         hint: 'Masukkan nama lengkap',
                         controller: _fullNameController,
                         validator: (value) =>
-                            SharedCode().emptyValidator(value),
+                            SharedCode().nameValidator(value),
                       ),
                       const SizedBox(
                         height: 16,
