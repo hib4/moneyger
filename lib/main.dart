@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/firebase_options.dart';
+import 'package:moneyger/ui/bottom_navigation/item/budget.dart';
 import 'package:moneyger/ui/splash_screen//splash_screen.dart';
 
 void main() async {
