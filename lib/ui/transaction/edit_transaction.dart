@@ -114,7 +114,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
             child: Form(
               key: _formKey,
               child: Column(
@@ -138,7 +138,8 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                     controller: _totalController,
                     textInputType: TextInputType.number,
                     withInputFormatter: true,
-                    validator: (value) => SharedCode().emptyValidator(value),
+                    validator: (value) =>
+                        SharedCode().transactionValidator(value),
                   ),
                   const SizedBox(
                     height: 16,

@@ -24,7 +24,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   final _formatter = CurrencyTextInputFormatter(
     locale: 'id',
     decimalDigits: 0,
-    symbol: 'Rp ',
+    symbol: 'Rp. ',
   );
   Map<String, dynamic> _userData = {};
 
@@ -116,7 +116,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     controller: _totalController,
                     textInputType: TextInputType.number,
                     withInputFormatter: true,
-                    validator: (value) => SharedCode().emptyValidator(value),
+                    validator: (value) =>
+                        SharedCode().transactionValidator(value),
                   ),
                   const SizedBox(
                     height: 16,

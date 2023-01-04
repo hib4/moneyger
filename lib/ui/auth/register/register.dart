@@ -74,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           label: 'Masukkan nama lengkap',
                           controller: _fullNameController,
                           validator: (value) =>
-                              SharedCode().emptyValidator(value),
+                              SharedCode().nameValidator(value),
                         ),
                         const SizedBox(
                           height: 12,

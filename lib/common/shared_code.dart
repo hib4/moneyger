@@ -7,6 +7,28 @@ class SharedCode {
     return value.toString().trim().isEmpty ? 'Bidang tidak boleh kosong' : null;
   }
 
+  String? nameValidator(value) {
+    bool nameValid = RegExp(r'[0-9]').hasMatch(value);
+
+    if (nameValid) {
+      return 'Nama tidak boleh mengandung angka';
+    } else if (value.toString().trim().isEmpty) {
+      return 'Nama tidak boleh kosong';
+    } else {
+      return null;
+    }
+  }
+
+  String? transactionValidator(value) {
+    if (value.toString() == 'Rp. 0') {
+      return 'Nominal tidak boleh 0';
+    } else if (value.toString().trim().isEmpty) {
+      return 'Nominal tidak boleh kosong';
+    } else {
+      return null;
+    }
+  }
+
   String? niyValidator(value) {
     return value.toString().length < 10
         ? 'NIY tidak boleh kurang dari 10 angka'
