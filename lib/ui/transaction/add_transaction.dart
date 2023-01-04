@@ -19,7 +19,7 @@ class AddTransactionPage extends StatefulWidget {
 
 class _AddTransactionPageState extends State<AddTransactionPage> {
   bool _isSelectedIncome = true;
-  String _selectedCategory = 'Belanja';
+  String _selectedCategory = 'Gaji';
   final _formKey = GlobalKey<FormState>();
   final _formatter = CurrencyTextInputFormatter(
     locale: 'id',
@@ -133,7 +133,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   _dropdownCategory(
                     textTheme,
                     value: _selectedCategory,
-                    items: ListCategory().dropdownItems,
+                    items: _isSelectedIncome
+                        ? ListCategory().dropdownIncomeItems
+                        : ListCategory().dropdownExpenditureItems,
                   ),
                   const SizedBox(
                     height: 16,
@@ -333,6 +335,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         if (_isSelectedIncome == true) {
           setState(() {
             _isSelectedIncome = !_isSelectedIncome;
+            _selectedCategory = 'Belanja';
           });
         }
       },
@@ -367,6 +370,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         if (_isSelectedIncome == false) {
           setState(() {
             _isSelectedIncome = !_isSelectedIncome;
+            _selectedCategory = 'Gaji';
           });
         }
       },

@@ -153,7 +153,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                   _dropdownCategory(
                     textTheme,
                     value: _selectedCategory,
-                    items: ListCategory().dropdownItems,
+                    items: ListCategory().dropdownExpenditureItems,
                   ),
                   const SizedBox(
                     height: 16,
