@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/ui/auth/login/login.dart';
 import 'package:moneyger/ui/auth/reset_password/reset_password_profile.dart';
+import 'package:moneyger/ui/personal_information/edit_personal_information.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
 import 'package:moneyger/ui/widget/user_item/user_item.dart';
 
@@ -72,9 +73,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     _button(
                       textTheme,
-                      onPress: () {},
+                      onPress: () {
+                        Navigate.navigatorPush(
+                            context, const EditPersonalInformation());
+                      },
                       icon: 'personal_info',
-                      title: 'Informasi Pribadi',
+                      title: 'Edit Profile',
                     ),
                     const SizedBox(
                       height: 16,
@@ -82,7 +86,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     _button(
                       textTheme,
                       onPress: () {
-                        Navigate.navigatorPush(context, ResetPasswordProfilePage());
+                        Navigate.navigatorPush(
+                            context, const ResetPasswordProfilePage());
                       },
                       icon: 'reset_password',
                       title: 'Reset Password',

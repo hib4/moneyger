@@ -80,8 +80,8 @@ class ProfilePreviewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-      future: _document.get(),
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: _document.snapshots(),
       builder: (_, snapshot) {
         if (snapshot.hasData) {
           var data = snapshot.data!;

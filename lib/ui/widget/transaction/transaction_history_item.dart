@@ -92,21 +92,23 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
                 },
                 onTapDown: widget.isHome ? null : _storePosition,
                 onTap: () {
-                  Navigate.navigatorPush(
-                    context,
-                    EditTransactionPage(
-                      data: [
-                        data['total'],
-                        data['category'],
-                        data['date'],
-                        data['desc'],
-                        data['day'],
-                        data['week'],
-                        data.id,
-                      ],
-                      isSelectedIncome: type == 'income' ? true : false,
-                    ),
-                  );
+                  widget.isHome
+                      ? null
+                      : Navigate.navigatorPush(
+                          context,
+                          EditTransactionPage(
+                            data: [
+                              data['total'],
+                              data['category'],
+                              data['date'],
+                              data['desc'],
+                              data['day'],
+                              data['week'],
+                              data.id,
+                            ],
+                            isSelectedIncome: type == 'income' ? true : false,
+                          ),
+                        );
                 },
                 child: Container(
                   padding: const EdgeInsets.all(15),
