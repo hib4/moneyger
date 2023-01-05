@@ -513,7 +513,6 @@ class FirebaseService {
               'desc': desc,
               'budget': budget,
               'remain': remain,
-              'percent': 0,
               'used': 0,
               'created_at': DateTime.now(),
               'updated_at': DateTime.now(),
@@ -576,6 +575,7 @@ class FirebaseService {
               'category': category,
               'date': date,
               'desc': desc,
+              'day': day,
               'week': formattedDate,
               'created_at': DateTime.now(),
               'updated_at': DateTime.now(),
@@ -600,6 +600,101 @@ class FirebaseService {
 
           transaction.update(userDocument, {
             'expenditure': newExpenditure,
+            'total_balance': newTotalBalance,
+          });
+        },
+      );
+      return true;
+    } on PlatformException {
+      return false;
+    } on SocketException {
+      showSnackBar(context, title: 'Tidak ada koneksi internet');
+      return false;
+    } on FirebaseException {
+      return false;
+    }
+  }
+
+  Future<bool> editBudgetTransaction(
+    BuildContext context, {
+    required String docId,
+    required String docIdTransaction,
+    required num total,
+    required num oldTotal,
+    required String date,
+    required String desc,
+    required String day,
+    required String week,
+  }) async {
+    try {
+      String uid = SharedCode().uid;
+      String type = 'expenditure';
+
+      DocumentReference userDocument =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+
+      DocumentReference detailTransactionDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection(type)
+          .doc(week);
+
+      DocumentReference budgetDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('budget')
+          .doc(docId);
+
+      DocumentReference budgetTransactionDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('budget')
+          .doc(docId)
+          .collection('transaction')
+          .doc(docIdTransaction);
+
+      FirebaseFirestore.instance.runTransaction(
+        (transaction) async {
+          DocumentSnapshot userSnapshot = await transaction.get(userDocument);
+          DocumentSnapshot detailTransactionSnapshot =
+              await transaction.get(detailTransactionDocument);
+          DocumentSnapshot budgetSnapshot =
+              await transaction.get(budgetDocument);
+
+          num oldTotalBalance = userSnapshot['total_balance'];
+          num oldValueUser = userSnapshot[type];
+          num oldValueDetail = detailTransactionSnapshot['day'][day];
+          num oldValueDetailTotal = detailTransactionSnapshot['total'];
+          num oldValueRemainBudget = budgetSnapshot['remain'];
+          num oldValueUsedBudget = budgetSnapshot['used'];
+
+          num newTotalBalance = oldTotalBalance + (oldTotal - total);
+          num newValueUser = (oldValueUser - oldTotal) + total;
+          num newValueDetail = (oldValueDetail - oldTotal) + total;
+          num newValueDetailTotal = (oldValueDetailTotal - oldTotal) + total;
+          num newValueRemainBudget = (oldValueRemainBudget - oldTotal) + total;
+          num newValueUsedBudget = (oldValueUsedBudget - oldTotal) + total;
+
+          transaction.update(budgetTransactionDocument, {
+            'total': total,
+            'date': date,
+            'day': day,
+            'updated_at': DateTime.now(),
+          });
+
+          transaction.update(budgetDocument, {
+            'remain': newValueRemainBudget,
+            'used': newValueUsedBudget,
+            'updated_at': DateTime.now(),
+          });
+
+          transaction.update(detailTransactionDocument, {
+            'total': newValueDetailTotal,
+            'day.$day': newValueDetail,
+          });
+
+          transaction.update(userDocument, {
+            type: newValueUser,
             'total_balance': newTotalBalance,
           });
         },

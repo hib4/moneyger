@@ -29,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
+              padding: const EdgeInsets.fromLTRB(28, 50, 28, 0),
               child: Column(
                 children: [
                   ProfilePreviewItem(),
@@ -61,7 +61,8 @@ class _ProfilePageState extends State<ProfilePage> {
             Expanded(
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(30),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
