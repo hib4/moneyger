@@ -204,7 +204,7 @@ class FirebaseService {
           num newValueType = oldValueType + total;
 
           if (!transactionSnapshot.exists) {
-            transactionDocument.set({
+            await transactionDocument.set({
               'type': type,
               'total': total,
               'category': category,
@@ -223,7 +223,6 @@ class FirebaseService {
             'total_balance': newBalance,
             type: newValueType,
           });
-          return true;
         },
       );
       return true;
@@ -515,10 +514,94 @@ class FirebaseService {
               'budget': budget,
               'remain': remain,
               'percent': 0,
+              'used': 0,
               'created_at': DateTime.now(),
               'updated_at': DateTime.now(),
             });
           }
+        },
+      );
+      return true;
+    } on PlatformException {
+      return false;
+    } on SocketException {
+      showSnackBar(context, title: 'Tidak ada koneksi internet');
+      return false;
+    } on FirebaseException {
+      return false;
+    }
+  }
+
+  Future<bool> addBudgetTransaction(
+    BuildContext context, {
+    required num total,
+    required String category,
+    required String date,
+    required String desc,
+    required String docId,
+  }) async {
+    try {
+      String uid = SharedCode().uid;
+      String day = SharedCode().day;
+      String formattedDate = SharedCode().formattedDate;
+
+      DocumentReference userDocument =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+
+      DocumentReference budgetDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('budget')
+          .doc(docId);
+
+      DocumentReference budgetTransactionDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('budget')
+          .doc(docId)
+          .collection('transaction')
+          .doc();
+
+      FirebaseFirestore.instance.runTransaction(
+        (transaction) async {
+          DocumentSnapshot userSnapshot = await transaction.get(userDocument);
+          DocumentSnapshot budgetSnapshot =
+              await transaction.get(budgetDocument);
+          DocumentSnapshot budgetTransactionSnapshot =
+              await transaction.get(budgetTransactionDocument);
+
+          if (!budgetTransactionSnapshot.exists) {
+            await budgetTransactionDocument.set({
+              'total': total,
+              'category': category,
+              'date': date,
+              'desc': desc,
+              'week': formattedDate,
+              'created_at': DateTime.now(),
+              'updated_at': DateTime.now(),
+            }).then((value) =>
+                addTypeTransaction(context, type: 'expenditure', total: total));
+          }
+
+          num oldRemain = budgetSnapshot['remain'];
+          num newRemain = oldRemain - total;
+          num oldUse = budgetSnapshot['used'];
+          num newUse = oldUse + total;
+
+          transaction.update(budgetDocument, {
+            'remain': newRemain,
+            'used': newUse,
+          });
+
+          num oldExpenditure = userSnapshot['expenditure'];
+          num newExpenditure = oldExpenditure + total;
+          num oldTotalBalance = userSnapshot['total_balance'];
+          num newTotalBalance = oldTotalBalance - total;
+
+          transaction.update(userDocument, {
+            'expenditure': newExpenditure,
+            'total_balance': newTotalBalance,
+          });
         },
       );
       return true;

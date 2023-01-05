@@ -11,7 +11,10 @@ import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 
 class AddBudgetTransactionPage extends StatefulWidget {
-  const AddBudgetTransactionPage({Key? key}) : super(key: key);
+  final String docId;
+
+  const AddBudgetTransactionPage({Key? key, required this.docId})
+      : super(key: key);
 
   @override
   State<AddBudgetTransactionPage> createState() =>
@@ -42,7 +45,8 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
 
     if (picked != null) {
       setState(
-        () => _dateController.text =
+            () =>
+        _dateController.text =
             DateFormat('d MMM yyyy', 'id').format(picked),
       );
     }
@@ -50,19 +54,20 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
 
   Future _getUserData() async {
     var document =
-        FirebaseFirestore.instance.collection('users').doc(SharedCode().uid);
+    FirebaseFirestore.instance.collection('users').doc(SharedCode().uid);
 
     var value = await document.get();
     _userData = value.data() ?? {};
   }
 
-  Future<bool> _addBudget() async {
-    bool isSuccess = await FirebaseService().addBudget(
-      context,
-      category: _selectedCategory,
-      desc: _descController.text,
-      budget: _formatter.getUnformattedValue(),
-      remain: _formatter.getUnformattedValue(),
+  Future<bool> _addBudgetTransaction() async {
+    bool isSuccess = await FirebaseService().addBudgetTransaction(
+        context,
+        total: _formatter.getUnformattedValue(),
+        category: _selectedCategory,
+        desc: _descController.text,
+        date: _dateController.text,
+        docId: widget.docId,
     );
 
     return isSuccess;
@@ -76,7 +81,9 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme
+        .of(context)
+        .textTheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -192,13 +199,13 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                       if (_formKey.currentState!.validate()) {
                         _getUserData().then((value) async {
                           _userData['total_balance'] <
-                                  _formatter.getUnformattedValue()
+                              _formatter.getUnformattedValue()
                               ? showSnackBar(context,
-                                  title: 'Saldo tidak mencukupi')
-                              : await _addBudget().then(
-                                  (value) =>
-                                      value ? Navigator.pop(context) : null,
-                                );
+                              title: 'Saldo tidak mencukupi')
+                              : await _addBudgetTransaction().then(
+                                (value) =>
+                            value ? Navigator.pop(context) : null,
+                          );
                         });
                       }
                     },
@@ -213,8 +220,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
     );
   }
 
-  Widget _dropdownCategory(
-    TextTheme textTheme, {
+  Widget _dropdownCategory(TextTheme textTheme, {
     required String value,
     required List<DropdownMenuItem<String>>? items,
   }) {
@@ -251,8 +257,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
     );
   }
 
-  Widget _textFormTransaction(
-    TextTheme textTheme, {
+  Widget _textFormTransaction(TextTheme textTheme, {
     required String hint,
     required TextEditingController controller,
     TextInputType textInputType = TextInputType.text,
@@ -309,12 +314,12 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
         hintStyle: textTheme.bodyText1,
         prefixIcon: withIcon
             ? const Icon(
-                Icons.date_range_outlined,
-                color: ColorValue.secondaryColor,
-              )
+          Icons.date_range_outlined,
+          color: ColorValue.secondaryColor,
+        )
             : null,
         contentPadding:
-            const EdgeInsets.symmetric(vertical: 17, horizontal: 16),
+        const EdgeInsets.symmetric(vertical: 17, horizontal: 16),
       ),
     );
   }

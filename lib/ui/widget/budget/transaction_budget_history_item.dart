@@ -26,7 +26,7 @@ class _TransactionBudgetHistoryItemState
   final _collection = FirebaseFirestore.instance
       .collection('users')
       .doc(SharedCode().uid)
-      .collection('transaction');
+      .collection('budget');
 
   void _showCustomPopMenu(List data, String isIncome) {
     final RenderObject? overlay =

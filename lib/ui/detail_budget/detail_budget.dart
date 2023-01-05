@@ -47,7 +47,7 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                 var data = snapshot.data!;
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
                   child: Column(
                     children: [
                       Row(
@@ -112,10 +112,12 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                                     radius: 30.0,
                                     lineWidth: 5.0,
                                     animation: true,
-                                    percent: 0.7,
-                                    center: const Text(
-                                      "100%",
-                                      style: TextStyle(
+                                    percent: SharedCode().getPercentDouble(
+                                        data['budget'], data['used']),
+                                    center: Text(
+                                      SharedCode().getPercentString(
+                                          data['budget'], data['used']),
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 12.0,
                                           color: ColorValue.secondaryColor),
@@ -197,7 +199,10 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                           TextButton(
                             onPressed: () {
                               Navigate.navigatorPush(
-                                  context, const AddBudgetTransactionPage());
+                                  context,
+                                  AddBudgetTransactionPage(
+                                    docId: widget.docId,
+                                  ));
                             },
                             child: const Text(
                               "+ Tambah Transaksi",
