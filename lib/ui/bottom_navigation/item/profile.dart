@@ -75,10 +75,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       textTheme,
                       onPress: () {
                         Navigate.navigatorPush(
-                            context, const EditPersonalInformation());
+                            context, const EditProfilePage());
                       },
                       icon: 'personal_info',
-                      title: 'Edit Profile',
+                      title: 'Edit Profil',
                     ),
                     const SizedBox(
                       height: 16,

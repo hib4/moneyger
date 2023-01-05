@@ -486,4 +486,49 @@ class FirebaseService {
       return false;
     }
   }
+
+  Future<bool> addBudget(
+    BuildContext context, {
+    required String category,
+    required String desc,
+    required num budget,
+    required num remain,
+  }) async {
+    try {
+      String uid = SharedCode().uid;
+
+      DocumentReference budgetDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('budget')
+          .doc();
+
+      FirebaseFirestore.instance.runTransaction(
+        (transaction) async {
+          DocumentSnapshot budgetSnapshot =
+              await transaction.get(budgetDocument);
+
+          if (!budgetSnapshot.exists) {
+            budgetDocument.set({
+              'category': category,
+              'desc': desc,
+              'budget': budget,
+              'remain': remain,
+              'percent': 0,
+              'created_at': DateTime.now(),
+              'updated_at': DateTime.now(),
+            });
+          }
+        },
+      );
+      return true;
+    } on PlatformException {
+      return false;
+    } on SocketException {
+      showSnackBar(context, title: 'Tidak ada koneksi internet');
+      return false;
+    } on FirebaseException {
+      return false;
+    }
+  }
 }

@@ -19,7 +19,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
   final _tabs = [
     const HomePage(),
     const TransactionPage(),
-    const ProfilePage()
+    const BudgetPage(),
+    const ProfilePage(),
   ];
 
   final _items = [
@@ -34,9 +35,14 @@ class _BottomNavigationState extends State<BottomNavigation> {
       label: 'Transaksi',
     ),
     BottomNavigationBarItem(
+      icon: SvgPicture.asset('assets/icons/transaction.svg'),
+      activeIcon: SvgPicture.asset('assets/icons/transaction_active.svg'),
+      label: 'Anggaran',
+    ),
+    BottomNavigationBarItem(
       icon: SvgPicture.asset('assets/icons/profile.svg'),
       activeIcon: SvgPicture.asset('assets/icons/profile_active.svg'),
-      label: 'Profile',
+      label: 'Profil',
     ),
   ];
 
