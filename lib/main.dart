@@ -6,6 +6,7 @@ import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/firebase_options.dart';
 import 'package:moneyger/ui/bottom_navigation/item/budget.dart';
 import 'package:moneyger/ui/splash_screen//splash_screen.dart';
+import 'package:moneyger/ui/subscribe/subscribe.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
       title: 'Moneyger',
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.getThemeLight(),
-      home: const SplashScreen(),
+      home: const SubscribePage(),
     );
   }
 }
