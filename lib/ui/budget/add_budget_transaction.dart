@@ -10,25 +10,16 @@ import 'package:moneyger/constant/list_category.dart';
 import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 
-class EditTransactionPage extends StatefulWidget {
-  final List data;
-  final bool isSelectedIncome;
-
-  const EditTransactionPage(
-      {Key? key, required this.data, required this.isSelectedIncome})
-      : super(key: key);
+class AddBudgetTransactionPage extends StatefulWidget {
+  const AddBudgetTransactionPage({Key? key}) : super(key: key);
 
   @override
-  State<EditTransactionPage> createState() => _EditTransactionPageState();
+  State<AddBudgetTransactionPage> createState() =>
+      _AddBudgetTransactionPageState();
 }
 
-class _EditTransactionPageState extends State<EditTransactionPage> {
-  String _selectedCategory = '';
-  String _type = '';
-  String _docId = '';
-  String _day = '';
-  String _week = '';
-  num _oldTotal = 0;
+class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
+  String _selectedCategory = 'Belanja';
   final _formKey = GlobalKey<FormState>();
   final _formatter = CurrencyTextInputFormatter(
     locale: 'id',
@@ -65,18 +56,13 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
     _userData = value.data() ?? {};
   }
 
-  Future<bool> _addTransaction(bool isSelectedIncome) async {
-    bool isSuccess = await FirebaseService().editTransaction(
+  Future<bool> _addBudget() async {
+    bool isSuccess = await FirebaseService().addBudget(
       context,
-      docId: _docId,
-      type: isSelectedIncome ? 'income' : 'expenditure',
-      total: _formatter.getUnformattedValue(),
-      oldTotal: _oldTotal,
       category: _selectedCategory,
-      date: _dateController.text,
       desc: _descController.text,
-      day: _day,
-      week: _week,
+      budget: _formatter.getUnformattedValue(),
+      remain: _formatter.getUnformattedValue(),
     );
 
     return isSuccess;
@@ -86,16 +72,6 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    var data = widget.data;
-    _totalController.text = _formatter.format(data[0].toString());
-    _oldTotal = data[0];
-    _type = data[7];
-    _selectedCategory = data[1];
-    _dateController.text = data[2];
-    _descController.text = data[3];
-    _day = data[4];
-    _week = data[5];
-    _docId = data[6];
   }
 
   @override
@@ -106,7 +82,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
-          'Edit Transaksi',
+          'Tambah Transaksi',
           style: TextStyle(color: Colors.black),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
@@ -156,9 +132,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                   _dropdownCategory(
                     textTheme,
                     value: _selectedCategory,
-                    items: _type == 'income'
-                        ? ListCategory().dropdownIncomeItems
-                        : ListCategory().dropdownExpenditureItems,
+                    items: ListCategory().dropdownExpenditureItems,
                   ),
                   const SizedBox(
                     height: 16,
@@ -216,28 +190,19 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        widget.isSelectedIncome
-                            ? await _addTransaction(widget.isSelectedIncome)
-                                .then(
-                                (value) =>
-                                    value ? Navigator.pop(context) : null,
-                              )
-                            : _getUserData().then((value) async {
-                                (_userData['total_balance'] + _oldTotal) <
-                                        _formatter.getUnformattedValue()
-                                    ? showSnackBar(context,
-                                        title: 'Saldo tidak mencukupi')
-                                    : await _addTransaction(
-                                            widget.isSelectedIncome)
-                                        .then(
-                                        (value) => value
-                                            ? Navigator.pop(context)
-                                            : null,
-                                      );
-                              });
+                        _getUserData().then((value) async {
+                          _userData['total_balance'] <
+                                  _formatter.getUnformattedValue()
+                              ? showSnackBar(context,
+                                  title: 'Saldo tidak mencukupi')
+                              : await _addBudget().then(
+                                  (value) =>
+                                      value ? Navigator.pop(context) : null,
+                                );
+                        });
                       }
                     },
-                    child: const Text('Edit'),
+                    child: const Text('Tambah'),
                   ),
                 ],
               ),

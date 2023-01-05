@@ -5,15 +5,15 @@ import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/widget/loading/loading_animation.dart';
 
-class EditPersonalInformation extends StatefulWidget {
-  const EditPersonalInformation({Key? key}) : super(key: key);
+class EditProfilePage extends StatefulWidget {
+  const EditProfilePage({Key? key}) : super(key: key);
 
   @override
-  State<EditPersonalInformation> createState() =>
-      _EditPersonalInformationState();
+  State<EditProfilePage> createState() =>
+      _EditProfilePageState();
 }
 
-class _EditPersonalInformationState extends State<EditPersonalInformation> {
+class _EditProfilePageState extends State<EditProfilePage> {
   final _document =
       FirebaseFirestore.instance.collection('users').doc(SharedCode().uid);
   final _fullNameController = TextEditingController();
@@ -27,7 +27,7 @@ class _EditPersonalInformationState extends State<EditPersonalInformation> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
-          'Edit Profile',
+          'Edit Profil',
           style: TextStyle(color: Colors.black),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
