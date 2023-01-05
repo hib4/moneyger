@@ -77,6 +77,24 @@ class SharedCode {
   String getInitials(String name) => name.isNotEmpty
       ? name.trim().split(RegExp(' +')).map((s) => s[0]).take(2).join()
       : '';
+
+  String getPercentString(int budget, int expenditure) {
+    double value = (double.parse('$expenditure') / double.parse('$budget')) * 100;
+    if (value > 100) {
+      return '100%';
+    } else {
+      return '${value.toInt()}%';
+    }
+  }
+
+  double getPercentDouble(int budget, int expenditure) {
+    double value = double.parse('$expenditure') / double.parse('$budget');
+    if (value > 1) {
+      return 1.0;
+    } else {
+      return value;
+    }
+  }
 }
 
 extension DateTimeExtension on DateTime {

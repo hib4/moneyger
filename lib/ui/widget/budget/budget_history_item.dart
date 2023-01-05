@@ -145,10 +145,12 @@ class _BudgetHistoryItemState extends State<BudgetHistoryItem> {
                           animation: true,
                           lineHeight: 15.0,
                           animationDuration: 750,
-                          percent: 0.66,
-                          center: const Text(
-                            "66.0%",
-                            style: TextStyle(color: Colors.black),
+                          percent: SharedCode().getPercentDouble(
+                              data['budget'] ?? 0, data['used'] ?? 0),
+                          center: Text(
+                            SharedCode()
+                                .getPercentString(data['budget'], data['used']),
+                            style: const TextStyle(color: Colors.black),
                           ),
                           barRadius: const Radius.circular(16),
                           progressColor: ColorValue.secondaryColor,
