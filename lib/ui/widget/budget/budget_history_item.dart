@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
-import 'package:moneyger/ui/detail_budget/detail_budget.dart';
+import 'package:moneyger/ui/budget/detail_budget.dart';
 import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -22,7 +22,7 @@ class _BudgetHistoryItemState extends State<BudgetHistoryItem> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: _collection.snapshots(),
+        stream: _collection.orderBy('updated_at', descending: true).snapshots(),
         builder: (_, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.docs.isEmpty) {

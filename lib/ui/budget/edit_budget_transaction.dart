@@ -10,20 +10,24 @@ import 'package:moneyger/constant/list_category.dart';
 import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 
-class AddBudgetTransactionPage extends StatefulWidget {
-  final String docId, category;
+class EditBudgetTransactionPage extends StatefulWidget {
+  final List data;
 
-  const AddBudgetTransactionPage(
-      {Key? key, required this.docId, required this.category})
+  const EditBudgetTransactionPage({Key? key, required this.data})
       : super(key: key);
 
   @override
-  State<AddBudgetTransactionPage> createState() =>
-      _AddBudgetTransactionPageState();
+  State<EditBudgetTransactionPage> createState() =>
+      _EditBudgetTransactionPageState();
 }
 
-class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
-  String _selectedCategory = 'Belanja';
+class _EditBudgetTransactionPageState extends State<EditBudgetTransactionPage> {
+  String _selectedCategory = '';
+  num _oldTotal = 0;
+  String _day = '';
+  String _week = '';
+  String _docId = '';
+  String _docIdTransaction = '';
   final _formKey = GlobalKey<FormState>();
   final _formatter = CurrencyTextInputFormatter(
     locale: 'id',
@@ -60,14 +64,17 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
     _userData = value.data() ?? {};
   }
 
-  Future<bool> _addBudgetTransaction() async {
-    bool isSuccess = await FirebaseService().addBudgetTransaction(
+  Future<bool> _editBudgetTransaction() async {
+    bool isSuccess = await FirebaseService().editBudgetTransaction(
       context,
+      docId: _docId,
+      docIdTransaction: _docIdTransaction,
       total: _formatter.getUnformattedValue(),
-      category: _selectedCategory,
       desc: _descController.text,
       date: _dateController.text,
-      docId: widget.docId,
+      oldTotal: _oldTotal,
+      day: _day,
+      week: _week,
     );
 
     return isSuccess;
@@ -77,7 +84,16 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _selectedCategory = widget.category;
+    var data = widget.data;
+    _totalController.text = _formatter.format('${data[0]}');
+    _oldTotal = data[0];
+    _dateController.text = data[1];
+    _descController.text = data[2];
+    _day = data[3];
+    _week = data[4];
+    _docId = data[5];
+    _docIdTransaction = data[6];
+    _selectedCategory = data[7];
   }
 
   @override
@@ -88,7 +104,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
-          'Tambah Transaksi',
+          'Edit Transaksi',
           style: TextStyle(color: Colors.black),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
@@ -140,7 +156,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                     value: _selectedCategory,
                     items: <DropdownMenuItem<String>>[
                       DropdownMenuItem(
-                          value: widget.category, child: Text(widget.category)),
+                          value: widget.data[7], child: Text(widget.data[7])),
                     ],
                   ),
                   const SizedBox(
@@ -200,18 +216,18 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _getUserData().then((value) async {
-                          _userData['total_balance'] <
+                          (_userData['total_balance'] + _oldTotal) <
                                   _formatter.getUnformattedValue()
                               ? showSnackBar(context,
                                   title: 'Saldo tidak mencukupi')
-                              : await _addBudgetTransaction().then(
+                              : await _editBudgetTransaction().then(
                                   (value) =>
                                       value ? Navigator.pop(context) : null,
                                 );
                         });
                       }
                     },
-                    child: const Text('Tambah'),
+                    child: const Text('Edit'),
                   ),
                 ],
               ),

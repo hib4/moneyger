@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
+import 'package:moneyger/ui/budget/edit_budget.dart';
 import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
 import 'package:moneyger/ui/transaction/edit_transaction.dart';
 import 'package:moneyger/ui/widget/custom_pop_menu.dart';
@@ -79,7 +80,22 @@ class _TransactionBudgetHistoryItemState
               return GestureDetector(
                 onLongPress: () {},
                 onTapDown: _storePosition,
-                onTap: () {},
+                onTap: () {
+                  Navigate.navigatorPush(
+                      context,
+                      EditBudgetTransactionPage(
+                        data: [
+                          data['total'],
+                          data['date'],
+                          data['desc'],
+                          data['day'],
+                          data['week'],
+                          widget.docId,
+                          data.id,
+                          data['category'],
+                        ],
+                      ));
+                },
                 child: Container(
                   padding: const EdgeInsets.all(15),
                   width: MediaQuery.of(context).size.width,

@@ -37,6 +37,10 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        title: const Text(
+          'Detail Anggaran',
+          style: TextStyle(color: Colors.black),
+        ),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: SingleChildScrollView(
@@ -47,7 +51,8 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                 var data = snapshot.data!;
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
                   child: Column(
                     children: [
                       Row(
@@ -202,6 +207,7 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                                   context,
                                   AddBudgetTransactionPage(
                                     docId: widget.docId,
+                                    category: data['category'],
                                   ));
                             },
                             child: const Text(
