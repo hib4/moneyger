@@ -3,6 +3,7 @@ import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/main.dart';
 import 'package:moneyger/service/api_service.dart';
 import 'package:moneyger/ui/chat/chat.dart';
+import 'package:moneyger/ui/subscribe/subscribe.dart';
 import 'package:moneyger/ui/widget/artikel/artikel_card.dart';
 import 'package:moneyger/ui/widget/chart/chart_widget.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
@@ -220,12 +221,90 @@ class _HomePageState extends State<HomePage> {
                             isiArtikel: _artikel[index].isiArtikel,
                           );
                         },
-                      )
+                      ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Future showpopup() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: ColorValue.secondaryColor,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          content: SizedBox(
+            width: 272.0,
+            height: 315,
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Align(
+                    alignment: Alignment.topRight,
+                    child: Icon(
+                      Icons.close,
+                      size: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 200,
+                  height: 126,
+                  margin: const EdgeInsets.only(top: 28, bottom: 8),
+                  child: const Image(
+                      image: AssetImage('assets/images/subscribe.png')),
+                ),
+                const SizedBox(
+                  width: 200,
+                  child: Text(
+                    'Atur keuanganmu dengan mudah menggunakan Monyeger Premium',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  height: 21,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    elevation: 0,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SubscribePage(),
+                        ));
+                  },
+                  child: const Text(
+                    'Berlangganan',
+                    style: TextStyle(color: ColorValue.secondaryColor),
+                  ),
+                ),
+                const SizedBox(
+                  height: 32,
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

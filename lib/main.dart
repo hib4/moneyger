@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       title: 'Moneyger',
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.getThemeLight(),
-      home: const SubscribePage(),
+      home: const SplashScreen(),
     );
   }
 }
