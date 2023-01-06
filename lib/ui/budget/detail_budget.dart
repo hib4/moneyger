@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
+import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/budget/add_budget_transaction.dart';
 import 'package:moneyger/ui/widget/budget/transaction_budget_history_item.dart';
 import 'package:moneyger/ui/widget/loading/loading_animation.dart';
+import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 import 'package:moneyger/ui/widget/transaction/transaction_history_item.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -48,36 +50,65 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
             stream: _document.doc(_docId).snapshots(),
             builder: (_, snapshot) {
               if (snapshot.hasData) {
-                var data = snapshot.data!;
+                if (!snapshot.data!.exists) {
+                  return const Center(
+                    child: LoadingAnimation(),
+                  );
+                }
 
+                var data = snapshot.data!;
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
                   child: Column(
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const CircleAvatar(
-                            backgroundColor: Color(0xFFF9F9F9),
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
                             children: [
-                              Text(
-                                data['category'],
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
+                              const CircleAvatar(
+                                backgroundColor: Color(0xFFF9F9F9),
                               ),
-                              Text(
-                                data['desc'],
-                                style: const TextStyle(fontSize: 12),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data['category'],
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Text(
+                                    data['desc'],
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ],
                               ),
                             ],
+                          ),
+                          IconButton(
+                            splashRadius: 30,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => _buildPopupDialog(
+                                  context,
+                                  data['desc'],
+                                  data.id,
+                                  data['used'],
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.redAccent,
+                              size: 22,
+                            ),
                           ),
                         ],
                       ),
@@ -234,6 +265,42 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
               }
             }),
       ),
+    );
+  }
+
+  Widget _buildPopupDialog(
+      BuildContext context, String desc, String docId, num used) {
+    return AlertDialog(
+      elevation: 0,
+      title: const Text('Peringatan'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text('Apakah anda yakin ingin menghapus $desc?'),
+        ],
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Kembali'),
+        ),
+        TextButton(
+          onPressed: () async {
+            await FirebaseService()
+                .deleteBudget(context, docId: docId, used: used)
+                .then(
+                  (value) => value
+                      ? Navigator.popUntil(context, (route) => route.isFirst)
+                      : showSnackBar(context,
+                          title: 'Gagal menghapus anggaran'),
+                );
+          },
+          child: const Text('Hapus'),
+        ),
+      ],
     );
   }
 }

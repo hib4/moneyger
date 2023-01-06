@@ -139,7 +139,7 @@ class FirebaseService {
                 await transaction.get(documentReference);
 
             if (!snapshot.exists) {
-              documentReference.set({
+              await documentReference.set({
                 'email': googleSignInAccount.email,
                 'full_name': googleSignInAccount.displayName,
                 'total_balance': 0,
@@ -258,6 +258,7 @@ class FirebaseService {
               await transaction.get(detailTransactionDocument);
 
           if (!detailTransactionSnapshot.exists) {
+            print('hellaaao');
             detailTransactionDocument.set({
               'total': total,
               'day': {
@@ -518,6 +519,58 @@ class FirebaseService {
               'updated_at': DateTime.now(),
             });
           }
+        },
+      );
+      return true;
+    } on PlatformException {
+      return false;
+    } on SocketException {
+      showSnackBar(context, title: 'Tidak ada koneksi internet');
+      return false;
+    } on FirebaseException {
+      return false;
+    }
+  }
+
+  Future<bool> deleteBudget(
+    BuildContext context, {
+    required String docId,
+    required num used,
+  }) async {
+    try {
+      String uid = SharedCode().uid;
+      String type = 'expenditure';
+
+      DocumentReference userDocument =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+
+      // DocumentReference detailTransactionDocument = FirebaseFirestore.instance
+      //     .collection('users')
+      //     .doc(uid)
+      //     .collection(type)
+      //     .doc(week);
+
+      DocumentReference budgetDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('budget')
+          .doc(docId);
+
+      FirebaseFirestore.instance.runTransaction(
+        (transaction) async {
+          DocumentSnapshot userSnapshot = await transaction.get(userDocument);
+
+          num oldExpenditure = userSnapshot['expenditure'];
+          num newExpenditure = oldExpenditure - used;
+          num oldTotalBalance = userSnapshot['total_balance'];
+          num newTotalBalance = oldTotalBalance + used;
+
+          await budgetDocument.delete().then((value) {
+            transaction.update(userDocument, {
+              'total_balance': newTotalBalance,
+              type: newExpenditure,
+            });
+          });
         },
       );
       return true;
