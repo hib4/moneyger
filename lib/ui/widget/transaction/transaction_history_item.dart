@@ -6,7 +6,7 @@ import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
 import 'package:moneyger/ui/transaction/edit_transaction.dart';
-import 'package:moneyger/ui/widget/custom_pop_menu.dart';
+import 'package:moneyger/ui/widget/pop_menu/custom_pop_menu_transaction.dart';
 
 class TransactionHistoryItem extends StatefulWidget {
   final bool isHome;
@@ -37,7 +37,7 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
         Offset.zero & overlay!.paintBounds.size,
       ),
       items: <PopupMenuEntry<int>>[
-        CustomPopMenu(
+        CustomPopMenuTransaction(
           data: data,
           isSelectedIncome: isIncome,
         ),

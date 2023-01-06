@@ -4,10 +4,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
-import 'package:moneyger/ui/budget/edit_budget.dart';
+import 'package:moneyger/ui/budget/edit_budget_transaction.dart';
 import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
 import 'package:moneyger/ui/transaction/edit_transaction.dart';
-import 'package:moneyger/ui/widget/custom_pop_menu.dart';
+import 'package:moneyger/ui/widget/pop_menu/custom_pop_menu_budget.dart';
+import 'package:moneyger/ui/widget/pop_menu/custom_pop_menu_transaction.dart';
 
 class TransactionBudgetHistoryItem extends StatefulWidget {
   final String docId;
@@ -29,7 +30,7 @@ class _TransactionBudgetHistoryItemState
       .doc(SharedCode().uid)
       .collection('budget');
 
-  void _showCustomPopMenu(List data, String isIncome) {
+  void _showCustomPopMenu(List data) {
     final RenderObject? overlay =
         Overlay.of(context)?.context.findRenderObject();
 
@@ -40,9 +41,8 @@ class _TransactionBudgetHistoryItemState
         Offset.zero & overlay!.paintBounds.size,
       ),
       items: <PopupMenuEntry<int>>[
-        CustomPopMenu(
+        CustomPopMenuBudget(
           data: data,
-          isSelectedIncome: isIncome,
         ),
       ],
     );
@@ -78,7 +78,18 @@ class _TransactionBudgetHistoryItemState
               final data = snapshot.data!.docs[index];
 
               return GestureDetector(
-                onLongPress: () {},
+                onLongPress: () {
+                  _showCustomPopMenu(
+                    [
+                      widget.docId,
+                      data.id,
+                      data['total'],
+                      data['day'],
+                      data['week'],
+                      data['desc'],
+                    ],
+                  );
+                },
                 onTapDown: _storePosition,
                 onTap: () {
                   Navigate.navigatorPush(

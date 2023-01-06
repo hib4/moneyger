@@ -709,4 +709,91 @@ class FirebaseService {
       return false;
     }
   }
+
+  Future<bool> deleteBudgetTransaction(
+    BuildContext context, {
+    required String docId,
+    required String docIdTransaction,
+    required num total,
+    required String day,
+    required String week,
+  }) async {
+    try {
+      String uid = SharedCode().uid;
+      String type = 'expenditure';
+
+      DocumentReference userDocument =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+
+      DocumentReference detailTransactionDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection(type)
+          .doc(week);
+
+      DocumentReference budgetDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('budget')
+          .doc(docId);
+
+      DocumentReference budgetTransactionDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('budget')
+          .doc(docId)
+          .collection('transaction')
+          .doc(docIdTransaction);
+
+      FirebaseFirestore.instance.runTransaction(
+        (transaction) async {
+          DocumentSnapshot userSnapshot = await transaction.get(userDocument);
+          DocumentSnapshot detailTransactionSnapshot =
+              await transaction.get(detailTransactionDocument);
+          DocumentSnapshot budgetSnapshot =
+              await transaction.get(budgetDocument);
+
+          num oldTotalBalance = userSnapshot['total_balance'];
+          num oldValueUser = userSnapshot[type];
+          num oldValueDetail = detailTransactionSnapshot['day'][day];
+          num oldValueDetailTotal = detailTransactionSnapshot['total'];
+          num oldValueRemainBudget = budgetSnapshot['remain'];
+          num oldValueUsedBudget = budgetSnapshot['used'];
+
+          num newTotalBalance = oldTotalBalance + total;
+          num newValueUser = oldValueUser - total;
+          num newValueDetail = oldValueDetail - total;
+          num newValueDetailTotal = oldValueDetailTotal - total;
+          num newValueRemainBudget = oldValueRemainBudget + total;
+          num newValueUsedBudget = oldValueUsedBudget - total;
+
+          await budgetTransactionDocument.delete().then((value) {
+            transaction.update(userDocument, {
+              type: newValueUser,
+              'total_balance': newTotalBalance,
+            });
+
+            transaction.update(budgetDocument, {
+              'remain': newValueRemainBudget,
+              'used': newValueUsedBudget,
+              'updated_at': DateTime.now(),
+            });
+
+            transaction.update(detailTransactionDocument, {
+              'total': newValueDetailTotal,
+              'day.$day': newValueDetail,
+            });
+          });
+        },
+      );
+      return true;
+    } on PlatformException {
+      return false;
+    } on SocketException {
+      showSnackBar(context, title: 'Tidak ada koneksi internet');
+      return false;
+    } on FirebaseException {
+      return false;
+    }
+  }
 }

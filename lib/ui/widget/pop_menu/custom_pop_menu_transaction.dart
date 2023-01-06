@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:moneyger/service/firebase_service.dart';
 
-class CustomPopMenu extends PopupMenuEntry<int> {
+class CustomPopMenuTransaction extends PopupMenuEntry<int> {
   final List data;
   final String isSelectedIncome;
 
-  const CustomPopMenu(
+  const CustomPopMenuTransaction(
       {super.key, required this.data, required this.isSelectedIncome});
 
   @override
@@ -18,7 +18,7 @@ class CustomPopMenu extends PopupMenuEntry<int> {
   PlusMinusEntryState createState() => PlusMinusEntryState();
 }
 
-class PlusMinusEntryState extends State<CustomPopMenu> {
+class PlusMinusEntryState extends State<CustomPopMenuTransaction> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
