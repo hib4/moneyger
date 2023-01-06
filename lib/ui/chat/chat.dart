@@ -128,7 +128,7 @@ class _ChatPageState extends State<ChatPage> {
                 String? answer = await ApiService().getCompletion(
                   context,
                   prompt: text,
-                  maxTokens: 50,
+                  maxTokens: 256,
                 );
                 if (answer != null) {
                   String singleLine = answer.replaceAll("\n", "");

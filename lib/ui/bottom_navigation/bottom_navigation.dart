@@ -35,8 +35,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
       label: 'Transaksi',
     ),
     BottomNavigationBarItem(
-      icon: SvgPicture.asset('assets/icons/transaction.svg'),
-      activeIcon: SvgPicture.asset('assets/icons/transaction_active.svg'),
+      icon: SvgPicture.asset('assets/icons/budget.svg'),
+      activeIcon: SvgPicture.asset('assets/icons/budget_active.svg'),
       label: 'Anggaran',
     ),
     BottomNavigationBarItem(

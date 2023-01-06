@@ -27,8 +27,59 @@ class _DetailTransactionItemState extends State<DetailTransactionItem> {
       stream: _document.snapshots(),
       builder: (_, snapshot) {
         if (snapshot.hasData) {
-          var data = snapshot.data!;
+          if (snapshot.data!.data()!.isEmpty) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              decoration: BoxDecoration(
+                color: widget.isIncome
+                    ? ColorValue.greenColor
+                    : ColorValue.redColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.isIncome ? 'Pendapatan' : 'Pengeluaran',
+                        style: textTheme.bodyText2!.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      SizedBox(
+                        width: 84,
+                        child: Text(
+                          widget.isIncome
+                              ? '-'
+                              : '-',
+                          style: textTheme.bodyText1!.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  SvgPicture.asset(
+                    widget.isIncome
+                        ? 'assets/svg/up.svg'
+                        : 'assets/svg/down.svg',
+                  ),
+                ],
+              ),
+            );
+          }
 
+          var data = snapshot.data!;
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             decoration: BoxDecoration(
