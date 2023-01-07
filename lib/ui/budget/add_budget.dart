@@ -8,6 +8,7 @@ import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/constant/list_category.dart';
 import 'package:moneyger/service/firebase_service.dart';
+import 'package:moneyger/ui/widget/banner_subscription.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 
 class AddBudgetPage extends StatefulWidget {
@@ -62,89 +63,92 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 24,
+          child: Column(
+            children: [
+              const BannerSubscription(),
+              const SizedBox(height: 24,),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Berapa Anggaran Kamu',
+                        style: textTheme.bodyText1!.copyWith(
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      _textFormTransaction(
+                        textTheme,
+                        hint: 'Rp',
+                        controller: _totalController,
+                        textInputType: TextInputType.number,
+                        withInputFormatter: true,
+                        validator: (value) =>
+                            SharedCode().transactionValidator(value),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        'Kategori',
+                        style: textTheme.bodyText1!.copyWith(
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      _dropdownCategory(
+                        textTheme,
+                        value: _selectedCategory,
+                        items: ListCategory().dropdownExpenditureItems,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        'Deskripsi',
+                        style: textTheme.bodyText1!.copyWith(
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      _textFormTransaction(
+                        textTheme,
+                        hint: 'Deskripsi singkat',
+                        controller: _descController,
+                        maxLength: 20,
+                        validator: (value) => SharedCode().emptyValidator(value),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await _addBudget().then(
+                              (value) => value ? Navigator.pop(context) : null,
+                            );
+                          }
+                        },
+                        child: const Text('Simpan'),
+                      ),
+                    ],
                   ),
-                  Text(
-                    'Berapa Anggaran Kamu',
-                    style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  _textFormTransaction(
-                    textTheme,
-                    hint: 'Rp',
-                    controller: _totalController,
-                    textInputType: TextInputType.number,
-                    withInputFormatter: true,
-                    validator: (value) =>
-                        SharedCode().transactionValidator(value),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    'Kategori',
-                    style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  _dropdownCategory(
-                    textTheme,
-                    value: _selectedCategory,
-                    items: ListCategory().dropdownExpenditureItems,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    'Deskripsi',
-                    style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  _textFormTransaction(
-                    textTheme,
-                    hint: 'Deskripsi singkat',
-                    controller: _descController,
-                    maxLength: 20,
-                    validator: (value) => SharedCode().emptyValidator(value),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        await _addBudget().then(
-                          (value) => value ? Navigator.pop(context) : null,
-                        );
-                      }
-                    },
-                    child: const Text('Simpan'),
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
