@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/ui/budget/detail_budget.dart';
@@ -21,13 +22,29 @@ class _BudgetHistoryItemState extends State<BudgetHistoryItem> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return StreamBuilder<QuerySnapshot>(
         stream: _collection.orderBy('updated_at', descending: true).snapshots(),
         builder: (_, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.docs.isEmpty) {
-              return const Center(
-                child: Text('Data masih kosong'),
+              return Center(
+                child: Column(
+                  children: [
+                    Lottie.asset(
+                      'assets/lottie/not_found.json',
+                      repeat: false,
+                    ),
+                    Text(
+                      'Data masih kosong',
+                      style: textTheme.headline3!.copyWith(
+                        color: ColorValue.greyColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
             return ListView.builder(

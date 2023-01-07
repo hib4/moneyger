@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:moneyger/common/color_value.dart';
+import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/constant/list_category.dart';
 import 'package:moneyger/service/firebase_service.dart';
+import 'package:moneyger/ui/subscribe/subscribe.dart';
+import 'package:moneyger/ui/widget/banner_subscription.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 
 class AddTransactionPage extends StatefulWidget {
@@ -84,140 +87,150 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            children: [
+              const BannerSubscription(),
+              const SizedBox(
+                height: 24,
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(30, 0, 30, 16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buttonIncome(textTheme),
-                      _buttonExpenditure(textTheme),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  Text(
-                    'Nominal',
-                    style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  _textFormTransaction(
-                    textTheme,
-                    hint: 'Rp',
-                    controller: _totalController,
-                    textInputType: TextInputType.number,
-                    withInputFormatter: true,
-                    validator: (value) =>
-                        SharedCode().transactionValidator(value),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    'Kategori',
-                    style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  _dropdownCategory(
-                    textTheme,
-                    value: _selectedCategory,
-                    items: _isSelectedIncome
-                        ? ListCategory().dropdownIncomeItems
-                        : ListCategory().dropdownExpenditureItems,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    'Tanggal',
-                    style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(8),
-                    onTap: () async {
-                      await _selectDate();
-                    },
-                    child: IgnorePointer(
-                      child: _textFormTransaction(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buttonIncome(textTheme),
+                          _buttonExpenditure(textTheme),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      Text(
+                        'Nominal',
+                        style: textTheme.bodyText1!.copyWith(
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      _textFormTransaction(
                         textTheme,
-                        hint: 'Masukkan tanggal',
-                        controller: _dateController,
-                        withIcon: true,
+                        hint: 'Rp',
+                        controller: _totalController,
+                        textInputType: TextInputType.number,
+                        withInputFormatter: true,
+                        validator: (value) =>
+                            SharedCode().transactionValidator(value),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        'Kategori',
+                        style: textTheme.bodyText1!.copyWith(
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      _dropdownCategory(
+                        textTheme,
+                        value: _selectedCategory,
+                        items: _isSelectedIncome
+                            ? ListCategory().dropdownIncomeItems
+                            : ListCategory().dropdownExpenditureItems,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        'Tanggal',
+                        style: textTheme.bodyText1!.copyWith(
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: () async {
+                          await _selectDate();
+                        },
+                        child: IgnorePointer(
+                          child: _textFormTransaction(
+                            textTheme,
+                            hint: 'Masukkan tanggal',
+                            controller: _dateController,
+                            withIcon: true,
+                            validator: (value) =>
+                                SharedCode().emptyValidator(value),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        'Deskripsi',
+                        style: textTheme.bodyText1!.copyWith(
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      _textFormTransaction(
+                        textTheme,
+                        hint: 'Deskripsi singkat',
+                        controller: _descController,
+                        maxLength: 20,
                         validator: (value) =>
                             SharedCode().emptyValidator(value),
                       ),
-                    ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            _isSelectedIncome
+                                ? await _addTransaction(_isSelectedIncome).then(
+                                    (value) =>
+                                        value ? Navigator.pop(context) : null,
+                                  )
+                                : _getUserData().then((value) async {
+                                    _userData['total_balance'] <
+                                            _formatter.getUnformattedValue()
+                                        ? showSnackBar(context,
+                                            title: 'Saldo tidak mencukupi')
+                                        : await _addTransaction(
+                                                _isSelectedIncome)
+                                            .then(
+                                            (value) => value
+                                                ? Navigator.pop(context)
+                                                : null,
+                                          );
+                                  });
+                          }
+                        },
+                        child: const Text('Tambah'),
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    'Deskripsi',
-                    style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  _textFormTransaction(
-                    textTheme,
-                    hint: 'Deskripsi singkat',
-                    controller: _descController,
-                    maxLength: 20,
-                    validator: (value) => SharedCode().emptyValidator(value),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _isSelectedIncome
-                            ? await _addTransaction(_isSelectedIncome).then(
-                                (value) =>
-                                    value ? Navigator.pop(context) : null,
-                              )
-                            : _getUserData().then((value) async {
-                                _userData['total_balance'] <
-                                        _formatter.getUnformattedValue()
-                                    ? showSnackBar(context,
-                                        title: 'Saldo tidak mencukupi')
-                                    : await _addTransaction(_isSelectedIncome)
-                                        .then(
-                                        (value) => value
-                                            ? Navigator.pop(context)
-                                            : null,
-                                      );
-                              });
-                      }
-                    },
-                    child: const Text('Tambah'),
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
