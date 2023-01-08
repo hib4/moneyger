@@ -91,7 +91,7 @@ class FirebaseService {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email).then(
             (value) => showSnackBar(
               context,
-              title: 'Email telah dikirim (cek dibagian spam)',
+              title: 'Email telah dikirim',
               duration: const Duration(seconds: 3),
             ),
           );
