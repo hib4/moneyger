@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:moneyger/common/color_value.dart';
+import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/main.dart';
 import 'package:moneyger/service/api_service.dart';
 import 'package:moneyger/ui/chat/chat.dart';
+import 'package:moneyger/ui/transaction/add_transaction.dart';
 import 'package:moneyger/ui/widget/artikel/artikel_card.dart';
 import 'package:moneyger/ui/widget/chart/chart_widget.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
@@ -40,6 +42,13 @@ class _HomePageState extends State<HomePage> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigate.navigatorPush(context, const AddTransactionPage());
+        },
+        backgroundColor: ColorValue.secondaryColor,
+        child: const Icon(Icons.add_rounded),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(

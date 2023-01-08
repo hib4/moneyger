@@ -113,6 +113,8 @@ class _DetailTransactionItemState extends State<DetailTransactionItem> {
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
