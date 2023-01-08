@@ -56,7 +56,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 8,
+                height: 16,
               ),
               Text(
                 'Anggaran Kamu',

@@ -154,6 +154,10 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      const Text(
+                                        'Anggaran',
+                                        style: TextStyle(fontSize: 10),
+                                      ),
                                       Text(
                                         SharedCode()
                                             .convertToIdr(data['budget'], 0),

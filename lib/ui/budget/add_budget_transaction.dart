@@ -23,7 +23,7 @@ class AddBudgetTransactionPage extends StatefulWidget {
 }
 
 class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
-  String _selectedCategory = 'Belanja';
+  String _selectedCategory = '';
   final _formKey = GlobalKey<FormState>();
   final _formatter = CurrencyTextInputFormatter(
     locale: 'id',
@@ -64,7 +64,6 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
     bool isSuccess = await FirebaseService().addBudgetTransaction(
       context,
       total: _formatter.getUnformattedValue(),
-      category: _selectedCategory,
       desc: _descController.text,
       date: _dateController.text,
       docId: widget.docId,

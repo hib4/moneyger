@@ -622,7 +622,6 @@ class FirebaseService {
   Future<bool> addBudgetTransaction(
     BuildContext context, {
     required num total,
-    required String category,
     required String date,
     required String desc,
     required String docId,
@@ -660,7 +659,6 @@ class FirebaseService {
           if (!budgetTransactionSnapshot.exists) {
             await budgetTransactionDocument.set({
               'total': total,
-              'category': category,
               'date': date,
               'desc': desc,
               'day': day,
