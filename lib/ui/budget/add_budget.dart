@@ -5,14 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:moneyger/common/color_value.dart';
+import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/constant/list_category.dart';
 import 'package:moneyger/service/firebase_service.dart';
+import 'package:moneyger/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:moneyger/ui/widget/banner_subscription.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 
 class AddBudgetPage extends StatefulWidget {
-  const AddBudgetPage({Key? key}) : super(key: key);
+  final bool isFromHome;
+
+  const AddBudgetPage({Key? key, this.isFromHome = false}) : super(key: key);
 
   @override
   State<AddBudgetPage> createState() => _AddBudgetPageState();
@@ -66,9 +70,12 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           child: Column(
             children: [
               const BannerSubscription(),
-              const SizedBox(height: 24,),
+              const SizedBox(
+                height: 24,
+              ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -126,7 +133,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         hint: 'Deskripsi singkat',
                         controller: _descController,
                         maxLength: 20,
-                        validator: (value) => SharedCode().emptyValidator(value),
+                        validator: (value) =>
+                            SharedCode().emptyValidator(value),
                       ),
                       const SizedBox(
                         height: 16,
@@ -138,7 +146,15 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             await _addBudget().then(
-                              (value) => value ? Navigator.pop(context) : null,
+                              (value) => value
+                                  ? widget.isFromHome
+                                      ? Navigate.navigatorReplacement(
+                                          context,
+                                          const BottomNavigation(
+                                            currentIndex: 2,
+                                          ))
+                                      : Navigator.pop(context)
+                                  : null,
                             );
                           }
                         },

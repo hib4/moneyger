@@ -644,6 +644,7 @@ class FirebaseService {
           transaction.update(budgetDocument, {
             'remain': newRemain,
             'used': newUse,
+            'updated_at': DateTime.now(),
           });
 
           num oldExpenditure = userSnapshot['expenditure'];
