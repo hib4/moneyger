@@ -17,36 +17,7 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int _currentIndex = 0;
-  List _pageStack = [];
-
-  void _pagePush(int i) {
-    if (_pageStack.isEmpty) {
-      _pageStack.add(_currentIndex);
-    }
-    if (i == _currentIndex) {
-      return;
-    }
-    if (!_pageStack.contains(_currentIndex)) {
-      _pageStack.add(_currentIndex);
-    }
-
-    setState(() {
-      print(_pageStack);
-      _currentIndex = i;
-    });
-  }
-
-  Future<bool> _pagePop(BuildContext context) {
-    if (_pageStack.isEmpty) {
-      return Future<bool>.value(true);
-    } else {
-      int t = _pageStack.removeLast();
-      setState(() {
-        _currentIndex = (_currentIndex != t) ? t : _pageStack.removeLast();
-      });
-      return Future<bool>.value(false);
-    }
-  }
+  final List _pageStack = [];
 
   final _tabs = [
     const HomePage(),
@@ -78,11 +49,39 @@ class _BottomNavigationState extends State<BottomNavigation> {
     ),
   ];
 
+  void _pagePush(int i) {
+    if (_pageStack.isEmpty) {
+      _pageStack.add(_currentIndex);
+    }
+    if (i == _currentIndex) {
+      return;
+    }
+    if (!_pageStack.contains(_currentIndex)) {
+      _pageStack.add(_currentIndex);
+    }
+
+    setState(() {
+      print(_pageStack);
+      _currentIndex = i;
+    });
+  }
+
+  Future<bool> _pagePop(BuildContext context) {
+    if (_pageStack.isEmpty) {
+      return Future<bool>.value(true);
+    } else {
+      int t = _pageStack.removeLast();
+      setState(() {
+        _currentIndex = (_currentIndex != t) ? t : _pageStack.removeLast();
+      });
+      return Future<bool>.value(false);
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('current index = ${widget.currentIndex}');
     _currentIndex = widget.currentIndex;
   }
 

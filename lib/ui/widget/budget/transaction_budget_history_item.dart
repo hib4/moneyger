@@ -11,9 +11,9 @@ import 'package:moneyger/ui/widget/pop_menu/custom_pop_menu_budget.dart';
 import 'package:moneyger/ui/widget/pop_menu/custom_pop_menu_transaction.dart';
 
 class TransactionBudgetHistoryItem extends StatefulWidget {
-  final String docId;
+  final String docId, category;
 
-  const TransactionBudgetHistoryItem({Key? key, required this.docId})
+  const TransactionBudgetHistoryItem({Key? key, required this.docId, required this.category})
       : super(key: key);
 
   @override
@@ -103,7 +103,7 @@ class _TransactionBudgetHistoryItemState
                           data['week'],
                           widget.docId,
                           data.id,
-                          data['category'],
+                          widget.category,
                         ],
                       ));
                 },
@@ -135,7 +135,7 @@ class _TransactionBudgetHistoryItemState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            data['category'],
+                            widget.category,
                             style: textTheme.bodyText1!.copyWith(
                               color: Colors.black,
                               fontWeight: FontWeight.w500,

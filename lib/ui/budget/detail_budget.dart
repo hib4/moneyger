@@ -5,6 +5,7 @@ import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/budget/add_budget_transaction.dart';
+import 'package:moneyger/ui/budget/edit_budget.dart';
 import 'package:moneyger/ui/widget/budget/transaction_budget_history_item.dart';
 import 'package:moneyger/ui/widget/loading/loading_animation.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
@@ -91,24 +92,46 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                               ),
                             ],
                           ),
-                          IconButton(
-                            splashRadius: 30,
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => _buildPopupDialog(
-                                  context,
-                                  data['desc'],
-                                  data.id,
-                                  data['used'],
+                          Row(
+                            children: [
+                              IconButton(
+                                splashRadius: 30,
+                                onPressed: () {
+                                  Navigate.navigatorPush(
+                                    context,
+                                    EditBudgetPage(
+                                      docId: _docId,
+                                      budget: data['budget'],
+                                      category: data['category'],
+                                      desc: data['desc'],
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.edit_rounded,
+                                  size: 22,
                                 ),
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.redAccent,
-                              size: 22,
-                            ),
+                              ),
+                              IconButton(
+                                splashRadius: 30,
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => _buildPopupDialog(
+                                      context,
+                                      data['desc'],
+                                      data.id,
+                                      data['used'],
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.delete_rounded,
+                                  color: Colors.redAccent,
+                                  size: 22,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -131,6 +154,10 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      const Text(
+                                        'Anggaran',
+                                        style: TextStyle(fontSize: 10),
+                                      ),
                                       Text(
                                         SharedCode()
                                             .convertToIdr(data['budget'], 0),
@@ -254,7 +281,10 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                       const SizedBox(
                         height: 16,
                       ),
-                      TransactionBudgetHistoryItem(docId: data.id),
+                      TransactionBudgetHistoryItem(
+                        docId: data.id,
+                        category: data['category'],
+                      ),
                     ],
                   ),
                 );

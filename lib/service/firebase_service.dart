@@ -532,6 +532,41 @@ class FirebaseService {
     }
   }
 
+  Future<bool> editBudget(
+    BuildContext context, {
+    required String docId,
+    required String category,
+    required String desc,
+  }) async {
+    try {
+      String uid = SharedCode().uid;
+
+      DocumentReference budgetDocument = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('budget')
+          .doc(docId);
+
+      FirebaseFirestore.instance.runTransaction(
+        (transaction) async {
+          transaction.update(budgetDocument, {
+            'category': category,
+            'desc': desc,
+            'updated_at': DateTime.now(),
+          });
+        },
+      );
+      return true;
+    } on PlatformException {
+      return false;
+    } on SocketException {
+      showSnackBar(context, title: 'Tidak ada koneksi internet');
+      return false;
+    } on FirebaseException {
+      return false;
+    }
+  }
+
   Future<bool> deleteBudget(
     BuildContext context, {
     required String docId,
@@ -587,7 +622,6 @@ class FirebaseService {
   Future<bool> addBudgetTransaction(
     BuildContext context, {
     required num total,
-    required String category,
     required String date,
     required String desc,
     required String docId,
@@ -625,7 +659,6 @@ class FirebaseService {
           if (!budgetTransactionSnapshot.exists) {
             await budgetTransactionDocument.set({
               'total': total,
-              'category': category,
               'date': date,
               'desc': desc,
               'day': day,
