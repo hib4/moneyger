@@ -54,48 +54,7 @@ class _HomePageState extends State<HomePage> {
         return true;
       },
       child: Scaffold(
-        floatingActionButton: SpeedDial(
-          icon: Icons.add_rounded,
-          activeIcon: Icons.close_rounded,
-          backgroundColor: ColorValue.secondaryColor,
-          renderOverlay: true,
-          overlayColor: Colors.white,
-          overlayOpacity: 0.5,
-          childrenButtonSize: const Size(60, 60),
-          spacing: 5,
-          spaceBetweenChildren: 5,
-          openCloseDial: isDialOpen,
-          children: [
-            SpeedDialChild(
-              child: SvgPicture.asset(
-                'assets/icons/transaction.svg',
-                color: Colors.white,
-                width: 18,
-                height: 18,
-              ),
-              backgroundColor: ColorValue.secondaryColor,
-              foregroundColor: Colors.white,
-              label: 'Transaksi',
-              labelStyle: const TextStyle(color: Colors.black),
-              onTap: () =>
-                  Navigate.navigatorPush(context, const AddTransactionPage()),
-            ),
-            SpeedDialChild(
-              child: SvgPicture.asset(
-                'assets/icons/budget.svg',
-                color: Colors.white,
-                width: 18,
-                height: 18,
-              ),
-              backgroundColor: ColorValue.secondaryColor,
-              foregroundColor: Colors.white,
-              label: 'Anggaran',
-              labelStyle: const TextStyle(color: Colors.black),
-              onTap: () =>
-                  Navigate.navigatorPush(context, const AddBudgetPage()),
-            ),
-          ],
-        ),
+        floatingActionButton: _speedDial(),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Container(
@@ -283,6 +242,57 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _speedDial() {
+    return SpeedDial(
+      icon: Icons.add_rounded,
+      activeIcon: Icons.close_rounded,
+      backgroundColor: ColorValue.secondaryColor,
+      renderOverlay: true,
+      overlayColor: Colors.white,
+      overlayOpacity: 0.5,
+      childrenButtonSize: const Size(60, 60),
+      spacing: 5,
+      spaceBetweenChildren: 5,
+      openCloseDial: isDialOpen,
+      children: [
+        SpeedDialChild(
+          child: SvgPicture.asset(
+            'assets/icons/transaction.svg',
+            color: Colors.white,
+            width: 18,
+            height: 18,
+          ),
+          backgroundColor: ColorValue.secondaryColor,
+          foregroundColor: Colors.white,
+          label: 'Transaksi',
+          labelStyle: const TextStyle(color: Colors.black),
+          onTap: () => Navigate.navigatorPush(
+              context,
+              const AddTransactionPage(
+                isFromHome: true,
+              )),
+        ),
+        SpeedDialChild(
+          child: SvgPicture.asset(
+            'assets/icons/budget.svg',
+            color: Colors.white,
+            width: 18,
+            height: 18,
+          ),
+          backgroundColor: ColorValue.secondaryColor,
+          foregroundColor: Colors.white,
+          label: 'Anggaran',
+          labelStyle: const TextStyle(color: Colors.black),
+          onTap: () => Navigate.navigatorPush(
+              context,
+              const AddBudgetPage(
+                isFromHome: true,
+              )),
+        ),
+      ],
     );
   }
 }

@@ -9,12 +9,16 @@ import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/constant/list_category.dart';
 import 'package:moneyger/service/firebase_service.dart';
+import 'package:moneyger/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:moneyger/ui/subscribe/subscribe.dart';
 import 'package:moneyger/ui/widget/banner_subscription.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 
 class AddTransactionPage extends StatefulWidget {
-  const AddTransactionPage({Key? key}) : super(key: key);
+  final bool isFromHome;
+
+  const AddTransactionPage({Key? key, this.isFromHome = false})
+      : super(key: key);
 
   @override
   State<AddTransactionPage> createState() => _AddTransactionPageState();
@@ -206,8 +210,15 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                           if (_formKey.currentState!.validate()) {
                             _isSelectedIncome
                                 ? await _addTransaction(_isSelectedIncome).then(
-                                    (value) =>
-                                        value ? Navigator.pop(context) : null,
+                                    (value) => value
+                                        ? widget.isFromHome
+                                            ? Navigate.navigatorReplacement(
+                                                context,
+                                                const BottomNavigation(
+                                                  currentIndex: 1,
+                                                ))
+                                            : Navigator.pop(context)
+                                        : null,
                                   )
                                 : _getUserData().then((value) async {
                                     _userData['total_balance'] <
@@ -218,7 +229,14 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                                 _isSelectedIncome)
                                             .then(
                                             (value) => value
-                                                ? Navigator.pop(context)
+                                                ? widget.isFromHome
+                                                    ? Navigate
+                                                        .navigatorReplacement(
+                                                            context,
+                                                            const BottomNavigation(
+                                                              currentIndex: 1,
+                                                            ))
+                                                    : Navigator.pop(context)
                                                 : null,
                                           );
                                   });
