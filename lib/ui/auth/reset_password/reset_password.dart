@@ -58,7 +58,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             height: 4,
                           ),
                           Text(
-                            'Masukkan email yang terkait dengan akun anda dan kami akan mengirimkan email dengan instruksi untuk mengatur ulang kata sandi anda.\n(cek dibagian spam)',
+                            'Masukkan email yang terkait dengan akun anda dan kami akan mengirimkan email dengan instruksi untuk mengatur ulang kata sandi.',
                             style: textTheme.bodyText1,
                             textAlign: TextAlign.center,
                           ),

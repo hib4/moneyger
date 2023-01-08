@@ -51,6 +51,7 @@ dependencies:
   cached_network_image: ^3.2.3
   percent_indicator: ^4.2.2
   flutter_launcher_icons: ^0.11.0
+  flutter_speed_dial: ^6.2.0
 
 dev_dependencies:
   flutter_test:

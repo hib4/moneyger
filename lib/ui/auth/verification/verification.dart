@@ -98,7 +98,7 @@ class _VerificationPageState extends State<VerificationPage> {
                         height: 4,
                       ),
                       Text(
-                        'Kami telah mengirimkan pesan verifikasi\n(cek dibagian spam)',
+                        'Kami telah mengirimkan pesan verifikasi ke email anda',
                         style: textTheme.bodyText1,
                         textAlign: TextAlign.center,
                       ),
