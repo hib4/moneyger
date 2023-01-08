@@ -158,7 +158,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                             );
                           }
                         },
-                        child: const Text('Simpan'),
+                        child: const Text('Tambah'),
                       ),
                     ],
                   ),

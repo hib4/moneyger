@@ -60,8 +60,9 @@ class _BudgetHistoryItemState extends State<BudgetHistoryItem> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              DetailBudgetPage(docId: data.id),
+                          builder: (context) => DetailBudgetPage(
+                            docId: data.id,
+                          ),
                         ));
                   },
                   child: Container(
