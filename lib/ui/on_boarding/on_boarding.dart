@@ -27,7 +27,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           Radius.circular(2),
         ),
         color: _currentPage == index
-            ? ColorValue.primaryColor
+            ? ColorValue.secondaryColor
             : ColorValue.secondaryColor.withOpacity(0.5),
       ),
       margin: const EdgeInsets.only(right: 5),
@@ -63,7 +63,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         Text(
                           "Moneyger",
                           style: textTheme.headline1!.copyWith(
-                            color: ColorValue.primaryColor,
+                            color: ColorValue.secondaryColor,
                             letterSpacing: 5,
                           ),
                         ),
