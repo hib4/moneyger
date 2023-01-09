@@ -236,7 +236,7 @@ class FirebaseService {
     }
   }
 
-  Future addTypeTransaction(
+  Future<bool> addTypeTransaction(
     BuildContext context, {
     required String type,
     required num total,
@@ -266,12 +266,14 @@ class FirebaseService {
               },
               'last_day': day,
             });
+            return true;
           } else {
             print(1);
             num oldValueTotal = detailTransactionSnapshot['total'];
             num newValueTotal = oldValueTotal + total;
+            String lastDay = detailTransactionSnapshot['last_day'];
 
-            if (detailTransactionSnapshot['last_day'] == day) {
+            if (lastDay == day) {
               num oldValueDay = detailTransactionSnapshot['day'][day];
               num newValueDay = oldValueDay + total;
 
@@ -283,6 +285,7 @@ class FirebaseService {
                   'day.$day': newValueDay,
                 },
               );
+              return true;
             } else {
               print(3);
               detailTransactionDocument.set(
@@ -295,12 +298,19 @@ class FirebaseService {
                 },
                 SetOptions(merge: true),
               );
+              return true;
             }
           }
         },
       );
-    } catch (e) {
-      print(e.toString());
+      return true;
+    } on PlatformException {
+      return false;
+    } on SocketException {
+      showSnackBar(context, title: 'Tidak ada koneksi internet');
+      return false;
+    } on FirebaseException {
+      return false;
     }
   }
 
@@ -578,12 +588,6 @@ class FirebaseService {
 
       DocumentReference userDocument =
           FirebaseFirestore.instance.collection('users').doc(uid);
-
-      // DocumentReference detailTransactionDocument = FirebaseFirestore.instance
-      //     .collection('users')
-      //     .doc(uid)
-      //     .collection(type)
-      //     .doc(week);
 
       DocumentReference budgetDocument = FirebaseFirestore.instance
           .collection('users')
