@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
@@ -68,8 +69,11 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                         children: [
                           Row(
                             children: [
-                              const CircleAvatar(
-                                backgroundColor: Color(0xFFF9F9F9),
+                              CircleAvatar(
+                                backgroundColor: const Color(0xFFF9F9F9),
+                                child: SvgPicture.asset(
+                                  'assets/budget/${data['category'].toString().toLowerCase()}.svg',
+                                ),
                               ),
                               const SizedBox(
                                 width: 16,
