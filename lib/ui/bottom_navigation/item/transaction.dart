@@ -27,47 +27,46 @@ class _TransactionPageState extends State<TransactionPage> {
         child: const Icon(Icons.add_rounded),
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child: Stack(
+          clipBehavior: Clip.none,
           children: [
-            // container biru
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 28),
-                  height: 264,
-                  width: MediaQuery.of(context).size.width,
-                  color: ColorValue.secondaryColor,
-                  child: SafeArea(
-                    child: Column(
-                      children: [
-                        // remove selamat pagi
-                        const SizedBox(
-                          height: 80,
-                        ),
-                        TotalBalanceItem(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const Text(
-                          "Total Saldo",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFFC7C7C7),
-                          ),
-                        ),
-                      ],
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              height: 264,
+              width: MediaQuery.of(context).size.width,
+              color: ColorValue.secondaryColor,
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    // remove selamat pagi
+                    const SizedBox(
+                      height: 80,
                     ),
-                  ),
+                    TotalBalanceItem(
+                      textStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Text(
+                      "Total Saldo",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFFC7C7C7),
+                      ),
+                    ),
+                  ],
                 ),
-                // 264(tinggi container biru) - 65 (tinggi pengeluaran) / 2(maksudnya setengah dari tinggi pengeluaran)
-                Positioned(
-                  top: 264 - 65 / 2,
-                  child: Container(
+              ),
+            ),
+            // 264(tinggi container biru) - 65 (tinggi pengeluaran) / 2(maksudnya setengah dari tinggi pengeluaran)
+            Container(
+              margin: const EdgeInsets.only(top: 264 - 65 / 2),
+              child: Column(
+                children: [
+                  Container(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     width: MediaQuery.of(context).size.width,
                     child: Row(
@@ -80,30 +79,27 @@ class _TransactionPageState extends State<TransactionPage> {
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
-            // judul transaksi seterusnya
-            const SizedBox(
-              height: 16,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
-              child: Column(
-                children: const [
-                  HeadlineItem(
-                    image: 'transaction',
-                    title: 'Transaksi',
-                    desc: 'Transaksi anda selama ini',
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 28, vertical: 32),
+                    child: Column(
+                      children: const [
+                        HeadlineItem(
+                          image: 'transaction',
+                          title: 'Transaksi',
+                          desc: 'Transaksi anda selama ini',
+                        ),
+                        //
+                        SizedBox(
+                          height: 16,
+                        ),
+                        TransactionHistoryItem(),
+                      ],
+                    ),
                   ),
-                  //
-                  SizedBox(
-                    height: 16,
-                  ),
-                  TransactionHistoryItem(),
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),
