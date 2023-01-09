@@ -37,6 +37,7 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _checkTokenStatus();
   }
 
   @override
@@ -47,13 +48,25 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  Future<bool> _checkTokenStatus() async {
+  Future _checkTokenStatus() async {
     String check = await SharedCode().getToken('chat') ?? '';
     if (check == '') {
-      return false;
+      _isCheckSubs.value = true;
     } else {
-      return true;
+      _isCheckSubs.value = false;
+      _addData(
+        ChatModel(
+          'Hai, dengan Tim Konsultasi disini. Ada yang bisa kita bantu tentang masalah keuangan?',
+          true,
+        ),
+        isFirst: true,
+      );
     }
+  }
+
+  Future<bool> _setTokenSubs() async {
+    bool status = await SharedCode().setToken('chat', 'true');
+    return status;
   }
 
   @override
@@ -248,12 +261,14 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   elevation: 0,
                 ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SubscribePage(),
-                      ));
+                onPressed: () async {
+                  await _setTokenSubs().then((value) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SubscribePage(),
+                        ));
+                  });
                 },
                 child: const Text(
                   'Berlangganan',
@@ -271,15 +286,17 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   elevation: 0,
                 ),
-                onPressed: () {
-                  _isCheckSubs.value = false;
-                  _addData(
-                    ChatModel(
-                      'Hai, dengan Tim Konsultasi disini. Ada yang bisa kita bantu tentang masalah keuangan?',
-                      true,
-                    ),
-                    isFirst: true,
-                  );
+                onPressed: () async {
+                  await _setTokenSubs().then((value) {
+                    _isCheckSubs.value = false;
+                    _addData(
+                      ChatModel(
+                        'Hai, dengan Tim Konsultasi disini. Ada yang bisa kita bantu tentang masalah keuangan?',
+                        true,
+                      ),
+                      isFirst: true,
+                    );
+                  });
                 },
                 child: const Text(
                   'Coba Gratis 3 Hari',
