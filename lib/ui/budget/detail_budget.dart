@@ -265,12 +265,15 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigate.navigatorPush(
-                                  context,
-                                  AddBudgetTransactionPage(
-                                    docId: widget.docId,
-                                    category: data['category'],
-                                  ));
+                              data['remain'] <= 0
+                                  ? showSnackBar(context,
+                                      title: 'Anggaran telah tercapai')
+                                  : Navigate.navigatorPush(
+                                      context,
+                                      AddBudgetTransactionPage(
+                                        docId: widget.docId,
+                                        category: data['category'],
+                                      ));
                             },
                             child: const Text(
                               "+ Tambah Transaksi",
