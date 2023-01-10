@@ -763,7 +763,7 @@ class FirebaseService {
           num newValueUser = (oldValueUser - oldTotal) + total;
           num newValueDetail = (oldValueDetail - oldTotal) + total;
           num newValueDetailTotal = (oldValueDetailTotal - oldTotal) + total;
-          num newValueRemainBudget = (oldValueRemainBudget - oldTotal) + total;
+          num newValueRemainBudget = (oldValueRemainBudget + oldTotal) - total;
           num newValueUsedBudget = (oldValueUsedBudget - oldTotal) + total;
 
           transaction.update(budgetTransactionDocument, {

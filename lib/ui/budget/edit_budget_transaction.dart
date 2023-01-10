@@ -35,6 +35,7 @@ class _EditBudgetTransactionPageState extends State<EditBudgetTransactionPage> {
     symbol: 'Rp. ',
   );
   Map<String, dynamic> _userData = {};
+  Map<String, dynamic> _budgetData = {};
 
   final _totalController = TextEditingController();
   final _dateController = TextEditingController();
@@ -62,6 +63,17 @@ class _EditBudgetTransactionPageState extends State<EditBudgetTransactionPage> {
 
     var value = await document.get();
     _userData = value.data() ?? {};
+  }
+
+  Future _getBudgetData() async {
+    var document = FirebaseFirestore.instance
+        .collection('users')
+        .doc(SharedCode().uid)
+        .collection('budget')
+        .doc(_docId);
+
+    var value = await document.get();
+    _budgetData = value.data() ?? {};
   }
 
   Future<bool> _editBudgetTransaction() async {
@@ -215,15 +227,23 @@ class _EditBudgetTransactionPageState extends State<EditBudgetTransactionPage> {
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        _getUserData().then((value) async {
-                          (_userData['total_balance'] + _oldTotal) <
+                        await _getUserData().then((value) async {
+                          _userData['total_balance'] <
                                   _formatter.getUnformattedValue()
                               ? showSnackBar(context,
                                   title: 'Saldo tidak mencukupi')
-                              : await _editBudgetTransaction().then(
-                                  (value) =>
-                                      value ? Navigator.pop(context) : null,
-                                );
+                              : await _getBudgetData().then((value) async {
+                                  _formatter.getUnformattedValue() >
+                                          (_budgetData['remain'] + _oldTotal)
+                                      ? showSnackBar(context,
+                                          title:
+                                              'Transaksi melebihi total anggaran')
+                                      : await _editBudgetTransaction().then(
+                                          (value) => value
+                                              ? Navigator.pop(context)
+                                              : null,
+                                        );
+                                });
                         });
                       }
                     },

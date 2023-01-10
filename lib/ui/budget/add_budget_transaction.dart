@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:moneyger/common/color_value.dart';
+import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/constant/list_category.dart';
 import 'package:moneyger/service/firebase_service.dart';
@@ -31,6 +32,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
     symbol: 'Rp. ',
   );
   Map<String, dynamic> _userData = {};
+  Map<String, dynamic> _budgetData = {};
 
   final _totalController = TextEditingController();
   final _dateController = TextEditingController();
@@ -58,6 +60,17 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
 
     var value = await document.get();
     _userData = value.data() ?? {};
+  }
+
+  Future _getBudgetData() async {
+    var document = FirebaseFirestore.instance
+        .collection('users')
+        .doc(SharedCode().uid)
+        .collection('budget')
+        .doc(widget.docId);
+
+    var value = await document.get();
+    _budgetData = value.data() ?? {};
   }
 
   Future<bool> _addBudgetTransaction() async {
@@ -198,15 +211,23 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        _getUserData().then((value) async {
+                        await _getUserData().then((value) async {
                           _userData['total_balance'] <
                                   _formatter.getUnformattedValue()
                               ? showSnackBar(context,
                                   title: 'Saldo tidak mencukupi')
-                              : await _addBudgetTransaction().then(
-                                  (value) =>
-                                      value ? Navigator.pop(context) : null,
-                                );
+                              : await _getBudgetData().then((value) async {
+                                  _budgetData['remain'] <
+                                          _formatter.getUnformattedValue()
+                                      ? showSnackBar(context,
+                                          title:
+                                              'Transaksi melebihi total anggaran')
+                                      : await _addBudgetTransaction().then(
+                                          (value) => value
+                                              ? Navigator.pop(context)
+                                              : null,
+                                        );
+                                });
                         });
                       }
                     },
