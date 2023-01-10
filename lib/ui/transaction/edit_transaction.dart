@@ -121,7 +121,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(
-                    height: 24,
+                    height: 16,
                   ),
                   Text(
                     'Nominal',

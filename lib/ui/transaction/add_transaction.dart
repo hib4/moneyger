@@ -27,6 +27,7 @@ class AddTransactionPage extends StatefulWidget {
 class _AddTransactionPageState extends State<AddTransactionPage> {
   bool _isSelectedIncome = true;
   String _selectedCategory = 'Gaji';
+  final ValueNotifier<bool> _status = ValueNotifier<bool>(true);
   final _formKey = GlobalKey<FormState>();
   final _formatter = CurrencyTextInputFormatter(
     locale: 'id',
@@ -76,6 +77,22 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     return isSuccess;
   }
 
+  Future _checkTokenStatus() async {
+    String check = await SharedCode().getToken('subs') ?? '';
+    if (check == '') {
+      _status.value = true;
+    } else {
+      _status.value = false;
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkTokenStatus();
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -93,17 +110,23 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const BannerSubscription(),
-              const SizedBox(
-                height: 24,
+              ValueListenableBuilder<bool>(
+                valueListenable: _status,
+                builder: (_, value, __) => Visibility(
+                  visible: value,
+                  child: const BannerSubscription(),
+                ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 16),
+                padding: const EdgeInsets.fromLTRB(30, 8, 30, 16),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(
+                        height: 16,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
