@@ -25,6 +25,7 @@ class AddBudgetPage extends StatefulWidget {
 class _AddBudgetPageState extends State<AddBudgetPage> {
   String _selectedCategory = 'Belanja';
   final _formKey = GlobalKey<FormState>();
+  final ValueNotifier<bool> _status = ValueNotifier<bool>(true);
   final _formatter = CurrencyTextInputFormatter(
     locale: 'id',
     decimalDigits: 0,
@@ -46,10 +47,20 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     return isSuccess;
   }
 
+  Future _checkTokenStatus() async {
+    String check = await SharedCode().getToken('subs') ?? '';
+    if (check == '') {
+      _status.value = true;
+    } else {
+      _status.value = false;
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _checkTokenStatus();
   }
 
   @override
@@ -69,9 +80,12 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const BannerSubscription(),
-              const SizedBox(
-                height: 24,
+              ValueListenableBuilder<bool>(
+                valueListenable: _status,
+                builder: (_, value, __) => Visibility(
+                  visible: value,
+                  child: const BannerSubscription(),
+                ),
               ),
               Container(
                 padding:
@@ -81,6 +95,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(
+                        height: 16,
+                      ),
                       Text(
                         'Berapa Anggaran Kamu',
                         style: textTheme.bodyText1!.copyWith(

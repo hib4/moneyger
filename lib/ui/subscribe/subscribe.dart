@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
+import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/ui/subscribe/success.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 import 'package:moneyger/ui/widget/subscribe/expansion.dart';
@@ -15,7 +16,6 @@ class SubscribePage extends StatefulWidget {
 }
 
 class _SubscribePageState extends State<SubscribePage> {
-  bool _isSelected = true;
   int _selected = 0;
   ValueNotifier<bool> _isSuccess = ValueNotifier<bool>(false);
 
@@ -124,9 +124,13 @@ class _SubscribePageState extends State<SubscribePage> {
                   ),
                   ElevatedButton(
                     onPressed: _selected >= 1
-                        ? () {
-                            Navigate.navigatorPushAndRemove(
-                                context, const SuccessPage());
+                        ? () async {
+                            await SharedCode().setToken('subs', 'true').then(
+                                  (value) => value
+                                      ? Navigate.navigatorPushAndRemove(
+                                          context, const SuccessPage())
+                                      : null,
+                                );
                           }
                         : () {
                             showSnackBar(context,
