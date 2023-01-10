@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/main.dart';
+import 'package:moneyger/model/article_model.dart';
 import 'package:moneyger/service/api_service.dart';
+import 'package:moneyger/ui/article/see_more_article.dart';
 import 'package:moneyger/ui/budget/add_budget.dart';
 import 'package:moneyger/ui/chat/chat.dart';
 import 'package:moneyger/ui/transaction/add_transaction.dart';
@@ -23,13 +25,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List _artikel = [];
+  List<ArticleModel> _article = [];
   final ValueNotifier<bool> isDialOpen = ValueNotifier<bool>(false);
 
   Future _getArtikel() async {
-    await ApiService().getservice().then((value) {
+    await ApiService().getArticle().then((value) {
       setState(() {
-        _artikel = value;
+        _article = value;
       });
     });
   }
@@ -218,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                     title: 'Artikel',
                     desc: 'Artikel mengenai ekonomi',
                   ),
-                  _artikel.isEmpty
+                  _article.isEmpty
                       ? Container()
                       : ListView.builder(
                           padding: const EdgeInsets.only(top: 16),
@@ -227,15 +229,27 @@ class _HomePageState extends State<HomePage> {
                           itemCount: 5,
                           itemBuilder: (context, index) {
                             return ArtikelCard(
-                              judul: _artikel[index].judul,
-                              subjudul: _artikel[index].subjudul,
-                              tanggalPosting: _artikel[index].tanggalPosting,
-                              penulis: _artikel[index].penulis,
-                              foto: _artikel[index].foto,
-                              isiArtikel: _artikel[index].isiArtikel,
+                              judul: _article[index].judul ?? '-',
+                              subjudul: _article[index].subjudul ?? '-',
+                              tanggalPosting:
+                                  _article[index].tanggalPosting ?? '-',
+                              penulis: _article[index].penulis ?? '-',
+                              foto: _article[index].foto ?? '-',
+                              isiArtikel: _article[index].isiArtikel ?? '-',
                             );
                           },
-                        )
+                        ),
+                  TextButton(
+                    onPressed: () {
+                      Navigate.navigatorPush(
+                        context,
+                        SeeMoreArticle(
+                          article: _article,
+                        ),
+                      );
+                    },
+                    child: Text('Lebih banyak Artikel'),
+                  ),
                 ],
               ),
             ),

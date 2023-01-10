@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:moneyger/constant/openai.dart';
-import 'package:moneyger/model/artikel_model.dart';
+import 'package:moneyger/model/article_model.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 
 class ApiService {
@@ -67,15 +67,15 @@ class ApiService {
     }
   }
 
-  Future<List> getservice() async {
-    List artikel = [];
+  Future<List<ArticleModel>> getArticle() async {
+    List<ArticleModel> article = [];
     String json = await rootBundle.loadString("assets/json/artikel.json");
 
     List datajson = jsonDecode(json);
 
     datajson.map((value) {
-      artikel.add(ArtikelModel.fromJson(value));
+      article.add(ArticleModel.fromJson(value));
     }).toList();
-    return artikel;
+    return article;
   }
 }
