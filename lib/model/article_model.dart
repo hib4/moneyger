@@ -1,4 +1,4 @@
-class ArtikelModel {
+class ArticleModel {
   int? id;
   String? judul;
   String? subjudul;
@@ -7,7 +7,7 @@ class ArtikelModel {
   String? isiArtikel;
   String? penulis;
 
-  ArtikelModel(
+  ArticleModel(
       {this.id,
       this.judul,
       this.subjudul,
@@ -16,7 +16,7 @@ class ArtikelModel {
       this.isiArtikel,
       this.penulis});
 
-  ArtikelModel.fromJson(Map<String, dynamic> json) {
+  ArticleModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     judul = json['judul'];
     subjudul = json['subjudul'];
