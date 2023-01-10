@@ -49,7 +49,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             height: 24,
                           ),
                           Text(
-                            'Lupa Password?',
+                            'Lupa Kata Sandi?',
                             style: textTheme.headline2!.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -91,7 +91,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 _isLoad.value = false;
                               }
                             },
-                            child: const Text('Reset Password'),
+                            child: const Text('Reset Kata Sandi'),
                           ),
                           const SizedBox(
                             height: 40,

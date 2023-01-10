@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                           height: 8,
                         ),
                         Text(
-                          'Masukkan email dan password untuk masuk',
+                          'Masukkan email dan kata sandi untuk masuk',
                           style: textTheme.bodyText2,
                         ),
                         const SizedBox(
@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                           height: 10,
                         ),
                         CustomTextFormField(
-                          label: 'Masukkan password',
+                          label: 'Masukkan kata sandi',
                           controller: _passwordController,
                           isPassword: true,
                           validator: (value) =>
@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                                   context, const ResetPasswordPage());
                             },
                             child: Text(
-                              'Lupa password?',
+                              'Lupa kata sandi?',
                               style: textTheme.bodyText2!.copyWith(
                                 color: ColorValue.secondaryColor,
                               ),

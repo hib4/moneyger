@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Container(
                 width: double.infinity,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                    const EdgeInsets.symmetric(horizontal: 28, vertical: 30),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -91,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             context, const ResetPasswordProfilePage());
                       },
                       icon: 'reset_password',
-                      title: 'Reset Password',
+                      title: 'Reset Kata Sandi',
                     ),
                     const SizedBox(
                       height: 16,

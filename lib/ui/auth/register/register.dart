@@ -90,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           height: 12,
                         ),
                         CustomTextFormField(
-                          label: 'Masukkan password',
+                          label: 'Masukkan kata sandi',
                           controller: _passwordController,
                           isPassword: true,
                           validator: (value) =>
