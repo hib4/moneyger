@@ -50,9 +50,9 @@ class _ChatPageState extends State<ChatPage> {
 
   Future _checkTokenStatus() async {
     String check = await SharedCode().getToken('chat') ?? '';
-    if (check == '') {
-      _isCheckSubs.value = true;
-    } else {
+    String subs = await SharedCode().getToken('subs') ?? '';
+
+    if (subs == 'true') {
       _isCheckSubs.value = false;
       _addData(
         ChatModel(
@@ -61,6 +61,19 @@ class _ChatPageState extends State<ChatPage> {
         ),
         isFirst: true,
       );
+    } else {
+      if (check == '') {
+        _isCheckSubs.value = true;
+      } else {
+        _isCheckSubs.value = false;
+        _addData(
+          ChatModel(
+            'Hai, dengan Tim Konsultasi disini. Ada yang bisa kita bantu tentang masalah keuangan?',
+            true,
+          ),
+          isFirst: true,
+        );
+      }
     }
   }
 
