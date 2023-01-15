@@ -61,7 +61,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
     }
 
     setState(() {
-      print(_pageStack);
       _currentIndex = i;
     });
   }

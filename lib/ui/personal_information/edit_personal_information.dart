@@ -1,16 +1,19 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/widget/loading/loading_animation.dart';
+import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
 
   @override
-  State<EditProfilePage> createState() =>
-      _EditProfilePageState();
+  State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
@@ -18,6 +21,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
       FirebaseFirestore.instance.collection('users').doc(SharedCode().uid);
   final _fullNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  PlatformFile? _pickedImage;
+
+  Future _selectImage() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+    );
+
+    if (result != null) {
+      setState(() {
+        _pickedImage = result.files.first;
+      });
+    } else {
+      showSnackBar(context, title: 'Tidak ada gambar yang dipilih');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,15 +70,44 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     children: [
                       Align(
                         alignment: Alignment.center,
-                        child: CircleAvatar(
-                          backgroundColor: ColorValue.secondaryColor,
-                          radius: 50,
-                          child: Text(
-                            SharedCode().getInitials(data['full_name']),
-                            style: textTheme.headline2!.copyWith(
-                              color: Colors.white,
-                              fontSize: 22,
-                            ),
+                        child: GestureDetector(
+                          onTap: _selectImage,
+                          child: Stack(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: ColorValue.secondaryColor,
+                                radius: 50,
+                                backgroundImage: _pickedImage != null
+                                    ? FileImage(
+                                        File(
+                                          _pickedImage!.path!,
+                                        ),
+                                      )
+                                    : data['photo_profile'] != ''
+                                        ? NetworkImage(data['photo_profile'])
+                                            as ImageProvider
+                                        : null,
+                                child: data['photo_profile'] != '' ||
+                                        _pickedImage != null
+                                    ? null
+                                    : Text(
+                                        SharedCode()
+                                            .getInitials(data['full_name']),
+                                        style: textTheme.headline2!.copyWith(
+                                          color: Colors.white,
+                                          fontSize: 22,
+                                        ),
+                                      ),
+                              ),
+                              const Positioned(
+                                bottom: 5,
+                                right: 3,
+                                child: CircleAvatar(
+                                  radius: 12,
+                                  child: Icon(Icons.edit_rounded, size: 12),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -79,8 +128,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         textTheme,
                         hint: 'Masukkan nama lengkap',
                         controller: _fullNameController,
-                        validator: (value) =>
-                            SharedCode().nameValidator(value),
+                        validator: (value) => SharedCode().nameValidator(value),
                       ),
                       const SizedBox(
                         height: 16,
@@ -114,15 +162,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            await FirebaseService()
-                                .editProfile(
-                                  context,
-                                  name: _fullNameController.text,
-                                )
-                                .then(
-                                  (value) =>
-                                      value ? Navigator.pop(context) : null,
-                                );
+                            _pickedImage != null
+                                ? await FirebaseService()
+                                    .editProfileWithImage(
+                                      context,
+                                      name: _fullNameController.text,
+                                      fileName: _pickedImage!.name,
+                                      filePath: _pickedImage!.path!,
+                                    )
+                                    .then(
+                                      (value) =>
+                                          value ? Navigator.pop(context) : null,
+                                    )
+                                : await FirebaseService()
+                                    .editProfile(
+                                      context,
+                                      name: _fullNameController.text,
+                                    )
+                                    .then(
+                                      (value) =>
+                                          value ? Navigator.pop(context) : null,
+                                    );
                           }
                         },
                         child: const Text('Edit'),
