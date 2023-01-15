@@ -98,13 +98,18 @@ class ProfilePreviewItem extends StatelessWidget {
               CircleAvatar(
                 backgroundColor: ColorValue.secondaryColor,
                 radius: 50,
-                child: Text(
-                  SharedCode().getInitials(data['full_name']),
-                  style: textTheme.headline2!.copyWith(
-                    color: Colors.white,
-                    fontSize: 22,
-                  ),
-                ),
+                backgroundImage: data['photo_profile'] != ''
+                    ? NetworkImage(data['photo_profile'])
+                    : null,
+                child: data['photo_profile'] != ''
+                    ? null
+                    : Text(
+                        SharedCode().getInitials(data['full_name']),
+                        style: textTheme.headline2!.copyWith(
+                          color: Colors.white,
+                          fontSize: 22,
+                        ),
+                      ),
               ),
               const SizedBox(
                 height: 24,
