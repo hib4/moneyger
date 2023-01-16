@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/ui/budget/detail_budget.dart';
 import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 class BudgetHistoryItem extends StatefulWidget {
   const BudgetHistoryItem({Key? key}) : super(key: key);
@@ -24,6 +26,7 @@ class _BudgetHistoryItemState extends State<BudgetHistoryItem> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return StreamBuilder<QuerySnapshot>(
         stream: _collection.orderBy('updated_at', descending: true).snapshots(),
@@ -93,9 +96,11 @@ class _BudgetHistoryItemState extends State<BudgetHistoryItem> {
                                 children: [
                                   Text(
                                     data['category'],
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 14,
-                                      color: Colors.black,
+                                      color: provider.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   ),
                                   Text(
@@ -133,10 +138,12 @@ class _BudgetHistoryItemState extends State<BudgetHistoryItem> {
                                   Text(
                                     SharedCode()
                                         .convertToIdr(data['budget'], 0),
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
-                                      color: ColorValue.secondaryColor,
+                                      color: provider.isDarkMode
+                                          ? ColorValueDark.secondaryColor
+                                          : ColorValue.secondaryColor,
                                     ),
                                   ),
                                 ],
@@ -151,10 +158,12 @@ class _BudgetHistoryItemState extends State<BudgetHistoryItem> {
                                   Text(
                                     SharedCode()
                                         .convertToIdr(data['remain'], 0),
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
-                                      color: ColorValue.secondaryColor,
+                                      color: provider.isDarkMode
+                                          ? ColorValueDark.secondaryColor
+                                          : ColorValue.secondaryColor,
                                     ),
                                   ),
                                 ],
@@ -175,7 +184,9 @@ class _BudgetHistoryItemState extends State<BudgetHistoryItem> {
                             style: const TextStyle(color: Colors.black),
                           ),
                           barRadius: const Radius.circular(16),
-                          progressColor: ColorValue.secondaryColor,
+                          progressColor: provider.isDarkMode
+                              ? ColorValueDark.secondaryColor
+                              : ColorValue.secondaryColor,
                           backgroundColor: const Color(0xFFEDF0F4),
                         ),
                       ],

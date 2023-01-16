@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/main.dart';
@@ -16,6 +17,7 @@ import 'package:moneyger/ui/widget/detail_transaction_item.dart';
 import 'package:moneyger/ui/widget/headline_item.dart';
 import 'package:moneyger/ui/widget/transaction/transaction_history_item.dart';
 import 'package:moneyger/ui/widget/user_item/user_item.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -46,6 +48,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -56,7 +59,7 @@ class _HomePageState extends State<HomePage> {
         return true;
       },
       child: Scaffold(
-        floatingActionButton: _speedDial(),
+        floatingActionButton: _speedDial(provider.isDarkMode),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Container(
@@ -78,7 +81,9 @@ class _HomePageState extends State<HomePage> {
                     width: double.infinity,
                     padding: const EdgeInsets.fromLTRB(0, 16, 16, 16),
                     decoration: BoxDecoration(
-                      color: const Color(0XFFF9F9F9),
+                      color: provider.isDarkMode
+                          ? ColorValueDark.darkColor
+                          : const Color(0XFFF9F9F9),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Column(
@@ -96,8 +101,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               TotalBalanceItem(
-                                textStyle: const TextStyle(
-                                  color: Colors.black,
+                                textStyle: TextStyle(
+                                  color: provider.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -170,19 +177,25 @@ class _HomePageState extends State<HomePage> {
                               Text(
                                 'Ingin Konsultasi?',
                                 style: textTheme.headline3!.copyWith(
-                                  color: Colors.white,
+                                  color: provider.isDarkMode
+                                      ? Colors.black
+                                      : Colors.white,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               Text(
                                 'Bingung dengan Keuangan kamu sekarang? Konsultasi aja!',
                                 style: textTheme.bodyText2!.copyWith(
-                                  color: Colors.white,
+                                  color: provider.isDarkMode
+                                      ? Colors.black
+                                      : Colors.white,
                                 ),
                               ),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
+                                  primary: provider.isDarkMode
+                                      ? ColorValueDark.darkColor
+                                      : Colors.white,
                                   minimumSize: const Size(74, 24),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
@@ -248,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     },
-                    child: Text('Lebih banyak Artikel'),
+                    child: const Text('Lebih banyak Artikel'),
                   ),
                 ],
               ),
@@ -259,13 +272,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _speedDial() {
+  Widget _speedDial(bool isDarkMode) {
     return SpeedDial(
       icon: Icons.add_rounded,
       activeIcon: Icons.close_rounded,
-      backgroundColor: ColorValue.secondaryColor,
+      backgroundColor: isDarkMode
+          ? ColorValueDark.secondaryColor
+          : ColorValue.secondaryColor,
       renderOverlay: true,
-      overlayColor: Colors.white,
+      overlayColor: isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
       overlayOpacity: 0.5,
       childrenButtonSize: const Size(60, 60),
       spacing: 5,
@@ -275,14 +290,17 @@ class _HomePageState extends State<HomePage> {
         SpeedDialChild(
           child: SvgPicture.asset(
             'assets/icons/transaction.svg',
-            color: Colors.white,
+            color: isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
             width: 18,
             height: 18,
           ),
-          backgroundColor: ColorValue.secondaryColor,
+          backgroundColor: isDarkMode
+              ? ColorValueDark.secondaryColor
+              : ColorValue.secondaryColor,
           foregroundColor: Colors.white,
           label: 'Transaksi',
-          labelStyle: const TextStyle(color: Colors.black),
+          labelStyle:
+              TextStyle(color: isDarkMode ? Colors.white : Colors.black),
           onTap: () => Navigate.navigatorPush(
               context,
               const AddTransactionPage(
@@ -292,14 +310,17 @@ class _HomePageState extends State<HomePage> {
         SpeedDialChild(
           child: SvgPicture.asset(
             'assets/icons/budget.svg',
-            color: Colors.white,
+            color: isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
             width: 18,
             height: 18,
           ),
-          backgroundColor: ColorValue.secondaryColor,
+          backgroundColor: isDarkMode
+              ? ColorValueDark.secondaryColor
+              : ColorValue.secondaryColor,
           foregroundColor: Colors.white,
           label: 'Anggaran',
-          labelStyle: const TextStyle(color: Colors.black),
+          labelStyle:
+              TextStyle(color: isDarkMode ? Colors.white : Colors.black),
           onTap: () => Navigate.navigatorPush(
               context,
               const AddBudgetPage(

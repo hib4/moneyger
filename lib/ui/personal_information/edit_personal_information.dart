@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/widget/loading/loading_animation.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
+import 'package:provider/provider.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
@@ -42,15 +44,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'Edit Profil',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: provider.isDarkMode
+                ? Colors.white
+                : ColorValueDark.backgroundColor,
+          ),
         ),
-        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor:
+            provider.isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
+        iconTheme: IconThemeData(
+          color: provider.isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -117,7 +127,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       Text(
                         'Nama Lengkap',
                         style: textTheme.bodyText1!.copyWith(
-                          color: Colors.black,
+                          color:
+                              provider.isDarkMode ? Colors.white : Colors.black,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -129,6 +140,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         hint: 'Masukkan nama lengkap',
                         controller: _fullNameController,
                         validator: (value) => SharedCode().nameValidator(value),
+                        isDarkMode: provider.isDarkMode,
                       ),
                       const SizedBox(
                         height: 16,
@@ -136,7 +148,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       Text(
                         'Email',
                         style: textTheme.bodyText1!.copyWith(
-                          color: Colors.black,
+                          color:
+                              provider.isDarkMode ? Colors.white : Colors.black,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -206,6 +219,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     TextTheme textTheme, {
     required String hint,
     required TextEditingController controller,
+    required bool isDarkMode,
     TextInputType textInputType = TextInputType.text,
     String? Function(String?)? validator,
     bool withIcon = false,
@@ -215,7 +229,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       keyboardType: textInputType,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: textTheme.bodyText1!.copyWith(color: Colors.black),
+      style: textTheme.bodyText1!.copyWith(
+        color: isDarkMode ? Colors.white : Colors.black,
+      ),
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: const BorderSide(
@@ -232,9 +248,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
           borderRadius: BorderRadius.circular(8),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             width: 2,
-            color: ColorValue.secondaryColor,
+            color: isDarkMode
+                ? ColorValueDark.secondaryColor
+                : ColorValue.secondaryColor,
           ),
           borderRadius: BorderRadius.circular(8),
         ),

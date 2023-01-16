@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/constant/list_category.dart';
 import 'package:moneyger/service/firebase_service.dart';
+import 'package:provider/provider.dart';
 
 class EditBudgetPage extends StatefulWidget {
   final num budget;
@@ -38,15 +40,22 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
+        backgroundColor:
+            provider.isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
+        title: Text(
           'Edit Anggaran',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: provider.isDarkMode ? Colors.white : Colors.black,
+          ),
         ),
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: provider.isDarkMode ? Colors.white : Colors.black,
+        ),
+
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -61,7 +70,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
               Text(
                 'Anggaran Kamu',
                 style: textTheme.bodyText1!.copyWith(
-                  color: Colors.black,
+                  color: provider.isDarkMode ? Colors.white : Colors.black,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -87,7 +96,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
               Text(
                 'Kategori',
                 style: textTheme.bodyText1!.copyWith(
-                  color: Colors.black,
+                  color: provider.isDarkMode ? Colors.white : Colors.black,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -98,6 +107,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                 textTheme,
                 value: _selectedCategory,
                 items: ListCategory().dropdownExpenditureItems,
+                isDarkMode: provider.isDarkMode,
               ),
               const SizedBox(
                 height: 16,
@@ -105,7 +115,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
               Text(
                 'Deskripsi',
                 style: textTheme.bodyText1!.copyWith(
-                  color: Colors.black,
+                  color: provider.isDarkMode ? Colors.white : Colors.black,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -117,6 +127,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                 hint: 'Masukkan deskripsi',
                 controller: _descController,
                 validator: (value) => SharedCode().emptyValidator(value),
+                isDarkMode: provider.isDarkMode,
               ),
               const SizedBox(
                 height: 32,
@@ -149,6 +160,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
     TextTheme textTheme, {
     required String hint,
     required TextEditingController controller,
+    required bool isDarkMode,
     TextInputType textInputType = TextInputType.text,
     String? Function(String?)? validator,
     bool withIcon = false,
@@ -158,7 +170,9 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
       keyboardType: textInputType,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: textTheme.bodyText1!.copyWith(color: Colors.black),
+      style: textTheme.bodyText1!.copyWith(
+        color: isDarkMode ? Colors.white : Colors.black,
+      ),
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: const BorderSide(
@@ -175,9 +189,11 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
           borderRadius: BorderRadius.circular(8),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             width: 2,
-            color: ColorValue.secondaryColor,
+            color: isDarkMode
+                ? ColorValueDark.secondaryColor
+                : ColorValue.secondaryColor,
           ),
           borderRadius: BorderRadius.circular(8),
         ),
@@ -213,6 +229,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
     TextTheme textTheme, {
     required String value,
     required List<DropdownMenuItem<String>>? items,
+    required bool isDarkMode,
   }) {
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
@@ -228,7 +245,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
           style: textTheme.bodyText1!,
         ),
         style: textTheme.bodyText1!.copyWith(
-          color: Colors.black,
+          color: isDarkMode ? Colors.white : Colors.black,
         ),
         isExpanded: true,
         itemHeight: 50,

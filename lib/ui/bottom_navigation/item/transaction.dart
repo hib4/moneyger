@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/ui/transaction/add_transaction.dart';
@@ -7,6 +8,7 @@ import 'package:moneyger/ui/widget/detail_transaction_item.dart';
 import 'package:moneyger/ui/widget/headline_item.dart';
 import 'package:moneyger/ui/widget/transaction/transaction_history_item.dart';
 import 'package:moneyger/ui/widget/user_item/user_item.dart';
+import 'package:provider/provider.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
@@ -18,12 +20,16 @@ class TransactionPage extends StatefulWidget {
 class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigate.navigatorPush(context, const AddTransactionPage());
         },
-        backgroundColor: ColorValue.secondaryColor,
+        backgroundColor: provider.isDarkMode
+            ? ColorValueDark.secondaryColor
+            : ColorValue.secondaryColor,
         child: const Icon(Icons.add_rounded),
       ),
       body: SingleChildScrollView(

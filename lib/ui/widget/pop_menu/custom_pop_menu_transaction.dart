@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/service/firebase_service.dart';
+import 'package:provider/provider.dart';
 
 class CustomPopMenuTransaction extends PopupMenuEntry<int> {
   final List data;
@@ -22,6 +24,7 @@ class PlusMinusEntryState extends State<CustomPopMenuTransaction> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return InkWell(
       onTap: () {
@@ -42,9 +45,9 @@ class PlusMinusEntryState extends State<CustomPopMenuTransaction> {
         ),
         child: Center(
           child: Text(
-            'Delete',
+            'Hapus',
             style: textTheme.bodyText1!.copyWith(
-              color: Colors.black,
+              color: provider.isDarkMode ? Colors.white : Colors.black,
             ),
           ),
         ),
