@@ -4,11 +4,13 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/constant/list_category.dart';
 import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
+import 'package:provider/provider.dart';
 
 class EditTransactionPage extends StatefulWidget {
   final List data;
@@ -101,15 +103,23 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'Edit Transaksi',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: provider.isDarkMode
+                ? Colors.white
+                : ColorValueDark.backgroundColor,
+          ),
         ),
-        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor:
+            provider.isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
+        iconTheme: IconThemeData(
+          color: provider.isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -126,7 +136,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                   Text(
                     'Nominal',
                     style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
+                      color: provider.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                   const SizedBox(
@@ -140,6 +150,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                     withInputFormatter: true,
                     validator: (value) =>
                         SharedCode().transactionValidator(value),
+                    isDarkMode: provider.isDarkMode,
                   ),
                   const SizedBox(
                     height: 16,
@@ -147,7 +158,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                   Text(
                     'Kategori',
                     style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
+                      color: provider.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                   const SizedBox(
@@ -159,6 +170,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                     items: _type == 'income'
                         ? ListCategory().dropdownIncomeItems
                         : ListCategory().dropdownExpenditureItems,
+                    isDarkMode: provider.isDarkMode,
                   ),
                   const SizedBox(
                     height: 16,
@@ -166,7 +178,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                   Text(
                     'Tanggal',
                     style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
+                      color: provider.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                   const SizedBox(
@@ -185,6 +197,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                         withIcon: true,
                         validator: (value) =>
                             SharedCode().emptyValidator(value),
+                        isDarkMode: provider.isDarkMode,
                       ),
                     ),
                   ),
@@ -194,7 +207,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                   Text(
                     'Deskripsi',
                     style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
+                      color: provider.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                   const SizedBox(
@@ -206,6 +219,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
                     controller: _descController,
                     maxLength: 20,
                     validator: (value) => SharedCode().emptyValidator(value),
+                    isDarkMode: provider.isDarkMode,
                   ),
                   const SizedBox(
                     height: 16,
@@ -252,6 +266,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
     TextTheme textTheme, {
     required String value,
     required List<DropdownMenuItem<String>>? items,
+        required bool isDarkMode,
   }) {
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
@@ -267,7 +282,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
           style: textTheme.bodyText1!,
         ),
         style: textTheme.bodyText1!.copyWith(
-          color: Colors.black,
+          color: isDarkMode ? Colors.white : Colors.black,
         ),
         isExpanded: true,
         itemHeight: 50,
@@ -290,6 +305,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
     TextTheme textTheme, {
     required String hint,
     required TextEditingController controller,
+    required bool isDarkMode,
     TextInputType textInputType = TextInputType.text,
     String? Function(String?)? validator,
     int? maxLength,
@@ -301,7 +317,9 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
       keyboardType: textInputType,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: textTheme.bodyText1!.copyWith(color: Colors.black),
+      style: textTheme.bodyText1!.copyWith(
+        color: isDarkMode ? Colors.white : Colors.black,
+      ),
       maxLength: maxLength ?? null,
       inputFormatters: withInputFormatter ? [_formatter] : [],
       decoration: InputDecoration(
@@ -320,9 +338,11 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
           borderRadius: BorderRadius.circular(8),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             width: 2,
-            color: ColorValue.secondaryColor,
+            color: isDarkMode
+                ? ColorValueDark.secondaryColor
+                : ColorValue.secondaryColor,
           ),
           borderRadius: BorderRadius.circular(8),
         ),
@@ -343,9 +363,11 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
         hintText: hint,
         hintStyle: textTheme.bodyText1,
         prefixIcon: withIcon
-            ? const Icon(
+            ? Icon(
                 Icons.date_range_outlined,
-                color: ColorValue.secondaryColor,
+                color: isDarkMode
+                    ? ColorValueDark.secondaryColor
+                    : ColorValue.secondaryColor,
               )
             : null,
         contentPadding:

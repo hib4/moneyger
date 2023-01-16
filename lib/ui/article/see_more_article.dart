@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moneyger/common/app_theme_data.dart';
+import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/model/article_model.dart';
 import 'package:moneyger/ui/widget/artikel/artikel_card.dart';
+import 'package:provider/provider.dart';
 
 class SeeMoreArticle extends StatefulWidget {
   final List<ArticleModel> article;
@@ -24,15 +27,24 @@ class _SeeMoreArticleState extends State<SeeMoreArticle> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
-        backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'Artikel',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: provider.isDarkMode
+                ? Colors.white
+                : ColorValueDark.backgroundColor,
+          ),
         ),
-        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor:
+            provider.isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
+        iconTheme: IconThemeData(
+          color: provider.isDarkMode ? Colors.white : Colors.black,
+        ),
         actions: [
           IconButton(
             splashRadius: 30,
@@ -88,6 +100,8 @@ class SearchArticle extends SearchDelegate {
   @override
   List<Widget>? buildActions(BuildContext context) {
     // TODO: implement buildActions
+    final provider = Provider.of<ThemeProvider>(context);
+
     return [
       IconButton(
         splashRadius: 30,
@@ -98,9 +112,9 @@ class SearchArticle extends SearchDelegate {
             query = '';
           }
         },
-        icon: const Icon(
+        icon: Icon(
           Icons.clear_rounded,
-          color: Colors.black,
+          color: provider.isDarkMode ? Colors.white : Colors.black,
         ),
       ),
     ];
@@ -109,14 +123,16 @@ class SearchArticle extends SearchDelegate {
   @override
   Widget? buildLeading(BuildContext context) {
     // TODO: implement buildLeading
+    final provider = Provider.of<ThemeProvider>(context);
+
     return IconButton(
       splashRadius: 30,
       onPressed: () {
         close(context, null);
       },
-      icon: const Icon(
+      icon: Icon(
         Icons.arrow_back,
-        color: Colors.black,
+        color: provider.isDarkMode ? Colors.white : Colors.black,
       ),
     );
   }
@@ -133,34 +149,34 @@ class SearchArticle extends SearchDelegate {
 
     return data.isEmpty
         ? Center(
-      child: Text(
-        'Artikel tidak ditemukan',
-        style: GoogleFonts.poppins(
-          fontSize: 14,
-        ),
-      ),
-    )
+            child: Text(
+              'Artikel tidak ditemukan',
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+              ),
+            ),
+          )
         : SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
-        child: ListView.builder(
-          padding: const EdgeInsets.only(top: 16),
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            return ArtikelCard(
-              judul: data[index].judul ?? '-',
-              subjudul: data[index].subjudul ?? '-',
-              tanggalPosting: data[index].tanggalPosting ?? '-',
-              penulis: data[index].penulis ?? '-',
-              foto: data[index].foto ?? '-',
-              isiArtikel: data[index].isiArtikel ?? '-',
-            );
-          },
-        ),
-      ),
-    );
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
+              child: ListView.builder(
+                padding: const EdgeInsets.only(top: 16),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return ArtikelCard(
+                    judul: data[index].judul ?? '-',
+                    subjudul: data[index].subjudul ?? '-',
+                    tanggalPosting: data[index].tanggalPosting ?? '-',
+                    penulis: data[index].penulis ?? '-',
+                    foto: data[index].foto ?? '-',
+                    isiArtikel: data[index].isiArtikel ?? '-',
+                  );
+                },
+              ),
+            ),
+          );
   }
 
   @override

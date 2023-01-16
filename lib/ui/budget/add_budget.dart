@@ -4,6 +4,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
@@ -12,6 +13,7 @@ import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:moneyger/ui/widget/banner_subscription.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
+import 'package:provider/provider.dart';
 
 class AddBudgetPage extends StatefulWidget {
   final bool isFromHome;
@@ -66,15 +68,23 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'Tambah Anggaran',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: provider.isDarkMode
+                ? Colors.white
+                : ColorValueDark.backgroundColor,
+          ),
         ),
-        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor:
+            provider.isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
+        iconTheme: IconThemeData(
+          color: provider.isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -101,7 +111,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       Text(
                         'Berapa Anggaran Kamu',
                         style: textTheme.bodyText1!.copyWith(
-                          color: Colors.black,
+                          color:
+                              provider.isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
                       const SizedBox(
@@ -115,6 +126,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         withInputFormatter: true,
                         validator: (value) =>
                             SharedCode().transactionValidator(value),
+                        isDarkMode: provider.isDarkMode,
                       ),
                       const SizedBox(
                         height: 16,
@@ -122,7 +134,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       Text(
                         'Kategori',
                         style: textTheme.bodyText1!.copyWith(
-                          color: Colors.black,
+                          color:
+                              provider.isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
                       const SizedBox(
@@ -132,6 +145,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         textTheme,
                         value: _selectedCategory,
                         items: ListCategory().dropdownExpenditureItems,
+                        isDarkMode: provider.isDarkMode,
                       ),
                       const SizedBox(
                         height: 16,
@@ -139,7 +153,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       Text(
                         'Deskripsi',
                         style: textTheme.bodyText1!.copyWith(
-                          color: Colors.black,
+                          color:
+                              provider.isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
                       const SizedBox(
@@ -152,6 +167,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         maxLength: 20,
                         validator: (value) =>
                             SharedCode().emptyValidator(value),
+                        isDarkMode: provider.isDarkMode,
                       ),
                       const SizedBox(
                         height: 16,
@@ -192,6 +208,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     TextTheme textTheme, {
     required String value,
     required List<DropdownMenuItem<String>>? items,
+    required bool isDarkMode,
   }) {
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
@@ -207,7 +224,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           style: textTheme.bodyText1!,
         ),
         style: textTheme.bodyText1!.copyWith(
-          color: Colors.black,
+          color: isDarkMode ? Colors.white : Colors.black,
         ),
         isExpanded: true,
         itemHeight: 50,
@@ -230,6 +247,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     TextTheme textTheme, {
     required String hint,
     required TextEditingController controller,
+    required bool isDarkMode,
     TextInputType textInputType = TextInputType.text,
     String? Function(String?)? validator,
     int? maxLength,
@@ -241,7 +259,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       keyboardType: textInputType,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: textTheme.bodyText1!.copyWith(color: Colors.black),
+      style: textTheme.bodyText1!
+          .copyWith(color: isDarkMode ? Colors.white : Colors.black),
       maxLength: maxLength ?? null,
       inputFormatters: withInputFormatter ? [_formatter] : [],
       decoration: InputDecoration(
@@ -260,9 +279,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           borderRadius: BorderRadius.circular(8),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             width: 2,
-            color: ColorValue.secondaryColor,
+            color: isDarkMode
+                ? ColorValueDark.secondaryColor
+                : ColorValue.secondaryColor,
           ),
           borderRadius: BorderRadius.circular(8),
         ),

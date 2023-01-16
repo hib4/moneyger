@@ -2,12 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:moneyger/common/app_theme_data.dart';
+import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/ui/auth/login/login.dart';
 import 'package:moneyger/ui/auth/reset_password/reset_password_profile.dart';
 import 'package:moneyger/ui/personal_information/edit_personal_information.dart';
+import 'package:moneyger/ui/switch_theme.dart';
 import 'package:moneyger/ui/widget/detail_transaction_item.dart';
 import 'package:moneyger/ui/widget/user_item/user_item.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -20,9 +24,12 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: const Color(0XFFF9F9F9),
+      backgroundColor: provider.isDarkMode
+          ? ColorValueDark.darkColor
+          : const Color(0XFFF9F9F9),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -63,9 +70,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 width: double.infinity,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 28, vertical: 30),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: provider.isDarkMode
+                      ? ColorValueDark.backgroundColor
+                      : Colors.white,
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(50),
                     topRight: Radius.circular(50),
                   ),
@@ -80,6 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       },
                       icon: 'personal_info',
                       title: 'Edit Profil',
+                      isDarkMode: provider.isDarkMode,
                     ),
                     const SizedBox(
                       height: 16,
@@ -92,6 +102,20 @@ class _ProfilePageState extends State<ProfilePage> {
                       },
                       icon: 'reset_password',
                       title: 'Reset Kata Sandi',
+                      isDarkMode: provider.isDarkMode,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    _button(
+                      textTheme,
+                      onPress: () {
+                        Navigate.navigatorPush(
+                            context, const SwitchThemePage());
+                      },
+                      icon: 'darkmode',
+                      title: 'Ganti Tema',
+                      isDarkMode: provider.isDarkMode,
                     ),
                     const SizedBox(
                       height: 16,
@@ -108,6 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       icon: 'logout',
                       title: 'Keluar',
                       isLogout: true,
+                      isDarkMode: provider.isDarkMode,
                     ),
                   ],
                 ),
@@ -124,22 +149,25 @@ class _ProfilePageState extends State<ProfilePage> {
     required void Function() onPress,
     required String icon,
     required String title,
+    required bool isDarkMode,
     bool isLogout = false,
   }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onPress,
-        splashColor: Colors.white,
+        splashColor: isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
         borderRadius: BorderRadius.circular(12.5),
         child: Row(
           children: [
             Container(
               height: 45,
               width: 45,
-              decoration: const BoxDecoration(
-                color: Color(0xFFF9F9F9),
-                borderRadius: BorderRadius.all(
+              decoration: BoxDecoration(
+                color: isDarkMode
+                    ? ColorValueDark.darkColor
+                    : const Color(0XFFF9F9F9),
+                borderRadius: const BorderRadius.all(
                   Radius.circular(12.5),
                 ),
               ),
@@ -147,7 +175,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: SvgPicture.asset(
                   'assets/icons/$icon.svg',
                   fit: BoxFit.fill,
-                  color: isLogout ? Colors.red : Colors.black,
+                  color: isLogout
+                      ? Colors.red
+                      : isDarkMode
+                          ? Colors.white
+                          : Colors.black,
                 ),
               ),
             ),
@@ -155,7 +187,11 @@ class _ProfilePageState extends State<ProfilePage> {
             Text(
               title,
               style: textTheme.bodyText1!.copyWith(
-                color: isLogout ? Colors.red : Colors.black,
+                color: isLogout
+                    ? Colors.red
+                    : isDarkMode
+                        ? Colors.white
+                        : Colors.black,
               ),
             ),
             const Spacer(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/model/chat_model.dart';
@@ -7,6 +8,7 @@ import 'package:moneyger/service/api_service.dart';
 import 'package:moneyger/ui/subscribe/subscribe.dart';
 import 'package:moneyger/ui/widget/chat/chat_message_item.dart';
 import 'package:moneyger/ui/widget/custom_text_form_field.dart';
+import 'package:provider/provider.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -85,6 +87,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -121,7 +124,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: _buildInput(),
+                  child: _buildInput(provider.isDarkMode),
                 ),
               ],
             ),
@@ -152,7 +155,7 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  Widget _buildInput() {
+  Widget _buildInput(bool isDarkMode) {
     return Row(
       children: [
         Expanded(
@@ -173,8 +176,11 @@ class _ChatPageState extends State<ChatPage> {
               padding: MaterialStateProperty.all(
                 const EdgeInsets.all(10),
               ),
-              backgroundColor:
-                  MaterialStateProperty.all(ColorValue.secondaryColor),
+              backgroundColor: MaterialStateProperty.all(
+                isDarkMode
+                    ? ColorValueDark.secondaryColor
+                    : ColorValue.secondaryColor,
+              ),
             ),
             onPressed: () async {
               if (_questionController.value.text.trim().isNotEmpty) {

@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
+import 'package:provider/provider.dart';
 
 class ArticlePage extends StatefulWidget {
   String judul, subjudul, tanggalPosting, penulis, foto, isiArtikel;
@@ -24,15 +26,23 @@ class _ArticlePageState extends State<ArticlePage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'Artikel',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: provider.isDarkMode
+                ? Colors.white
+                : ColorValueDark.backgroundColor,
+          ),
         ),
-        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor:
+            provider.isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
+        iconTheme: IconThemeData(
+          color: provider.isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -51,9 +61,10 @@ class _ArticlePageState extends State<ArticlePage> {
               Text(
                 "${widget.tanggalPosting}, Penulis ${widget.penulis}",
                 style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                    color: ColorValue.greyColor),
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                  color: ColorValue.greyColor,
+                ),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 16, bottom: 24),
@@ -77,7 +88,7 @@ class _ArticlePageState extends State<ArticlePage> {
               Text(
                 widget.subjudul,
                 style: textTheme.bodyText1!.copyWith(
-                  color: Colors.black,
+                  color: provider.isDarkMode ? Colors.white : Colors.black,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -86,7 +97,9 @@ class _ArticlePageState extends State<ArticlePage> {
               ),
               Text(
                 widget.isiArtikel,
-                style: textTheme.bodyText1!.copyWith(color: Colors.black),
+                style: textTheme.bodyText1!.copyWith(
+                  color: provider.isDarkMode ? Colors.white : Colors.black,
+                ),
               ),
             ],
           ),

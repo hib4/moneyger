@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
 import 'package:moneyger/ui/transaction/edit_transaction.dart';
 import 'package:moneyger/ui/widget/pop_menu/custom_pop_menu_transaction.dart';
+import 'package:provider/provider.dart';
 
 class TransactionHistoryItem extends StatefulWidget {
   final bool isHome;
@@ -52,6 +54,7 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return StreamBuilder<QuerySnapshot>(
       stream: _collection.orderBy('created_at', descending: true).snapshots(),
@@ -116,7 +119,9 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
                   width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.only(bottom: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF9F9F9),
+                    color: provider.isDarkMode
+                        ? const Color(0XFF303136)
+                        : const Color(0XFFF9F9F9),
                     borderRadius: BorderRadius.circular(7.5),
                   ),
                   child: Row(
@@ -145,7 +150,9 @@ class _TransactionHistoryItemState extends State<TransactionHistoryItem> {
                           Text(
                             data['category'],
                             style: textTheme.bodyText1!.copyWith(
-                              color: Colors.black,
+                              color: provider.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
                               fontWeight: FontWeight.w500,
                             ),
                           ),

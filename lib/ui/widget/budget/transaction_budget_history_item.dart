@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
@@ -9,11 +10,13 @@ import 'package:moneyger/ui/widget/loading/shimmer_widget.dart';
 import 'package:moneyger/ui/transaction/edit_transaction.dart';
 import 'package:moneyger/ui/widget/pop_menu/custom_pop_menu_budget.dart';
 import 'package:moneyger/ui/widget/pop_menu/custom_pop_menu_transaction.dart';
+import 'package:provider/provider.dart';
 
 class TransactionBudgetHistoryItem extends StatefulWidget {
   final String docId, category;
 
-  const TransactionBudgetHistoryItem({Key? key, required this.docId, required this.category})
+  const TransactionBudgetHistoryItem(
+      {Key? key, required this.docId, required this.category})
       : super(key: key);
 
   @override
@@ -55,6 +58,7 @@ class _TransactionBudgetHistoryItemState
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return StreamBuilder<QuerySnapshot>(
       stream: _collection
@@ -112,7 +116,9 @@ class _TransactionBudgetHistoryItemState
                   width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.only(bottom: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF9F9F9),
+                    color: provider.isDarkMode
+                        ? ColorValueDark.darkColor
+                        : const Color(0xFFF9F9F9),
                     borderRadius: BorderRadius.circular(7.5),
                   ),
                   child: Row(
@@ -137,7 +143,7 @@ class _TransactionBudgetHistoryItemState
                           Text(
                             widget.category,
                             style: textTheme.bodyText1!.copyWith(
-                              color: Colors.black,
+                              color: provider.isDarkMode ? Colors.white : Colors.black,
                               fontWeight: FontWeight.w500,
                             ),
                           ),

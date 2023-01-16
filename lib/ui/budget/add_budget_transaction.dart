@@ -4,12 +4,14 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
 import 'package:moneyger/constant/list_category.dart';
 import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
+import 'package:provider/provider.dart';
 
 class AddBudgetTransactionPage extends StatefulWidget {
   final String docId, category;
@@ -95,15 +97,23 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'Tambah Transaksi',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: provider.isDarkMode
+                ? Colors.white
+                : ColorValueDark.backgroundColor,
+          ),
         ),
-        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor:
+            provider.isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
+        iconTheme: IconThemeData(
+          color: provider.isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -120,7 +130,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                   Text(
                     'Nominal',
                     style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
+                      color: provider.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                   const SizedBox(
@@ -134,6 +144,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                     withInputFormatter: true,
                     validator: (value) =>
                         SharedCode().transactionValidator(value),
+                    isDarkMode: provider.isDarkMode,
                   ),
                   const SizedBox(
                     height: 16,
@@ -141,7 +152,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                   Text(
                     'Kategori',
                     style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
+                      color: provider.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                   const SizedBox(
@@ -152,8 +163,11 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                     value: _selectedCategory,
                     items: <DropdownMenuItem<String>>[
                       DropdownMenuItem(
-                          value: widget.category, child: Text(widget.category)),
+                        value: widget.category,
+                        child: Text(widget.category),
+                      ),
                     ],
+                    isDarkMode: provider.isDarkMode,
                   ),
                   const SizedBox(
                     height: 16,
@@ -161,7 +175,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                   Text(
                     'Tanggal',
                     style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
+                      color: provider.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                   const SizedBox(
@@ -180,6 +194,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                         withIcon: true,
                         validator: (value) =>
                             SharedCode().emptyValidator(value),
+                        isDarkMode: provider.isDarkMode,
                       ),
                     ),
                   ),
@@ -189,7 +204,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                   Text(
                     'Deskripsi',
                     style: textTheme.bodyText1!.copyWith(
-                      color: Colors.black,
+                      color: provider.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                   const SizedBox(
@@ -201,6 +216,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
                     controller: _descController,
                     maxLength: 20,
                     validator: (value) => SharedCode().emptyValidator(value),
+                    isDarkMode: provider.isDarkMode,
                   ),
                   const SizedBox(
                     height: 16,
@@ -246,6 +262,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
     TextTheme textTheme, {
     required String value,
     required List<DropdownMenuItem<String>>? items,
+    required bool isDarkMode,
   }) {
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
@@ -261,7 +278,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
           style: textTheme.bodyText1!,
         ),
         style: textTheme.bodyText1!.copyWith(
-          color: Colors.black,
+          color: isDarkMode ? Colors.white : Colors.black,
         ),
         isExpanded: true,
         itemHeight: 50,
@@ -284,6 +301,7 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
     TextTheme textTheme, {
     required String hint,
     required TextEditingController controller,
+    required bool isDarkMode,
     TextInputType textInputType = TextInputType.text,
     String? Function(String?)? validator,
     int? maxLength,
@@ -295,7 +313,9 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
       keyboardType: textInputType,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: textTheme.bodyText1!.copyWith(color: Colors.black),
+      style: textTheme.bodyText1!.copyWith(
+        color: isDarkMode ? Colors.white : Colors.black,
+      ),
       maxLength: maxLength ?? null,
       inputFormatters: withInputFormatter ? [_formatter] : [],
       decoration: InputDecoration(
@@ -337,9 +357,11 @@ class _AddBudgetTransactionPageState extends State<AddBudgetTransactionPage> {
         hintText: hint,
         hintStyle: textTheme.bodyText1,
         prefixIcon: withIcon
-            ? const Icon(
+            ? Icon(
                 Icons.date_range_outlined,
-                color: ColorValue.secondaryColor,
+                color: isDarkMode
+                    ? ColorValueDark.secondaryColor
+                    : ColorValue.secondaryColor,
               )
             : null,
         contentPadding:
