@@ -135,8 +135,10 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 24,
                   ),
-                  const HeadlineItem(
-                    image: 'transaction',
+                  HeadlineItem(
+                    image: provider.isDarkMode
+                        ? 'transaction_dark'
+                        : 'transaction',
                     title: 'Transaksi',
                     desc: 'Beberapa transaksi kamu akhir-akhir ini',
                   ),
@@ -149,8 +151,8 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 16,
                   ),
-                  const HeadlineItem(
-                    image: 'info',
+                  HeadlineItem(
+                    image: provider.isDarkMode ? 'consultation_dark' : 'info',
                     title: 'Konsultasi Keuangan',
                     desc: 'Konsultasikan keuanganmu!',
                   ),
@@ -228,8 +230,8 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 24,
                   ),
-                  const HeadlineItem(
-                    image: 'article',
+                  HeadlineItem(
+                    image: provider.isDarkMode ? 'article_dark' : 'article',
                     title: 'Artikel',
                     desc: 'Artikel mengenai ekonomi',
                   ),

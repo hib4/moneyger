@@ -89,17 +89,19 @@ class _TransactionPageState extends State<TransactionPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 28, vertical: 32),
                     child: Column(
-                      children: const [
+                      children: [
                         HeadlineItem(
-                          image: 'transaction',
+                          image: provider.isDarkMode
+                              ? 'transaction_dark'
+                              : 'transaction',
                           title: 'Transaksi',
                           desc: 'Transaksi anda selama ini',
                         ),
                         //
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
-                        TransactionHistoryItem(),
+                        const TransactionHistoryItem(),
                       ],
                     ),
                   ),

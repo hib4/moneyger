@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
@@ -7,6 +8,7 @@ import 'package:moneyger/ui/subscribe/success.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 import 'package:moneyger/ui/widget/subscribe/expansion.dart';
 import 'package:moneyger/ui/widget/subscribe/subscribe_card.dart';
+import 'package:provider/provider.dart';
 
 class SubscribePage extends StatefulWidget {
   const SubscribePage({Key? key}) : super(key: key);
@@ -21,15 +23,19 @@ class _SubscribePageState extends State<SubscribePage> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
+        backgroundColor:
+            provider.isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
+        title: Text(
           'Langganan',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+              color: provider.isDarkMode ? Colors.white : Colors.black),
         ),
         leading: BackButton(
-          color: Colors.black,
+          color: provider.isDarkMode ? Colors.white : Colors.black,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -47,16 +53,21 @@ class _SubscribePageState extends State<SubscribePage> {
                     'assets/svg/logo2.svg',
                     width: 86.5,
                     height: 97.24,
+                    color: provider.isDarkMode
+                        ? ColorValueDark.secondaryColor
+                        : ColorValue.secondaryColor,
                   ),
                   const SizedBox(
                     height: 13,
                   ),
-                  const Text(
+                  Text(
                     'Moneyger Premium',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: ColorValue.secondaryColor,
+                        color: provider.isDarkMode
+                            ? ColorValueDark.secondaryColor
+                            : ColorValue.secondaryColor,
                         letterSpacing: 1.5),
                   ),
                   const SizedBox(
@@ -80,12 +91,14 @@ class _SubscribePageState extends State<SubscribePage> {
                   const SizedBox(
                     height: 35,
                   ),
-                  const Text(
+                  Text(
                     'FAQ Tentang Moneyger Premium',
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: ColorValue.secondaryColor),
+                        color: provider.isDarkMode
+                            ? ColorValueDark.secondaryColor
+                            : ColorValue.secondaryColor),
                   ),
                   const Divider(
                     height: 16,
@@ -101,20 +114,22 @@ class _SubscribePageState extends State<SubscribePage> {
                   const SizedBox(
                     height: 16,
                   ),
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Pilih Paket',
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: ColorValue.secondaryColor),
+                          color: provider.isDarkMode
+                              ? ColorValueDark.secondaryColor
+                              : ColorValue.secondaryColor),
                     ),
                   ),
                   const SizedBox(
                     height: 16,
                   ),
-                  _buttonbulanan(),
+                  _buttonbulanan(context),
                   const SizedBox(
                     height: 21,
                   ),
@@ -136,7 +151,9 @@ class _SubscribePageState extends State<SubscribePage> {
                             showSnackBar(context,
                                 title: 'Pilih paket terlebih dahulu');
                           },
-                    child: const Text('Langganan Sekarang'),
+                    child: const Text(
+                      'Langganan Sekarang',
+                    ),
                   ),
                   const SizedBox(
                     height: 32,
@@ -156,7 +173,9 @@ class _SubscribePageState extends State<SubscribePage> {
     );
   }
 
-  Widget _buttonbulanan() {
+  Widget _buttonbulanan(BuildContext context) {
+    final provider = Provider.of<ThemeProvider>(context);
+
     return GestureDetector(
       onTap: () {
         if (_selected != 1) {
@@ -174,8 +193,17 @@ class _SubscribePageState extends State<SubscribePage> {
         padding: const EdgeInsets.fromLTRB(21, 17, 21, 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: _selected == 1 ? ColorValue.secondaryColor : Colors.white,
-            border: Border.all(color: ColorValue.secondaryColor)),
+            color: _selected == 1
+                ? provider.isDarkMode
+                    ? ColorValueDark.secondaryColor
+                    : ColorValue.secondaryColor
+                : provider.isDarkMode
+                    ? ColorValueDark.backgroundColor
+                    : Colors.white,
+            border: Border.all(
+                color: provider.isDarkMode
+                    ? ColorValueDark.secondaryColor
+                    : ColorValue.secondaryColor)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -188,11 +216,17 @@ class _SubscribePageState extends State<SubscribePage> {
                   color: Colors.transparent,
                   border: Border.all(
                       color: _selected == 1
-                          ? Colors.white
-                          : ColorValue.secondaryColor)),
+                          ? provider.isDarkMode
+                              ? ColorValueDark.backgroundColor
+                              : Colors.white
+                          : provider.isDarkMode
+                              ? ColorValueDark.secondaryColor
+                              : ColorValue.secondaryColor)),
               child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: provider.isDarkMode
+                      ? ColorValueDark.backgroundColor
+                      : Colors.white,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -210,19 +244,27 @@ class _SubscribePageState extends State<SubscribePage> {
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: _selected == 1
-                          ? Colors.white
-                          : ColorValue.secondaryColor),
+                          ? provider.isDarkMode
+                              ? ColorValueDark.backgroundColor
+                              : Colors.white
+                          : provider.isDarkMode
+                              ? ColorValueDark.secondaryColor
+                              : ColorValue.secondaryColor),
                 ),
                 SizedBox(
-                  width: 180,
+                  width: MediaQuery.of(context).size.width / 3,
                   child: Text(
                     '30 Hari Trial & Bayar penuh satu bulan',
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.normal,
                         color: _selected == 1
-                            ? const Color(0xFFE9E8E8)
-                            : ColorValue.secondaryColor),
+                            ? provider.isDarkMode
+                                ? ColorValueDark.backgroundColor
+                                : Colors.white
+                            : provider.isDarkMode
+                                ? ColorValueDark.secondaryColor
+                                : ColorValue.secondaryColor),
                   ),
                 )
               ],
@@ -234,8 +276,12 @@ class _SubscribePageState extends State<SubscribePage> {
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: _selected == 1
-                      ? Colors.white
-                      : ColorValue.secondaryColor),
+                      ? provider.isDarkMode
+                          ? ColorValueDark.backgroundColor
+                          : Colors.white
+                      : provider.isDarkMode
+                          ? ColorValueDark.secondaryColor
+                          : ColorValue.secondaryColor),
             )
           ],
         ),
@@ -244,6 +290,8 @@ class _SubscribePageState extends State<SubscribePage> {
   }
 
   Widget _buttontahunan() {
+    final provider = Provider.of<ThemeProvider>(context);
+
     return GestureDetector(
       onTap: () {
         if (_selected != 2) {
@@ -261,8 +309,17 @@ class _SubscribePageState extends State<SubscribePage> {
         padding: const EdgeInsets.fromLTRB(21, 17, 21, 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: _selected == 2 ? ColorValue.secondaryColor : Colors.white,
-            border: Border.all(color: ColorValue.secondaryColor)),
+            color: _selected == 2
+                ? provider.isDarkMode
+                    ? ColorValueDark.secondaryColor
+                    : ColorValue.secondaryColor
+                : provider.isDarkMode
+                    ? ColorValueDark.backgroundColor
+                    : Colors.white,
+            border: Border.all(
+                color: provider.isDarkMode
+                    ? ColorValueDark.secondaryColor
+                    : ColorValue.secondaryColor)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -275,11 +332,17 @@ class _SubscribePageState extends State<SubscribePage> {
                   color: Colors.transparent,
                   border: Border.all(
                       color: _selected == 2
-                          ? Colors.white
-                          : ColorValue.secondaryColor)),
+                          ? provider.isDarkMode
+                              ? ColorValueDark.backgroundColor
+                              : Colors.white
+                          : provider.isDarkMode
+                              ? ColorValueDark.secondaryColor
+                              : ColorValue.secondaryColor)),
               child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: provider.isDarkMode
+                      ? ColorValueDark.backgroundColor
+                      : Colors.white,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -300,8 +363,12 @@ class _SubscribePageState extends State<SubscribePage> {
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: _selected == 2
-                              ? Colors.white
-                              : ColorValue.secondaryColor),
+                              ? provider.isDarkMode
+                                  ? ColorValueDark.backgroundColor
+                                  : Colors.white
+                              : provider.isDarkMode
+                                  ? ColorValueDark.secondaryColor
+                                  : ColorValue.secondaryColor),
                     ),
                     Text(
                       '/16.000 per bulan',
@@ -309,21 +376,29 @@ class _SubscribePageState extends State<SubscribePage> {
                           fontSize: 8,
                           fontWeight: FontWeight.normal,
                           color: _selected == 2
-                              ? Colors.white
-                              : ColorValue.secondaryColor),
+                              ? provider.isDarkMode
+                                  ? ColorValueDark.backgroundColor
+                                  : Colors.white
+                              : provider.isDarkMode
+                                  ? ColorValueDark.secondaryColor
+                                  : ColorValue.secondaryColor),
                     ),
                   ],
                 ),
                 SizedBox(
-                  width: 180,
+                  width: MediaQuery.of(context).size.width / 3,
                   child: Text(
                     '30 Hari Trial & Bayar penuh satu tahun',
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.normal,
                         color: _selected == 2
-                            ? Colors.white
-                            : ColorValue.secondaryColor),
+                            ? provider.isDarkMode
+                                ? ColorValueDark.backgroundColor
+                                : Colors.white
+                            : provider.isDarkMode
+                                ? ColorValueDark.secondaryColor
+                                : ColorValue.secondaryColor),
                   ),
                 )
               ],
@@ -338,8 +413,12 @@ class _SubscribePageState extends State<SubscribePage> {
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: _selected == 2
-                        ? Colors.white
-                        : ColorValue.secondaryColor,
+                        ? provider.isDarkMode
+                            ? ColorValueDark.backgroundColor
+                            : Colors.white
+                        : provider.isDarkMode
+                            ? ColorValueDark.secondaryColor
+                            : ColorValue.secondaryColor,
                   ),
                 ),
                 const Text(
