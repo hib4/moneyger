@@ -35,6 +35,7 @@ class FirebaseService {
               'total_balance': 0,
               'income': 0,
               'expenditure': 0,
+              'photo_profile': '',
               'created_at': DateTime.now(),
               'updated_at': DateTime.now(),
             });
@@ -146,6 +147,7 @@ class FirebaseService {
                 'total_balance': 0,
                 'income': 0,
                 'expenditure': 0,
+                'photo_profile': '',
                 'created_at': DateTime.now(),
                 'updated_at': DateTime.now(),
               });
