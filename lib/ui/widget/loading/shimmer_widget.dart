@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moneyger/common/app_theme_data.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerWidget extends StatelessWidget {
@@ -9,19 +11,26 @@ class ShimmerWidget extends StatelessWidget {
       required this.radius});
 
   final double height, width, radius;
-  final Color _baseColor = const Color(0xFFEEEEEE);
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ThemeProvider>(context);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: Shimmer.fromColors(
-        baseColor: _baseColor,
-        highlightColor: const Color(0xFFFFFFFF),
+        baseColor: provider.isDarkMode
+            ? const Color(0xFF3B3D43)
+            : const Color(0xFFEEEEEE),
+        highlightColor: provider.isDarkMode
+            ? const Color(0xFF4A4C52)
+            : const Color(0xFFFFFFFF),
         child: Container(
           height: height,
           width: width,
-          color: _baseColor,
+          color: provider.isDarkMode
+              ? const Color(0xFF3B3D43)
+              : const Color(0xFFEEEEEE),
         ),
       ),
     );

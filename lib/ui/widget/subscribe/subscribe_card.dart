@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
+import 'package:provider/provider.dart';
 
 class SubcribeCard extends StatefulWidget {
   const SubcribeCard({Key? key}) : super(key: key);
@@ -12,6 +14,8 @@ class SubcribeCard extends StatefulWidget {
 class _SubcribeCardState extends State<SubcribeCard> {
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ThemeProvider>(context);
+
     return Container(
       padding: const EdgeInsets.only(top: 12),
       width: MediaQuery.of(context).size.width,
@@ -20,12 +24,14 @@ class _SubcribeCardState extends State<SubcribeCard> {
           borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
-          const Text(
+          Text(
             'Apa yang baru di Moneyger Premium?',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: ColorValue.secondaryColor,
+              color: provider.isDarkMode
+                  ? ColorValueDark.secondaryColor
+                  : ColorValue.secondaryColor,
             ),
             textAlign: TextAlign.center,
           ),
@@ -33,19 +39,25 @@ class _SubcribeCardState extends State<SubcribeCard> {
             height: 16,
           ),
           item('consultation', 'Konsultasi Keuangan',
-              'Dapatkan fitur konsultasi keungan dengan para ahli'),
+              'Dapatkan fitur konsultasi keungan dengan para ahli', context),
           item('darkmode', 'Mode Gelap',
-              'Atur keunangan kamu lebih nyaman dengan mode gelap'),
-          item('stats', 'Statistik Kuangan',
-              'Kamu bisa mendapatkan jangkaun statistik keuangan bulanan lebih lengkap'),
+              'Atur keunangan kamu lebih nyaman dengan mode gelap', context),
+          item(
+              'stats',
+              'Statistik Kuangan',
+              'Kamu bisa mendapatkan jangkaun statistik keuangan bulanan lebih lengkap',
+              context),
           item2('cost', 'Penganggaran',
-              'Kamu dapat mengunakan anggaran yang tidak terbatas'),
+              'Kamu dapat mengunakan anggaran yang tidak terbatas', context),
         ],
       ),
     );
   }
 
-  Widget item(String icon, String title, String subtitle) {
+  Widget item(
+      String icon, String title, String subtitle, BuildContext context) {
+    final provider = Provider.of<ThemeProvider>(context);
+
     return Column(
       children: [
         Padding(
@@ -60,7 +72,9 @@ class _SubcribeCardState extends State<SubcribeCard> {
                     const EdgeInsets.symmetric(horizontal: 5, vertical: 5.5),
                 margin: const EdgeInsets.only(right: 6),
                 decoration: BoxDecoration(
-                    color: const Color(0xFFF9F9F9),
+                    color: provider.isDarkMode
+                        ? ColorValueDark.darkColor
+                        : Color(0xFFF9F9F9),
                     borderRadius: BorderRadius.circular(5)),
                 child: SvgPicture.asset(
                   'assets/svg/$icon.svg',
@@ -71,10 +85,12 @@ class _SubcribeCardState extends State<SubcribeCard> {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: ColorValue.secondaryColor),
+                        color: provider.isDarkMode
+                            ? ColorValueDark.secondaryColor
+                            : ColorValue.secondaryColor),
                   ),
                   SizedBox(
                     width: 220,
@@ -107,7 +123,10 @@ class _SubcribeCardState extends State<SubcribeCard> {
     );
   }
 
-  Widget item2(String icon, String title, String subtitle) {
+  Widget item2(
+      String icon, String title, String subtitle, BuildContext context) {
+    final provider = Provider.of<ThemeProvider>(context);
+
     return Column(
       children: [
         Padding(
@@ -122,7 +141,9 @@ class _SubcribeCardState extends State<SubcribeCard> {
                     const EdgeInsets.symmetric(horizontal: 5, vertical: 5.5),
                 margin: const EdgeInsets.only(right: 6),
                 decoration: BoxDecoration(
-                    color: const Color(0xFFF9F9F9),
+                    color: provider.isDarkMode
+                        ? ColorValueDark.darkColor
+                        : Color(0xFFF9F9F9),
                     borderRadius: BorderRadius.circular(5)),
                 child: SvgPicture.asset(
                   'assets/svg/$icon.svg',
@@ -133,13 +154,15 @@ class _SubcribeCardState extends State<SubcribeCard> {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: ColorValue.secondaryColor),
+                        color: provider.isDarkMode
+                            ? ColorValueDark.secondaryColor
+                            : ColorValue.secondaryColor),
                   ),
                   SizedBox(
-                    width: 220,
+                    width: 200,
                     child: Text(
                       subtitle,
                       style: const TextStyle(
