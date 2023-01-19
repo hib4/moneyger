@@ -23,6 +23,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       FirebaseFirestore.instance.collection('users').doc(SharedCode().uid);
   final _fullNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final ValueNotifier<bool> _isLoad = ValueNotifier<bool>(false);
   PlatformFile? _pickedImage;
 
   Future _selectImage() async {
@@ -62,155 +63,175 @@ class _EditProfilePageState extends State<EditProfilePage> {
           color: provider.isDarkMode ? Colors.white : Colors.black,
         ),
       ),
-      body: SingleChildScrollView(
-        child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          future: _document.get(),
-          builder: (_, snapshot) {
-            if (snapshot.hasData) {
-              var data = snapshot.data!;
-              _fullNameController.text = data['full_name'];
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              future: _document.get(),
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  var data = snapshot.data!;
+                  _fullNameController.text = data['full_name'];
 
-              return Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: GestureDetector(
-                          onTap: _selectImage,
-                          child: Stack(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: ColorValue.secondaryColor,
-                                radius: 50,
-                                backgroundImage: _pickedImage != null
-                                    ? FileImage(
-                                        File(
-                                          _pickedImage!.path!,
-                                        ),
-                                      )
-                                    : data['photo_profile'] != ''
-                                        ? NetworkImage(data['photo_profile'])
-                                            as ImageProvider
-                                        : null,
-                                child: data['photo_profile'] != '' ||
-                                        _pickedImage != null
-                                    ? null
-                                    : Text(
-                                        SharedCode()
-                                            .getInitials(data['full_name']),
-                                        style: textTheme.headline2!.copyWith(
-                                          color: Colors.white,
-                                          fontSize: 22,
-                                        ),
-                                      ),
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 32),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: _selectImage,
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: ColorValue.borderColor,
+                                    radius: 50,
+                                    backgroundImage: _pickedImage != null
+                                        ? FileImage(
+                                            File(
+                                              _pickedImage!.path!,
+                                            ),
+                                          )
+                                        : data['photo_profile'] != ''
+                                            ? NetworkImage(
+                                                    data['photo_profile'])
+                                                as ImageProvider
+                                            : null,
+                                    child: data['photo_profile'] != '' ||
+                                            _pickedImage != null
+                                        ? null
+                                        : Text(
+                                            SharedCode()
+                                                .getInitials(data['full_name']),
+                                            style:
+                                                textTheme.headline2!.copyWith(
+                                              color: Colors.black,
+                                              fontSize: 22,
+                                            ),
+                                          ),
+                                  ),
+                                  const Positioned(
+                                    bottom: 5,
+                                    right: 3,
+                                    child: CircleAvatar(
+                                      radius: 12,
+                                      child: Icon(Icons.edit_rounded, size: 12),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const Positioned(
-                                bottom: 5,
-                                right: 3,
-                                child: CircleAvatar(
-                                  radius: 12,
-                                  child: Icon(Icons.edit_rounded, size: 12),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                          const SizedBox(
+                            height: 32,
+                          ),
+                          Text(
+                            'Nama Lengkap',
+                            style: textTheme.bodyText1!.copyWith(
+                              color: provider.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          _textFormTransaction(
+                            textTheme,
+                            hint: 'Masukkan nama lengkap',
+                            controller: _fullNameController,
+                            validator: (value) =>
+                                SharedCode().nameValidator(value),
+                            isDarkMode: provider.isDarkMode,
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            'Email',
+                            style: textTheme.bodyText1!.copyWith(
+                              color: provider.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Container(
+                            width: double.infinity,
+                            height: 50,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              data['email'],
+                              style: textTheme.bodyText1,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 32,
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                _isLoad.value = true;
+                                _pickedImage != null
+                                    ? await FirebaseService()
+                                        .editProfileWithImage(
+                                          context,
+                                          name: _fullNameController.text,
+                                          fileName: _pickedImage!.name,
+                                          filePath: _pickedImage!.path!,
+                                        )
+                                        .then(
+                                          (value) => value
+                                              ? Navigator.pop(context)
+                                              : null,
+                                        )
+                                    : await FirebaseService()
+                                        .editProfile(
+                                          context,
+                                          name: _fullNameController.text,
+                                        )
+                                        .then(
+                                          (value) => value
+                                              ? Navigator.pop(context)
+                                              : null,
+                                        );
+                                _isLoad.value = false;
+                              }
+                            },
+                            child: const Text('Edit'),
+                          ),
+                        ],
                       ),
-                      const SizedBox(
-                        height: 32,
-                      ),
-                      Text(
-                        'Nama Lengkap',
-                        style: textTheme.bodyText1!.copyWith(
-                          color:
-                              provider.isDarkMode ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      _textFormTransaction(
-                        textTheme,
-                        hint: 'Masukkan nama lengkap',
-                        controller: _fullNameController,
-                        validator: (value) => SharedCode().nameValidator(value),
-                        isDarkMode: provider.isDarkMode,
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Text(
-                        'Email',
-                        style: textTheme.bodyText1!.copyWith(
-                          color:
-                              provider.isDarkMode ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: 50,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          data['email'],
-                          style: textTheme.bodyText1,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 32,
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            _pickedImage != null
-                                ? await FirebaseService()
-                                    .editProfileWithImage(
-                                      context,
-                                      name: _fullNameController.text,
-                                      fileName: _pickedImage!.name,
-                                      filePath: _pickedImage!.path!,
-                                    )
-                                    .then(
-                                      (value) =>
-                                          value ? Navigator.pop(context) : null,
-                                    )
-                                : await FirebaseService()
-                                    .editProfile(
-                                      context,
-                                      name: _fullNameController.text,
-                                    )
-                                    .then(
-                                      (value) =>
-                                          value ? Navigator.pop(context) : null,
-                                    );
-                          }
-                        },
-                        child: const Text('Edit'),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            } else {
-              return const Center(
-                child: LoadingAnimation(),
-              );
-            }
-          },
-        ),
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: LoadingAnimation(),
+                  );
+                }
+              },
+            ),
+          ),
+          ValueListenableBuilder<bool>(
+            valueListenable: _isLoad,
+            builder: (context, value, _) => Visibility(
+              visible: value,
+              child: const LoadingAnimation(),
+            ),
+          ),
+        ],
       ),
     );
   }

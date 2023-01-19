@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:moneyger/common/app_theme_data.dart';
@@ -26,14 +27,21 @@ class EditBudgetPage extends StatefulWidget {
 
 class _EditBudgetPageState extends State<EditBudgetPage> {
   String _selectedCategory = '';
+  final _budgetController = TextEditingController();
   final _descController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final _formatter = CurrencyTextInputFormatter(
+    locale: 'id',
+    decimalDigits: 0,
+    symbol: 'Rp. ',
+  );
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _selectedCategory = widget.category;
+    _budgetController.text = _formatter.format(widget.budget.toString());
     _descController.text = widget.desc;
   }
 
@@ -55,7 +63,6 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
         iconTheme: IconThemeData(
           color: provider.isDarkMode ? Colors.white : Colors.black,
         ),
-
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -77,18 +84,12 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
               const SizedBox(
                 height: 8,
               ),
-              Container(
-                width: double.infinity,
-                height: 50,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  SharedCode().convertToIdr(widget.budget, 0),
-                  style: textTheme.bodyText1,
-                ),
+              _textFormTransaction(
+                textTheme,
+                hint: 'Masukkan anggaran',
+                controller: _budgetController,
+                validator: (value) => SharedCode().emptyValidator(value),
+                isDarkMode: provider.isDarkMode,
               ),
               const SizedBox(
                 height: 16,
