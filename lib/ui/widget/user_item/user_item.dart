@@ -96,7 +96,7 @@ class ProfilePreviewItem extends StatelessWidget {
           return Column(
             children: [
               CircleAvatar(
-                backgroundColor: ColorValue.secondaryColor,
+                backgroundColor: ColorValue.borderColor,
                 radius: 50,
                 backgroundImage: data['photo_profile'] != ''
                     ? NetworkImage(data['photo_profile'])
@@ -106,7 +106,7 @@ class ProfilePreviewItem extends StatelessWidget {
                     : Text(
                         SharedCode().getInitials(data['full_name']),
                         style: textTheme.headline2!.copyWith(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 22,
                         ),
                       ),

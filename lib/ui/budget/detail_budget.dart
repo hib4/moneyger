@@ -72,7 +72,7 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                 var data = snapshot.data!;
                 return Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
                   child: Column(
                     children: [
                       Row(

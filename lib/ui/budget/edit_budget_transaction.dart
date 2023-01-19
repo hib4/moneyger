@@ -241,7 +241,7 @@ class _EditBudgetTransactionPageState extends State<EditBudgetTransactionPage> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         await _getUserData().then((value) async {
-                          _userData['total_balance'] <
+                          (_userData['total_balance'] + _oldTotal) <
                                   _formatter.getUnformattedValue()
                               ? showSnackBar(context,
                                   title: 'Saldo tidak mencukupi')

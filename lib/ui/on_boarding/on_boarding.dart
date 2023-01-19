@@ -81,6 +81,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           contents[i].title,
                           style: textTheme.headline2!
                               .copyWith(fontWeight: FontWeight.w700),
+                          textAlign: TextAlign.center,
                         ),
                         const SizedBox(
                           height: 16,
