@@ -1,5 +1,5 @@
 class OpenAi {
-  final String _apiKey = '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';
+  final String _apiKey = 'YOUR API KEY HER';
 
   String get apiKey => _apiKey;
 }
