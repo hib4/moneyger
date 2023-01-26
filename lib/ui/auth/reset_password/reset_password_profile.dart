@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
@@ -7,6 +9,7 @@ import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/auth/login/login.dart';
 import 'package:moneyger/ui/widget/custom_text_form_field.dart';
 import 'package:moneyger/ui/widget/loading/loading_animation.dart';
+import 'package:provider/provider.dart';
 
 class ResetPasswordProfilePage extends StatefulWidget {
   const ResetPasswordProfilePage({Key? key}) : super(key: key);
@@ -19,15 +22,50 @@ class ResetPasswordProfilePage extends StatefulWidget {
 class _ResetPasswordProfilePageState extends State<ResetPasswordProfilePage> {
   final _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final _document =
+      FirebaseFirestore.instance.collection('users').doc(SharedCode().uid);
+  Map<String, dynamic> _userData = {};
 
   final ValueNotifier<bool> _isLoad = ValueNotifier<bool>(false);
+
+  Future _getUserData() async {
+    var document =
+        FirebaseFirestore.instance.collection('users').doc(SharedCode().uid);
+
+    var value = await document.get();
+    _userData = value.data() ?? {};
+    _emailController.text = _userData['email'];
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Reset Kata Sandi',
+          style: TextStyle(
+            color: provider.isDarkMode
+                ? Colors.white
+                : ColorValueDark.backgroundColor,
+          ),
+        ),
+        backgroundColor:
+            provider.isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
+        iconTheme: IconThemeData(
+          color: provider.isDarkMode ? Colors.white : Colors.black,
+        ),
+      ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -106,7 +144,9 @@ class _ResetPasswordProfilePageState extends State<ResetPasswordProfilePage> {
                                 TextSpan(
                                   text: 'Profil',
                                   style: textTheme.bodyText1!.copyWith(
-                                    color: ColorValue.secondaryColor,
+                                    color: provider.isDarkMode
+                                        ? ColorValueDark.secondaryColor
+                                        : ColorValue.secondaryColor,
                                     fontWeight: FontWeight.w500,
                                   ),
                                   recognizer: TapGestureRecognizer()

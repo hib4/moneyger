@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
@@ -11,6 +12,7 @@ import 'package:moneyger/ui/auth/verification/verification.dart';
 import 'package:moneyger/ui/widget/button_sign_in_google.dart';
 import 'package:moneyger/ui/widget/custom_text_form_field.dart';
 import 'package:moneyger/ui/widget/loading/loading_animation.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -31,6 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       body: SafeArea(
@@ -50,6 +53,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         SvgPicture.asset(
                           'assets/svg/logo.svg',
                           width: size.width * 0.25,
+                          color: provider.isDarkMode
+                              ? ColorValueDark.secondaryColor
+                              : ColorValue.secondaryColor,
                         ),
                         const SizedBox(
                           height: 48,
@@ -153,7 +159,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               TextSpan(
                                 text: 'Masuk',
                                 style: textTheme.bodyText1!.copyWith(
-                                  color: ColorValue.secondaryColor,
+                                  color: provider.isDarkMode
+                                      ? ColorValueDark.secondaryColor
+                                      : ColorValue.secondaryColor,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 recognizer: TapGestureRecognizer()

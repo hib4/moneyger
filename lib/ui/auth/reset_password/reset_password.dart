@@ -1,5 +1,6 @@
-import 'package:flutter/gestures.dart';
+ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
@@ -7,6 +8,7 @@ import 'package:moneyger/service/firebase_service.dart';
 import 'package:moneyger/ui/auth/login/login.dart';
 import 'package:moneyger/ui/widget/custom_text_form_field.dart';
 import 'package:moneyger/ui/widget/loading/loading_animation.dart';
+import 'package:provider/provider.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({Key? key}) : super(key: key);
@@ -25,6 +27,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       body: SafeArea(
@@ -104,7 +107,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 TextSpan(
                                   text: 'Masuk',
                                   style: textTheme.bodyText1!.copyWith(
-                                    color: ColorValue.secondaryColor,
+                                    color: provider.isDarkMode
+                                        ? ColorValueDark.secondaryColor
+                                        : ColorValue.secondaryColor,
                                     fontWeight: FontWeight.w500,
                                   ),
                                   recognizer: TapGestureRecognizer()

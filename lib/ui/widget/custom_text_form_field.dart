@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
+import 'package:provider/provider.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final String label;
@@ -29,6 +31,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return TextFormField(
       controller: widget.controller,
@@ -38,7 +41,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       obscureText: widget.isPassword ? _isPasswordNotVisible : false,
       autocorrect: !widget.isPassword,
       enableSuggestions: !widget.isPassword,
-      style: textTheme.bodyText1!.copyWith(color: Colors.black),
+      style: textTheme.bodyText1!.copyWith(
+        color: provider.isDarkMode ? Colors.white : Colors.black,
+      ),
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -56,9 +61,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(widget.borderRadius),
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             width: 2,
-            color: ColorValue.secondaryColor,
+            color: provider.isDarkMode
+                ? ColorValueDark.secondaryColor
+                : ColorValue.secondaryColor,
           ),
         ),
         errorBorder: OutlineInputBorder(

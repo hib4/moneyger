@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/common/navigate.dart';
 import 'package:moneyger/common/shared_code.dart';
@@ -12,6 +13,7 @@ import 'package:moneyger/ui/widget/loading/loading_animation.dart';
 import 'package:moneyger/ui/widget/snackbar/snackbar_item.dart';
 import 'package:moneyger/ui/widget/transaction/transaction_history_item.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 class DetailBudgetPage extends StatefulWidget {
   final String docId;
@@ -38,14 +40,23 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'Detail Anggaran',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: provider.isDarkMode
+                ? Colors.white
+                : ColorValueDark.backgroundColor,
+          ),
         ),
-        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor:
+            provider.isDarkMode ? ColorValueDark.backgroundColor : Colors.white,
+        iconTheme: IconThemeData(
+          color: provider.isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
       body: SingleChildScrollView(
         child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -61,7 +72,7 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                 var data = snapshot.data!;
                 return Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
                   child: Column(
                     children: [
                       Row(
@@ -83,9 +94,11 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                                 children: [
                                   Text(
                                     data['category'],
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 14,
-                                      color: Colors.black,
+                                      color: provider.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   ),
                                   Text(
@@ -165,10 +178,12 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                                       Text(
                                         SharedCode()
                                             .convertToIdr(data['budget'], 0),
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
-                                          color: ColorValue.secondaryColor,
+                                          color: provider.isDarkMode
+                                              ? ColorValueDark.secondaryColor
+                                              : ColorValue.secondaryColor,
                                         ),
                                       ),
                                     ],
@@ -184,13 +199,18 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                                     center: Text(
                                       SharedCode().getPercentString(
                                           data['budget'], data['used']),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12.0,
-                                          color: ColorValue.secondaryColor),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12.0,
+                                        color: provider.isDarkMode
+                                            ? ColorValueDark.secondaryColor
+                                            : ColorValue.secondaryColor,
+                                      ),
                                     ),
                                     circularStrokeCap: CircularStrokeCap.round,
-                                    progressColor: ColorValue.secondaryColor,
+                                    progressColor: provider.isDarkMode
+                                        ? ColorValueDark.secondaryColor
+                                        : ColorValue.secondaryColor,
                                     backgroundColor: const Color(0xFFEDF0F4),
                                   ),
                                 ],
@@ -217,10 +237,12 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                                       Text(
                                         SharedCode()
                                             .convertToIdr(data['remain'], 0),
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
-                                          color: ColorValue.secondaryColor,
+                                          color: provider.isDarkMode
+                                              ? ColorValueDark.secondaryColor
+                                              : ColorValue.secondaryColor,
                                         ),
                                       ),
                                     ],
@@ -236,10 +258,12 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                                       Text(
                                         SharedCode()
                                             .convertToIdr(data['used'], 0),
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
-                                          color: ColorValue.secondaryColor,
+                                          color: provider.isDarkMode
+                                              ? ColorValueDark.secondaryColor
+                                              : ColorValue.secondaryColor,
                                         ),
                                       ),
                                     ],
@@ -256,12 +280,15 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             "Riwayat Transaksi",
                             style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: provider.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                           TextButton(
                             onPressed: () {
@@ -275,11 +302,13 @@ class _DetailBudgetPageState extends State<DetailBudgetPage> {
                                         category: data['category'],
                                       ));
                             },
-                            child: const Text(
+                            child: Text(
                               "+ Tambah Transaksi",
                               style: TextStyle(
                                 fontSize: 12,
-                                color: ColorValue.secondaryColor,
+                                color: provider.isDarkMode
+                                    ? ColorValueDark.secondaryColor
+                                    : ColorValue.secondaryColor,
                               ),
                             ),
                           ),

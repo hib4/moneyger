@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moneyger/common/app_theme_data.dart';
 import 'package:moneyger/common/color_value.dart';
 import 'package:moneyger/ui/bottom_navigation/item/budget.dart';
 import 'package:moneyger/ui/bottom_navigation/item/home.dart';
 import 'package:moneyger/ui/bottom_navigation/item/profile.dart';
 import 'package:moneyger/ui/bottom_navigation/item/transaction.dart';
+import 'package:provider/provider.dart';
 
 class BottomNavigation extends StatefulWidget {
   final int currentIndex;
@@ -26,29 +28,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
     const ProfilePage(),
   ];
 
-  final _items = [
-    BottomNavigationBarItem(
-      icon: SvgPicture.asset('assets/icons/home.svg'),
-      activeIcon: SvgPicture.asset('assets/icons/home_active.svg'),
-      label: 'Beranda',
-    ),
-    BottomNavigationBarItem(
-      icon: SvgPicture.asset('assets/icons/transaction.svg'),
-      activeIcon: SvgPicture.asset('assets/icons/transaction_active.svg'),
-      label: 'Transaksi',
-    ),
-    BottomNavigationBarItem(
-      icon: SvgPicture.asset('assets/icons/budget.svg'),
-      activeIcon: SvgPicture.asset('assets/icons/budget_active.svg'),
-      label: 'Anggaran',
-    ),
-    BottomNavigationBarItem(
-      icon: SvgPicture.asset('assets/icons/profile.svg'),
-      activeIcon: SvgPicture.asset('assets/icons/profile_active.svg'),
-      label: 'Profil',
-    ),
-  ];
-
   void _pagePush(int i) {
     if (_pageStack.isEmpty) {
       _pageStack.add(_currentIndex);
@@ -61,7 +40,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
     }
 
     setState(() {
-      print(_pageStack);
       _currentIndex = i;
     });
   }
@@ -88,17 +66,62 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<ThemeProvider>(context);
 
     return WillPopScope(
       onWillPop: () => _pagePop(context),
       child: Scaffold(
         body: _tabs[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
-          items: _items,
+          items: [
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/icons/home.svg'),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/home_active.svg',
+                color: provider.isDarkMode
+                    ? ColorValueDark.secondaryColor
+                    : ColorValue.secondaryColor,
+              ),
+              label: 'Beranda',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/icons/transaction.svg'),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/transaction_active.svg',
+                color: provider.isDarkMode
+                    ? ColorValueDark.secondaryColor
+                    : ColorValue.secondaryColor,
+              ),
+              label: 'Transaksi',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/icons/budget.svg'),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/budget_active.svg',
+                color: provider.isDarkMode
+                    ? ColorValueDark.secondaryColor
+                    : ColorValue.secondaryColor,
+              ),
+              label: 'Anggaran',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/icons/profile.svg'),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/profile_active.svg',
+                color: provider.isDarkMode
+                    ? ColorValueDark.secondaryColor
+                    : ColorValue.secondaryColor,
+              ),
+              label: 'Profil',
+            ),
+          ],
           currentIndex: _currentIndex,
+          backgroundColor: Theme.of(context).backgroundColor,
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: ColorValue.primaryColor,
+          selectedItemColor: provider.isDarkMode
+              ? ColorValueDark.secondaryColor
+              : ColorValue.secondaryColor,
+          unselectedItemColor: ColorValue.greyColor,
           selectedFontSize: 12,
           unselectedFontSize: 12,
           selectedLabelStyle: textTheme.bodyText2,

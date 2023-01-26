@@ -55,9 +55,7 @@ class _DetailTransactionItemState extends State<DetailTransactionItem> {
                       SizedBox(
                         width: 84,
                         child: Text(
-                          widget.isIncome
-                              ? '-'
-                              : '-',
+                          widget.isIncome ? '-' : '-',
                           style: textTheme.bodyText1!.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,

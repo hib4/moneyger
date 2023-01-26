@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -34,6 +35,7 @@ class FirebaseService {
               'total_balance': 0,
               'income': 0,
               'expenditure': 0,
+              'photo_profile': '',
               'created_at': DateTime.now(),
               'updated_at': DateTime.now(),
             });
@@ -145,6 +147,7 @@ class FirebaseService {
                 'total_balance': 0,
                 'income': 0,
                 'expenditure': 0,
+                'photo_profile': '',
                 'created_at': DateTime.now(),
                 'updated_at': DateTime.now(),
               });
@@ -471,7 +474,10 @@ class FirebaseService {
     }
   }
 
-  Future<bool> editProfile(BuildContext context, {required String name}) async {
+  Future<bool> editProfile(
+    BuildContext context, {
+    required String name,
+  }) async {
     try {
       String uid = SharedCode().uid;
 
@@ -482,6 +488,46 @@ class FirebaseService {
         (transaction) async {
           transaction.update(userDocument, {
             'full_name': name,
+          });
+          return true;
+        },
+      );
+      return true;
+    } on PlatformException {
+      return false;
+    } on SocketException {
+      showSnackBar(context, title: 'Tidak ada koneksi internet');
+      return false;
+    } on FirebaseException {
+      return false;
+    }
+  }
+
+  Future<bool> editProfileWithImage(
+    BuildContext context, {
+    required String name,
+    required String fileName,
+    required String filePath,
+  }) async {
+    try {
+      String uid = SharedCode().uid;
+
+      DocumentReference userDocument =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+
+      final path = 'users/$uid/$name';
+      final file = File(filePath);
+      final reference =
+          FirebaseStorage.instance.ref().child(path).putFile(file);
+
+      final snapshot = await reference.whenComplete(() {});
+      final url = await snapshot.ref.getDownloadURL();
+
+      FirebaseFirestore.instance.runTransaction(
+        (transaction) async {
+          transaction.update(userDocument, {
+            'full_name': name,
+            'photo_profile': url,
           });
           return true;
         },
